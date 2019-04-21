@@ -1,0 +1,33 @@
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card-header">
+        <h3 class="mb-0 my-2"><b>Research details</b></h3>
+    </div>
+    <form class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table border="1" cellpadding="15" cellspacing="2">
+{#            <tbody>#}
+{#            #}
+            {{ research_form|crispy }}
+{#            </tbody>#}
+        </table>
+        <br>
+        <blackcolor>
+            <div class="form-group">
+                <button type="submit" class="button" name="save">
+                    Save
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="prev">
+                    Previous
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="next">
+                    Next
+                </button>
+            </div>
+        </blackcolor>
+    </form>
+{% endblock content %}

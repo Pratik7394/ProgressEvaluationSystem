@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+
+<html>
+<head>
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Submission View</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+    <script>
+
+        $("#export").click(function () {
+            $("table").tableToCSV();
+        });
+
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], {type: "text/csv"});
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+
+        }
+
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+
+    </script>
+
+    <style>
+        {#    table, th, td {#}
+        {#        border: 4px solid black;#}
+        {#    }#}
+        {#</style>#}
+        table, td, th {
+            border: 4px solid #19334d;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            padding: 14px;
+            background-color: white;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
+        th, td {
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
+        }
+    </style>
+
+
+</head>
+<body>
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="{% url 'registration:homePageStudent' %}">
+                         <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                        Logout
+                    </a>
+                </span></div>
+        </div>
+    </nav>
+
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+
+
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Submission</h1>
+
+            <p class="mbr-text pb-3 mbr-fonts-style display-5">
+            <div align="left">
+                <ul>
+                    <b>
+                        <blackcolor>
+                            <title>Questionnaire</title>
+                            <h1>Submission Overview</h1>
+                            Student Name: {{ fullname }}
+                            <table>
+                                <thead>
+                                <tr>
+                                    {#                                        <th>Your Name</th>#}
+                                    <th>Topic</th>
+                                    <th>Proposal</th>
+                                    <th>Defense</th>
+                                    <th>Academic Advisor</th>
+                                    <th>Research Advisor</th>
+                                </tr>
+                                <tr>
+
+                                    {% for user in research_dict %}
+                                        {#                                            <td>  {{ fullname }} </td>#}
+                                        <td>     {{ user.Topic }} </td>
+                                        <td>    {{ user.Proposal }} </td>
+                                        <td>    {{ user.Defense }} </td>
+                                        <td>      {{ user.Current_Academic_Advisor }} </td>
+                                        <td>     {{ user.Current_Research_Advisor }} </td>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5">No data</td>
+                                        </tr>
+
+                                    {% endfor %}
+                            </table>
+
+                            <h1>COMPLETED COURSES</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Courses Taken</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Term and Year</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in course_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }}</td>
+                                        <td>{{ user.Subject_Code }}</td>
+                                        <td>{{ user.Subject_Term_and_Year }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>QUALIFYING EXAM</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Exam Qualify</th>
+                                    <th>Attempt Number</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in examAttempt_dict %}
+                                    <tr>
+                                        <td>{{ user.Exam_Name }}</td>
+                                        <td>{{ user.Attempt_Number }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>TEACHING</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Subject Code</th>
+                                    <th>Semester</th>
+                                    <th>Instructor Name</th>
+                                    <th>Responsibilities</th>
+                                    <th>Lectures or Presentation_Given</th>
+                                    <th>Area of Improvement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in techingAssistant_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }} </td>
+                                        <td>{{ user.Subject_Code }} </td>
+                                        <td>{{ user.In_Which_Semester }} </td>
+                                        <td>{{ user.Instructor_Name }} </td>
+                                        <td>{{ user.Responsibilities }} </td>
+                                        <td>{{ user.Lecture_or_Presentation_Given }} </td>
+                                        <td>{{ user.Area_of_Improvement }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            {#                                <h1>THESIS</h1>#}
+                            {#                                <table class="table table-bordered">#}
+                            {#                                    <thead>#}
+                            {#                                    <tr>#}
+                            {#                                        <th>Thesis Topic</th>#}
+                            {#                                        <th>Thesis Proposal</th>#}
+                            {#                                        <th>Thesis Defense</th>#}
+                            {#                                    </tr>#}
+                            {#                                    </thead>#}
+                            {#                                    <tbody>#}
+                            {#                                    {% for user in research_object %}#}
+                            {#                                        <tr>#}
+                            {#                                            <td>{{ user.Topic }}</td>#}
+                            {#                                            <td>{{ user.Proposal }}</td>#}
+                            {#                                            <td>{{ user.Defense }}</td>#}
+                            {#                                        </tr>#}
+                            {#                                    {% empty %}#}
+                            {#                                        <tr>#}
+                            {#                                            <td colspan="5">No data</td>#}
+                            {#                                        </tr>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </table>#}
+
+
+                            <h1>RESEARCH</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>TOPIC</th>
+                                    <th>PROPOSAL</th>
+                                    <th>DEFENSE</th>
+                                    <th>CURRENT ACADEMIC ADVISOR</th>
+                                    <th>CURRENT RESEARCH ADVISOR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in research_dict %}
+                                    <tr>
+                                        <td>{{ user.Topic }}</td>
+                                        <td>{{ user.Proposal }}</td>
+                                        <td>{{ user.Defense }}</td>
+                                        <td>{{ user.Current_Academic_Advisor }}</td>
+                                        <td>{{ user.Current_Research_Advisor }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </blackcolor>
+                    </b>
+                </ul>
+            </div>
+
+            <div align="left">
+                <div class="card-body">
+                    <form class="form" role="form" autocomplete="off" method="post"
+                          enctype="multipart/form-data">
+
+                        {#                            <div align="left">#}
+                        {#                                <div class="card-body">#}
+                        {#                                    <form class="form" role="form" autocomplete="off" method="get"#}
+                        {#                                          enctype="multipart/form-data">#}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <button type="submit" onclick="exportTableToCSV('student_submission.csv')"
+                                    class="button" name="export">
+                                Export
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                        {#                                    </form>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+
+
+                        <blackcolor>
+                            <p>
+
+                                <br>
+                                {#                                    <br>#}
+                                {#                                <h1>#}
+                                <strong>
+                                    {% csrf_token %}
+                                    {{ feedback_form }}
+                                </strong>
+                                {#                                </h1>#}
+                                {#                                <label for="feedback">Email:</label>#}
+                                {#                                <input type="text" name="feedback" placeholder="Enter feedback">#}
+                                {#                                <br>#}
+                                {##}
+                                {#                                <h3><b>#}
+                                {#                                    <blackcolor>#}
+                                {#                                        <label for="feedback">Feedback:</label>#}
+                                {#                                        <br>#}
+                                {#                                        <textarea name="feedback" rows="8" cols="125"></textarea>#}
+                                {#                                        <br>#}
+                                {#                                    </blackcolor>#}
+                                {#                                </b></h3>#}
+                                {#                                <div class="form-group">#}
+                                <br>
+                                <button type="submit" class="button" name="save">
+                                    Save
+                                </button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+                                <button type="submit" class="button" name="submit">
+                                    Submit
+                                </button>
+                                {#                                </div>#}
+                                <br>
+                                <br>
+                                <h4>
+                            <p style="color:red">Clicking submit will email the feedback to student and no one else will
+                                be able to add a feedback</p></h4>
+                            <br>
+                            <br>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <br>
+                            <div class="form-group">
+                                <button type="submit" class="button" name="back">
+                                    Back
+                                </button>
+                            </div>
+
+                            {#                                {% if messages %}#}
+                            {#                                    <ul class="messages">#}
+                            {#                                        {% for message in messages %}#}
+                            {#                                            <li class="{{ message.tags }}">{{ message }}</li>#}
+                            {#                                        {% endfor %}#}
+                            {#                                    </ul>#}
+                            {#                                {% endif %}#}
+                            </b>
+                        </blackcolor>
+                    </form>
+                </div>
+            </div>
+
+            <br>
+            {#                <div align="left">#}
+            {#                    <form class="form" role="form" autocomplete="off" method="post"#}
+            {#                          enctype="multipart/form-data">#}
+            {#                        {% csrf_token %}#}
+            {##}
+            {#                    </form>#}
+            {#                </div>#}
+            </p>
+
+        </div>
+    </div>
+    {#    </div>#}
+
+</section>
+
+
+<script src="{% static 'assets/web/assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/popper/popper.min.js' %}"></script>
+<script src="{% static 'assets/tether/tether.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/parallax/jarallax.min.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/script.min.js' %}"></script>
+<script src="{% static 'assets/touchswipe/jquery.touch-swipe.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+
+
+</body>
+</html>
