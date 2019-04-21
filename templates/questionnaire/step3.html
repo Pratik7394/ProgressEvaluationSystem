@@ -1,0 +1,54 @@
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="card-header">
+        <h3 class="mb-0 my-2"><b>Add Teaching Assistance experience</b></h3>
+    </div>
+    <form id="ta-formset" class="form" role="form" autocomplete="off" method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ ta_formset.management_form }}
+        <table border="1" cellpadding="15" cellspacing="2">
+            <tbody>
+            {% for form in ta_formset.forms %}
+                <tr>
+                    <td>{{ form.Subject_Name|as_crispy_field }}</td>
+                    <td>{{ form.Subject_Code|as_crispy_field }}</td>
+                    <td>{{ form.In_Which_Semester|as_crispy_field }}</td>
+                    <td>{{ form.Instructor_Name|as_crispy_field }}</td>
+                    <td>{{ form.Responsibilities|as_crispy_field }}</td>
+                    <td>{{ form.Lecture_or_Presentation_Given|as_crispy_field }}</td>
+                    <td>{{ form.Area_of_Improvement|as_crispy_field }}</td>
+                    <td>{{ form.DELETE|as_crispy_field }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <blackcolor>
+            <div class="form-group">
+                <button type="submit" class="button" name="save">
+                    Save
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="prev">
+                    Previous
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="next">
+                    Next
+                </button>
+            </div>
+        </blackcolor>
+    </form>
+{% endblock content %}
+
+{% block footer %}
+    <script type="text/javascript">
+        $('.ta-formset').formset({
+            addText: 'Add Teaching Assist Experience',
+            deleteText: 'Remove'
+        });
+    </script>
+{% endblock footer %}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en">
+
+
+{#<html>#}
+<head>
+
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Submission View</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+
+</head>
+
+<body>
+
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+            <span class="navbar-logo">
+                <a href="{% url 'questionnaire:viewSubmissions' %}">
+                     <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                </a>
+            </span>
+                <span class="navbar-caption-wrap">
+                <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:viewSubmissions' %}">
+                    PhD Evaluation
+                </a>
+            </span>
+                <span class="navbar-caption-wrap">
+                <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                    Logout
+                </a>
+            </span>
+            </div>
+        </div>
+    </nav>
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            {#                <p class="mbr-text pb-3 mbr-fonts-style display-5">#}
+
+            <b>
+                <blackcolor>
+
+                    <div align="left">
+                        <form class="form" role="form" autocomplete="off" method="post"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {#                                <b>#}
+                            {#                                    <blackcolor>#}
+                            <h1><u><strong>Profile</strong></u></h1>
+                            <br>
+                            <h4>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">First Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ submissionTrack_obj.first_name }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Last Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ submissionTrack_obj.last_name }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Email:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ submissionTrack_obj.Email }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">SUNY ID:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ submissionTrack_obj.SUNY_ID }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ submissionTrack_obj.current_GPA }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+
+                                    <!-- col-sm-10 -->
+
+
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current Research
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ submissionTrack_obj.Current_Research_Advisor }} </p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current Academic
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ submissionTrack_obj.Current_Academic_Advisor }} </p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </h4>
+                            <br>
+                            {#                            <div align="left">#}
+                            <h1><u><strong>Submitted Questionnaire Till Now:</strong></u></h1>
+                            <br>
+                            {% for submission in submissionList %}
+                                {% if submission.status == 'Submitted' %}
+                                    <button type="submit" class="button"
+                                            name={{ submission.id }}>
+                                        View {{ submission.questionnaire_for }}
+                                    </button>
+                                    &nbsp&nbsp&nbsp&nbsp
+                                {% endif %}
+                            {% endfor %}
+                            {#                            </div>#}
+                        </form>
+
+                    </div>
+                </blackcolor>
+            </b>
+
+        </div>
+    </div>
+    {#    </div>#}
+</section>
+<br>
+
+
+</body>
+</html>

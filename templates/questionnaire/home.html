@@ -1,0 +1,78 @@
+{% extends "questionnaire/base.html" %}
+{% block content %}
+  <h1>Welcome {{ user.username }}!</h1>
+
+  <h3>Your Progress so far!</h3>  
+  {% for report in reports %}
+        <div class="media-body">
+          <p><a href="#">{{ report.Questionnaire_For }}</a><p>
+            
+        </div>
+  {% endfor %}
+  
+  <h3>Research</h3>
+  <div>
+      <!-- Research details go here -->
+  </div>
+  <div>
+    <table>
+      <tr>
+        <th>                
+          <h5>Research Papers</h5>
+        </th>
+        <td>
+          <a href="#">Add a research paper</a>
+        </td>
+        <td>
+          <a href="#">View all research papers</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Course Work</h3>
+  <div>
+    <table>
+      <tr>
+        <th>                
+          <h5>Courses Taken</h5>
+        </th>
+        <td>
+          <a href="{% url 'questionnaire-form-courses' %}">Add a course you have taken</a>
+        </td>
+        <td>
+          <a href="#">View all courses you have taken</a>
+        </td>
+      </tr>
+      <tr>
+        <th>                
+          <h5>Qualifying Exam</h5>
+        </th>
+        <td>
+          <a href="#">Add a qualifying exam attempt</a>
+        </td>
+        <td>
+          <a href="#">View all qualifying exam attempts</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Teaching Assistant Work</h3>
+  <div>
+    <table>
+      <tr>
+        <th>                
+          <h5>Teaching assistantship</h5>
+        </th>
+        <td>
+          <a href="#">Add TA experience for a course</a>
+        </td>
+        <td>
+          <a href="#">View all TA experiences</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+{% endblock content %}

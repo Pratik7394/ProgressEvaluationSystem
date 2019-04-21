@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en">
+
+
+<html>
+<head>
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+
+</head>
+<body>
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="{% url 'registration:index' %}">
+                         <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:index' %}">
+                        PhD Evaluation
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogin' %}">
+                        Login
+                    </a>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+    <div class="container align-center">
+        <div class="container p-3"></div>
+
+        <div class="container py-5 my-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-15 mx-auto">
+                            <div class="card border-secondary">
+                                <div class="card-header">
+                                    <h3 class="mb-0 my-2"><b>Register here!</b></h3>
+                                </div>
+                                <div align="left">
+                                    <div class="card-body">
+                                        <form class="form" role="form" autocomplete="off" method="post"
+                                              enctype="multipart/form-data">
+                                            <b>
+                                                {% csrf_token %}
+                                                {{ userInfo_form.as_p }}
+                                                {{ userInfo_form2.as_p }}
+                                            </b>
+                                            <div class="form-group">
+                                                <button type="submit" class="button">
+                                                    Register
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/row-->
+
+                </div>
+                <!--/col-->
+            </div>
+            <!--/row-->
+        </div>
+    </div>
+
+</section>
+
+
+<script src="{% static 'assets/web/assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/popper/popper.min.js' %}"></script>
+<script src="{% static 'assets/tether/tether.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/parallax/jarallax.min.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/script.min.js' %}"></script>
+<script src="{% static 'assets/touchswipe/jquery.touch-swipe.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+
+
+</body>
+</html>
+
+
+{#######################################################################################}
+<!-- Dont remove this: Divyarth Singh -->
+{##########################################################################################}
+
+    {#    <div class="container align-center">#}
+    {#        <div class="row justify-content-md-center">#}
+    {#            <div class="mbr-white col-md-5">#}
+    {#            <h2>#}
+    {#                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Register</h1></h2>#}
+    {#                <h1><b>#}
+    {#                    <blackcolor>Register Here!</blackcolor>#}
+    {#                </b></h1>#}
+    {#                <div class="main-w3layouts wrapper">#}
+    {#                    <div class="main-agileinfo">#}
+    {#                        <div class="agileits-top">#}
+    {#                            <div align="left">#}
+    {#                                <form class="form" role="form" autocomplete="off" method="post"#}
+    {#                                      enctype="multipart/form-data">#}
+    {#                                    <h5>#}
+    {#                                        <blackcolor>#}
+    {#                                            <b>#}
+    {##}
+    {#                                                {% csrf_token %}#}
+    {#                                                {{ userInfo_form.as_p }}#}
+    {#                                                {{ userInfo_form2.as_p }}#}
+    {##}
+    {#                                                {% if messages %}#}
+    {#                                                    <ul class="messages">#}
+    {#                                                        {% for message in messages %}#}
+    {#                                                            <li class="{{ message.tags }}"><b>{{ message }}</b></li>#}
+    {#                                                        {% endfor %}#}
+    {#                                                    </ul>#}
+    {#                                                {% endif %}#}
+    {##}
+    {#                                            </b>#}
+    {#                                        </blackcolor>#}
+    {#                                    </h5>#}
+    {#                                    <div class="form-group">#}
+    {#                                        <button type="submit" class="btn btn-success btn-md float-right">Register#}
+    {#                                        </button>#}
+    {#                                    </div>#}
+    {#                                </form>#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <br>#}
+    {#                </p>#}
+    {##}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+
+{#<!DOCTYPE html>#}
+{##}
+{#{% load staticfiles %}#}
+{#{% load static %}#}
+{##}
+{#<html lang="en">#}
+{##}
+{#<head>#}
+{##}
+{#    <meta charset="utf-8">#}
+{#    <title>Registration</title>#}
+{#    <!-- Latest compiled and minified CSS -->#}
+{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"#}
+{#          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">#}
+{#    <meta charset="utf-8">#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
+{##}
+{##}
+{#</head>#}
+{##}
+{#<body>#}
+{##}
+{#<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">#}
+{#    <div class="container">#}
+{#        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">#}
+{#            <span class="navbar-toggler-icon"></span>#}
+{#        </button>#}
+{#        <a href="{% url 'registration:registration' %}" class="navbar-brand">PhD Evaluation</a>#}
+{#        <a href="{% url 'registration:userLogin' %}" class="nav-link text-white">Login</a>#}
+{#      <a href="{% url 'registration:forgotPassword' %}" class="nav-link text-white">Forgot Password</a>#}
+{#    </div>#}
+{#</nav>#}
+{##}
+{#<div class="container p-3"></div>#}
+{##}
+{#<div class="container py-5 my-5">#}
+{#    <div class="row">#}
+{#        <div class="col-md-12">#}
+{#            <div class="row">#}
+{#                <div class="col-md-8 mx-auto">#}
+{#                    <div class="card border-secondary">#}
+{#                        <div class="card-header">#}
+{#                            <h3 class="mb-0 my-2"><b>Register here!</b></h3>#}
+{#                            <h3 class="mb-0 my-2"><b>Enter email in username field.</b></h3>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <form class="form" role="form" autocomplete="off" method="post"#}
+{#                                  enctype="multipart/form-data">#}
+{##}
+{#                                {% csrf_token %}#}
+{#                                {{ userInfo_form.as_p }}#}
+{#                                {{ userInfo_form2.as_p }}#}
+{##}
+{#                                {% if messages %}#}
+{#                                    <ul class="messages">#}
+{#                                        {% for message in messages %}#}
+{#                                            <li class="{{ message.tags }}"><b>{{ message }}</b></li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                {% endif %}#}
+{##}
+{#                                <div class="form-group">#}
+{#                                    <button type="submit" class="btn btn-success btn-md float-right">Register</button>#}
+{#                                </div>#}
+{##}
+{##}
+{#                            </form>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <!--/row-->#}
+{##}
+{#        </div>#}
+{#        <!--/col-->#}
+{#    </div>#}
+{#    <!--/row-->#}
+{#</div>#}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+{#{% block body_block %}#}
+{##}
+{#  <div class="container">#}
+{#    <div class="jumbotron">#}
+{#      {% if registered %}#}
+{#        <h1>Thank you for registering!</h1>#}
+{#      {% else %}#}
+{#        <h1>Register Here</h1>#}
+{#        <h3>Just fill out the form.</h3>#}
+{##}
+{#        <form enctype="multipart/form-data" method="POST">#}
+{#        <form method="POST">#}
+{#          {% csrf_token %}#}
+{#          {{ userInfo_form.as_p }}#}
+{#          {{ userInfo_form2.as_p }}#}
+{#          <input type="submit" name="" value="Register">#}
+{#        </form>#}
+{##}
+{#      {% endif %}#}
+{##}
+{#    </div>#}
+{##}
+{#  </div>#}
+{##}
+{#{% endblock %}#}
+
+
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">#}
+{##}
+{#{% load staticfiles	%}#}
+{#{% load static %}#}
+{##}
+{#<html lang="en">#}
+{#	<head>#}
+{##}
+{#        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">#}
+{#		<meta charset="utf-8">#}
+{#		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">#}
+{#        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">#}
+{#		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+{#  		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>#}
+{#  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>#}
+{#        <title>Register</title>#}
+{##}
+{#	</head>#}
+{##}
+{#	<>#}
+{#    <body>#}
+{#  <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top body" >#}
+{#    <div class="container">#}
+{#      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">#}
+{#        <span class="navbar-toggler-icon"></span>#}
+{#      </button>#}
+{#      <a href="/registration/registration" class="navbar-brand"><b>PhD Evaluation</b></a>#}
+{#      <div class="collapse navbar-collapse" id="navbarCollapse">#}
+{#        <ul class="navbar-nav ml-auto">#}
+{#          <li class="nav-item">#}
+{#            <a href="/registration/login" class="nav-link text-white"><b>Login</b></a>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </div>#}
+{#  </nav>#}
+{##}
+{#      <div class="container p-3"></div>#}
+{#	        <div class="container py-5 my-5">#}
+{#			    <div class="row">#}
+{#			        <div class="col-md-12">#}
+{#			            <div class="row">#}
+{#			                <div class="col-md-10 mx-auto">#}
+{#			                    <div class="card border-secondary">#}
+{#			                        <div class="card-header">#}
+{#			                            <h3 class="mb-0 my-2">  <b>Register </b></h3>#}
+{#			                        </div>#}
+{#			                        <div class="card-body">#}
+{##}
+{#			                            <form class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">#}
+{##}
+{#											{% csrf_token %}#}
+{##}
+{#										        {% for fields in register_form %}#}
+{#										         	{% if fields.errors %}#}
+{#										                <div class="form-group error row">#}
+{#										                    <label class="form-label col-sm-4">{{ fields.label }}:</label>#}
+{#										                    <div class="form-field col-sm-8">{{ fields }}#}
+{#										                        <small class="help-inline text-muted">#}
+{#										                            {% for error in  fields.errors %}{{ error }}{% endfor %}#}
+{#										                        </small>#}
+{#										                    </div>#}
+{#										                </div>#}
+{#										            {% else %}#}
+{#										                <div class="form-group row">#}
+{#										                    <label class="form-label col-sm-4">{{ fields.label }}:</label>#}
+{#										                    <div class="form-field col-sm-8">{{ fields }}#}
+{#										                      <!--  {% if field.help_text %}#}
+{#										                            <br><small class="help-inline text-muted">{{ field.help_text }}</small>#}
+{#										                        {% endif %} -->#}
+{#										                    </div>#}
+{#										                </div>#}
+{#										           {% endif %}#}
+{#										        {% endfor %}#}
+{##}
+{##}
+{#			                                <div class="form-group">#}
+{#			                                    <button type="submit" class="btn btn-success btn-md float-right">Sign Up</button>#}
+{#			                                </div>#}
+{#			                            </form>#}
+{##}
+{#                                        {% if messages %}#}
+{#                                            <ul class="messages">#}
+{#                                                {% for message in messages %}#}
+{#                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+{#                                                {% endfor %}#}
+{#                                            </ul>#}
+{#                                            <a href="{%url 'registration/login' %}"> Click Here to go to login</a>#}
+{#                                        {% endif %}#}
+{#			                        </div>#}
+{#			                    </div>#}
+{#			                </div>#}
+{#			            </div>#}
+{#			            <!--/row-->#}
+{##}
+{#			        </div>#}
+{#			        <!--/col-->#}
+{#			    </div>#}
+{#			    <!--/row-->#}
+{#			</div>#}
+{#			<!--/container-->#}
+{#	</body>#}

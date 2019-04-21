@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en">
+
+<html>
+<head>
+
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Hello {{ sessionFullName }}</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+
+    <!-- Dont remove this: Divyarth Singh -->
+    {#    <script>#}
+    {##}
+    {#        function setGetParameter() {#}
+    {#            var search_word = $("#search").val();#}
+    {#            $.ajax({#}
+    {#                type: "POST",#}
+    {#                url: {% url 'questionnaire:submissions' %},#}
+    {#                data: search_word,#}
+    {#                success: function (result) {#}
+    {#                    alert("Success");#}
+    {#                }#}
+    {#            });#}
+    {#        }#}
+    {#    </script>#}
+    <style>
+        {#    table, th, td {#}
+        {#        border: 4px solid black;#}
+        {#    }#}
+        {#</style>#}
+        table, td, th {
+            border: 4px solid #19334d;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            padding: 14px;
+            background-color: white;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
+        th, td {
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
+        }
+    </style>
+
+    <style>
+        p.dashed {
+            border-style: dashed;
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="{% url 'registration:homePageStudent' %}">
+                         <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:homePageStudent' %}">
+                        PhD Evaluation
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                        Logout
+                    </a>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            <p class="mbr-text pb-3 mbr-fonts-style display-5">
+
+            <ul>
+                <b>
+                    <blackcolor>
+                        {% if user.is_authenticated %}
+                            <br>
+                            <br>
+                            <h1>Welcome {{ sessionFullName }}</h1>
+                        {% else %}
+                            <h2>Welcome to the site!</h2>
+                        {% endif %}
+                    </blackcolor>
+                </b>
+            </ul>
+
+            <br>
+
+            <div align="left">
+                <form class="form" role="form" autocomplete="off" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <b>
+                        <blackcolor>
+                            <h2><u><strong>Profile</strong></u></h2>
+                            <br>
+                            <h4>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">First Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ profile.first_name }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Last Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ profile.last_name }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">SUNY ID:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ profile.SUNY_ID }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Native Country:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ profile.native_country }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA">{{ profile2.current_GPA }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current Research
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ profile2.Current_Research_Advisor }} </p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current Academic
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:#0A0AAA"> {{ profile2.Current_Academic_Advisor }} </p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    {#                                        <div class="col-sm-6">#}
+                                    {#                                            <div class="row mgbt-xs-0">#}
+                                    {#                                                <label class="col-xs-5 control-label">Number of paper#}
+                                    {#                                                    PUBLISHED:&nbsp</label>#}
+                                    {#                                                <div class="col-xs-7 controls"><p#}
+                                    {#                                                        style="color:#0A0AAA"> {{ profile.number_of_paper_PUBLISHED }} </p>#}
+                                    {#                                                </div>#}
+                                    {#                                                <!-- col-sm-10 -->#}
+                                    {#                                            </div>#}
+                                    {#                                        </div>#}
+                                </div>
+                                <br>
+                            </h4>
+                        </blackcolor>
+                    </b>
+                </form>
+            </div>
+
+            <div align="left">
+                <b>
+                    <blackcolor>
+                        <h4>
+                            <a class="button" href="{% url 'registration:editProfileStudent' %}">
+                                Edit Profile
+                            </a>
+                        </h4>
+                    </blackcolor>
+                </b>
+            </div>
+
+            <div align="left">
+                <form class="form" role="form" autocomplete="off" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <b>
+                        <blackcolor>
+                            {#                                <h4>#}
+                            <br>
+                            <br>
+                            <h2><u><strong>Questionnaire</strong></u></h2>
+                            <br>
+                            <ul>
+                                <h4>
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Questionnaire For</th>
+                                            <th>Status</th>
+                                            <th>View/Edit</th>
+{#                                            <th>Feedback</th>#}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for submission in submissionList %}
+                                            <tr>
+                                                <td>{{ submission.questionnaire_for }}</td>
+                                                <td>{{ submission.status }}</td>
+                                                <td>
+                                                    <div class="form-group">
+
+                                                        {% if submission.status == "Saved" %}
+                                                            <button type="submit" class="button"
+                                                                    name={{ submission.id }}>
+                                                                Edit
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if submission.status == 'Submitted For Review' %}
+                                                            <button type="submit" class="button"
+                                                                    name={{ submission.id }}>
+                                                                View
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if submission.status == "Not Started" %}
+                                                            <button type="submit" class="button"
+                                                                    name={{ submission.id }}>
+                                                                Start
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if submission.status == "Review In Progress" %}
+                                                            {#                                                            <button type="submit" class="button"#}
+                                                            {#                                                                    name={{ submission.questionnaire_for_id }}>#}
+                                                            Review In Progress
+                                                            {#                                                            </button>#}
+                                                        {% endif %}
+                                                        {% if submission.status == "Review Submitted" %}
+                                                            {#                                                            <button type="submit" class="button"#}
+                                                            {#                                                                    name={{ submission.questionnaire_for_id }}>#}
+                                                            Review Completed
+                                                            {#                                                            </button>#}
+                                                        {% endif %}
+                                                    </div>
+                                                    {{ blankspace }}
+                                                </td>
+                                            </tr>
+
+                                            {#                                                <a class="button" onclick="setGetParameter()" name="{{ submission.Questionnaire_For }}"#}
+                                            {#                                                           href="{% url 'questionnaire:submissions' item_id=submission.id %}">#}
+                                            {#                                                        href="{% url 'questionnaire:submissions' %}">#}
+                                            {#                                                            {{ submission.Questionnaire_For }}#}
+                                            {#                                                        </a>#}
+
+
+
+                                            {#                                                <input onclick="setGetParameter()" type="button"#}
+                                            {#                                                       class="btn btn-primary" value="View Details"/>#}
+
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="5">No data</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </h4>
+                            </ul>
+                        </blackcolor>
+                    </b>
+                </form>
+            </div>
+            </p>
+        </div>
+    </div>
+    {#    </div>#}
+
+</section>
+
+
+<script src="{% static 'assets/web/assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/popper/popper.min.js' %}"></script>
+<script src="{% static 'assets/tether/tether.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/parallax/jarallax.min.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/script.min.js' %}"></script>
+<script src="{% static 'assets/touchswipe/jquery.touch-swipe.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+
+</body>
+
+</html>

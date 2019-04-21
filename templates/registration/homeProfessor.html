@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en">
+
+{#<html>#}
+<head>
+
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Hello {{ sessionFullName }}</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+
+    <!-- Dont remove this: Divyarth Singh -->
+    {#    <script>#}
+    {##}
+    {#        function setGetParameter() {#}
+    {#            var search_word = $("#search").val();#}
+    {#            $.ajax({#}
+    {#                type: "POST",#}
+    {#                url: {% url 'questionnaire:submissions' %},#}
+    {#                data: search_word,#}
+    {#                success: function (result) {#}
+    {#                    alert("Success");#}
+    {#                }#}
+    {#            });#}
+    {#        }#}
+    {#    </script>#}
+    <style>
+        {#    table, th, td {#}
+        {#        border: 4px solid black;#}
+        {#    }#}
+        {#</style>#}
+        table, td, th {
+            border: 4px solid #19334d;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            padding: 14px;
+            background-color: white;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
+        th, td {
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
+        }
+    </style>
+
+    <style>
+        p.dashed {
+            border-style: dashed;
+        }
+    </style>
+
+
+</head>
+<body>
+
+{#<form>#}
+
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="{% url 'professor:professorHome' %}">
+                         <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'professor:professorHome' %}">
+                        PhD Evaluation
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                        Logout
+                    </a>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            {#            <p class="mbr-text pb-3 mbr-fonts-style display-5">#}
+            {#            <ul>#}
+            <b>
+                <blackcolor>
+                    <br>
+                    <br>
+                    <div class="container align-center">
+                        <div align="centre">
+                            {% if user.is_authenticated %}
+                                <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }}</u></h2>
+                                {#                            <br>#}
+                            {% else %}
+                                <h2>Welcome to the site!</h2>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if messages %}
+                        <p class="messages">
+                            {% for message in messages %}
+
+{#                                <li>#}
+                                <p style="color:red">
+                                    {{ message }}
+                                </p>
+{#                                </li>#}
+
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </blackcolor>
+            </b>
+            {#            </ul>#}
+            {#            <blackcolor>#}
+
+            {% load widget_tweaks %}
+
+            <form method="get">
+                <div class="well well-sm">
+
+                    <blackcolor>
+                        <h4 style="margin-top: 0">Filter</h4>
+                    </blackcolor>
+                    <blackcolor>
+                        <div class="row">
+                            <div class="form-group col-sm-1 col-md-2">
+                                {{ filter.form.first_name.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.first_name class="form-control" %}
+                                </p>
+                            </div>
+                            <div class="form-group col-sm-1 col-md-2">
+                                {{ filter.form.last_name.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.last_name class="form-control" %}
+                                </p>
+                            </div>
+                            <div class="form-group col-sm-1 col-md-2">
+                                {{ filter.form.current_GPA.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.current_GPA class="form-control" %}
+                                </p>
+                            </div>
+                            {#                            <div class="form-group col-sm-1 col-md-2">#}
+                            {#                                {{ filter.form.SUNY_ID.label_tag }}#}
+                            {#                                <p class="dashed">#}
+                            {#                                    {% render_field filter.form.SUNY_ID class="form-control" %}#}
+                            {#                                </p>#}
+                            {#                            </div>#}
+                            <div class="form-group col-sm-1 col-md-2">
+                                {{ filter.form.Email.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.Email class="form-control" %}
+                                </p>
+                            </div>
+                            <div class="form-group col-sm-1 col-md-3">
+                                {{ filter.form.Current_Academic_Advisor.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.Current_Academic_Advisor class="form-control" %}
+                                </p>
+                            </div>
+                            <div class="form-group col-sm-1 col-md-3">
+                                {{ filter.form.Current_Research_Advisor.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.Current_Research_Advisor class="form-control" %}
+                                </p>
+                            </div>
+                            <div class="form-group col-sm-1 col-md-2">
+                                {{ filter.form.status.label_tag }}
+                                <p class="dashed">
+                                    {% render_field filter.form.status class="form-control" %}
+                                </p>
+                            </div>
+                            {#                            <div class="form-group col-sm-8 col-md-6">#}
+                            {#                                {{ filter.form.status2.label_tag }}#}
+                            {#                                <div>#}
+                            {#                                <p class="dashed">#}
+                            {#                                    {% for choice in filter.form.status2 %}#}
+                            {#                                        <label class="checkbox-inline">#}
+                            {#                                            {{ choice.tag }} {{ choice.choice_label }}#}
+                            {#                                        </label>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </p>#}
+                            {#                                </div>#}
+
+                            {#                            </div>#}
+
+
+                            <div align="left">
+                                <div class="card-body">
+                                    <form class="form" role="form" autocomplete="off" method="get"
+                                          enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {#                                <blackcolor>#}
+                                        <div class="form-group">
+
+                                            <button type="submit" class="button" name="search">
+                                                Search
+                                            </button>
+
+                                        </div>
+                                        {#                                </blackcolor>#}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </blackcolor>
+                </div>
+            </form>
+
+            <form class="form" role="form" autocomplete="off" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>GPA</th>
+                        <th>Year In Program</th>
+                        <th>Email</th>
+                        <th>Questionnaire Year</th>
+                        <th>Academic Advisor</th>
+                        <th>Research Advisor</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for filter in filter.qs %}
+
+                        <tr>
+                            <td>
+                                <a href="{% url 'professor:profile' item_id=filter.username.id %}">{{ filter.first_name }} </a>
+                            </td>
+                            <td>{{ filter.last_name }}</td>
+                            <td>{{ filter.current_GPA }}</td>
+                            <td> " WORK IN PROGRESS "</td>
+                            <td>{{ filter.Email }}</td>
+                            <td>{{ filter.questionnaire_for }}</td>
+                            <td>{{ filter.Current_Academic_Advisor }} </td>
+                            <td> {{ filter.Current_Research_Advisor }} </td>
+                            <td>
+                                <div class="form-group">
+                                    {% if filter.status == "Submitted" %}
+                                        <a href="{% url 'professor:submissionView' item_id=filter.id %}">
+                                            {{ filter.status }} </a>
+                                    {% else %}
+                                        {{ filter.status }}
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </form>
+            <div align="left">
+                <div class="card-body">
+                    <form class="form" role="form" autocomplete="off" method="get"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <a href="{% url 'professor:return_result' %}?{{ request.GET.urlencode }}">
+                                <button
+                                        type="submit" class="button" name="export">
+                                    Export
+                                </button>
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                {#                                <div class="form-group">#}
+                                <button type="submit" class="button" name="clear">
+                                    Clear Search
+                                </button>
+                                {#                                </div>#}
+
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {#            </p>#}
+        </div>
+
+    </div>
+    {#</div>#}
+</section>
+
+
+<script src="{% static 'assets/web/assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/popper/popper.min.js' %}"></script>
+<script src="{% static 'assets/tether/tether.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/parallax/jarallax.min.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/script.min.js' %}"></script>
+<script src="{% static 'assets/touchswipe/jquery.touch-swipe.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+
+</body>
+
+</html>
