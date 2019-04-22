@@ -6,15 +6,20 @@
 
 {% block content %}
     <div class="card-header">
-        <h2 class="mb-0 my-2"><b>Course details</b></h2>
+        <h2 class="mb-0 my-2"><b>Courses Taken</b></h2>
     </div>
     <form id="course-formset" class="form" role="form" autocomplete="off" method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
         {{ course_formset.management_form }}
-        <table border="3" cellpadding="15" cellspacing="0">
+        <table  class="d" border="3" cellpadding="15" cellspacing="0">
             <tbody>
             {% for form in course_formset.forms %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
                 <tr>
                     <td>{{ form.Subject_Name|as_crispy_field }}</td>
                     <td>{{ form.Subject_Code|as_crispy_field }}</td>
@@ -57,10 +62,4 @@
 {% endblock content %}
 
 {% block footer%}
-    <script>
-        $('.course-formset').formset({
-            addText: 'Add Course',
-            deleteText: 'Remove'
-        });
-    </script>
 {% endblock footer%}

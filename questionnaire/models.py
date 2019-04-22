@@ -54,7 +54,7 @@ class submissionTrack(models.Model):
     Email = models.EmailField(blank=True, null=True)
     Current_Research_Advisor = models.CharField(max_length=500, blank=True)
     Current_Academic_Advisor = models.CharField(max_length=500, blank=True)
-    Current_Program_Year = models.CharField(max_length=500, blank=True)
+    Current_Program_Year = models.IntegerField(blank=True, null=True)
 
     #############feedback############
     Feedback = models.TextField(blank=True)
@@ -116,7 +116,6 @@ class techingAssistant(models.Model):
         return str(self.username) + " " + str(
             self.questionnaire_for) + " " + self.Subject_Code + " " + self.In_Which_Semester
 
-
 class paper(models.Model):
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
     Title = models.CharField(max_length=5000)
@@ -130,10 +129,10 @@ class paper(models.Model):
         (UR, UR),
         (PU, PU),
     )
-    Status_of_Paper = models.CharField(max_length=15, choices=status_choices, default=IP)
+    Status_of_Paper = models.CharField(max_length=15, choices=status_choices)
 
-    Author = models.ForeignKey(studentName, db_column="name", on_delete=models.PROTECT)
-    Coauthor = models.TextField(max_length=5000)
+    Author = models.ForeignKey(studentName, db_column="name", on_delete=models.PROTECT, blank=True)
+    Coauthor = models.CharField(max_length=1000, blank=True)
 
     class Meta:
         unique_together = ('Author', 'questionnaire_for', 'Title')
@@ -148,12 +147,12 @@ class research(models.Model):
     Topic = models.CharField(max_length=5000, blank=True)
     Proposal = models.CharField(max_length=5000, blank=True)
     Defense = models.CharField(max_length=5000, blank=True)
-    Current_GPA = models.FloatField(default="2.9", validators=[MaxValueValidator(4.0)])
+    Current_GPA = models.FloatField(validators=[MaxValueValidator(4.0)], blank=True, null=True)
     Current_Academic_Advisor = models.ForeignKey(professorName, related_name='academic_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
     Current_Research_Advisor = models.ForeignKey(professorName, related_name='research_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
-    Current_Program_Year = models.CharField(default="1", max_length=500)
+    Current_Program_Year = models.IntegerField(default="1", validators=[MinValueValidator(1)])
 
     class Meta:
         unique_together = ('username', 'questionnaire_for')

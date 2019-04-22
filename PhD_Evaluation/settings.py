@@ -140,6 +140,7 @@ STATICFILES_DIRS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -148,4 +149,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jeenu151@gmail.com'
 EMAIL_HOST_PASSWORD = 'hxtrcpcemlpaiexj'
 
-LOGIN_URL = '/registration/userLogin'
+LOGIN_URL = '/registration/login'

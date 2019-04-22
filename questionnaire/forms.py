@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django import forms
 from .models import (
     course as Course,
     examAttempt as QExam,
@@ -24,6 +25,11 @@ class TeachingForm(ModelForm):
     class Meta:
         model = TA
         exclude = ['username', 'questionnaire_for']
+        widgets = {
+            'Responsibilities': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
+            'Lecture_or_Presentation_Given': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
+            'Area_of_Improvement': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
+        }
         # fields = ['Subject_Name', 'Subject_Code', 'In_Which_Semester', 'Instructor_Name',
         #  'Responsibilities', 'Lecture_or_Presentation_Given', 'Area_of_Improvement']
 

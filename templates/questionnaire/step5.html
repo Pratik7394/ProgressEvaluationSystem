@@ -4,15 +4,15 @@
 {% block content %}
 
     <div class="card-header">
-        <h3 class="mb-0 my-2"><b>Add a Research Paper</b></h3>
+        <h2 class="mb-0 my-2"><b>Add a Research Paper</b></h2>>
     </div>
-
+    <br>
     <form id="paper-formset" class="form" role="form" autocomplete="off" method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
 
         {{ paper_formset.management_form }}
-        <table border="1" cellpadding="1" cellspacing="2">
+        <table class="d" border="3" cellpadding="15" cellspacing="0">
             <tbody>
             {% for form in paper_formset.forms %}
                 <tr>
@@ -38,7 +38,11 @@
             </div>
         </blackcolor>
     </form>
-
+    {% if paper_formset.errors %}
+        {% for error in paper_formset.errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
     {% if paper_formset.non_form_errors %}
         {% for error in paper_formset.non_form_errors %}
             {{ error|escape }}
@@ -48,10 +52,4 @@
 {% endblock content %}
 
 {% block footer%}
-    <script type="text/javascript">
-    </script>
-    $('.paper-formset').formset({
-    addText: 'Add Qualification Exam',
-    deleteText: 'Remove'
-    });
 {% endblock footer%}

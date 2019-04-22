@@ -4,7 +4,7 @@
 {% block content %}
 
     <div class="card-header">
-        <h3 class="mb-0 my-2"><b>Add a Qualifying Exam attempt</b></h3>
+        <h2 class="mb-0 my-2"><b>Qualifying Exams(All Attempts)</b></h2>
     </div>
 
     <form id="qexam-formset" class="form" role="form" autocomplete="off" method="post"
@@ -12,7 +12,7 @@
         {% csrf_token %}
 
         {{ qexam_formset.management_form }}
-        <table border="1" cellpadding="1" cellspacing="2">
+        <table  class="d" border="3" cellpadding="15" cellspacing="0">
             <tbody>
             {% for form in qexam_formset.forms %}
                 <tr>
@@ -52,10 +52,4 @@
 {% endblock content %}
 
 {% block footer%}
-    <script type="text/javascript">
-    </script>
-    addText: 'Add Qualification Exam',
-    $('.qexam-formset').formset({
-    deleteText: 'Remove'
-    });
 {% endblock footer%}

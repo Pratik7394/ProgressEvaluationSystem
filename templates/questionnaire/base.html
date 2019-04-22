@@ -21,7 +21,55 @@
     <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+    <style>
+        table.d {
+            table-layout: fixed;
+            width: 100%;
+        }
+    </style>
 
+    <style>
+        {#    table, th, td {#}
+        {#        border: 4px solid black;#}
+        {#    }#}
+        {#</style>#}
+        table, td, th {
+            border: 4px solid #19334d;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            padding: 14px;
+            background-color: floralwhite;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
+        th, td {
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
+        }
+    </style>
+
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+    </style>
 
 </head>
 <body>
@@ -42,12 +90,12 @@
         <div class="menu-logo">
             <div class="navbar-brand">
                 <span class="navbar-logo">
-                    <a href="#">
+                    <a href="{% url 'questionnaire:studentHome' %}">
                          <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
                     </a>
                 </span>
                 <span class="navbar-caption-wrap">
-                    <a class="navbar-caption text-white display-4" href="#">
+                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
                         PhD Evaluation
                     </a>
                 </span>
@@ -56,11 +104,13 @@
                         Home
                     </a>
                   </span>
+                {% if user.is_authenticated %}
                 <span class="navbar-caption-wrap">
                     <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
                         Logout
                     </a>
                 </span>
+                {% endif %}
                 {% block nav_header%}{% endblock nav_header%}
             </div>
         </div>
@@ -69,19 +119,19 @@
 
 </section>
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
-    <div class="container align-center">
+    <div class="container align-left">
         <div class="container p-3"></div>
 
         <div class="container py-5 my-5">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-15 mx-auto">
-                            <div class="card border-secondary">
+                            <div class="card border-primary">
                                 <div align="left">
                                     {% if messages %}
                                         {% for message in messages %}
-                                            <div class="alert alert-{{ message.tags }}">
+                                            <div  role="alert" class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
                                                 {{ message }}
                                             </div>
                                         {% endfor %}
@@ -91,6 +141,23 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="content-section">
+                        <h3>Navigate Questionnaire</h3>
+                        <div align="left">
+                            <p class='text-muted'>
+                            <ul class="list-group">
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'questionnaire:form-courses' %}">Step-1: Courses</a></li>
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'questionnaire:form-qexams' %}">Step-2: Qualifying Exams</a></li>
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'questionnaire:form-ta' %}">Step-3: Teaching Assistant</a></li>
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'questionnaire:form-research' %}">Step-4: Research</a></li>
+                            <li class="list-group-item list-group-item-light"><a href="{% url 'questionnaire:form-papers' %}">Step-5: Research Papers</a></li>
+                            </ul>
+                            <small>Make sure to 'Save' your progress.</small>
+                            </p>
                         </div>
                     </div>
                 </div>
