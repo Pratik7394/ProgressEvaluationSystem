@@ -246,8 +246,9 @@ def handleCourses(request):
                 new_courses = []
                 if course_formset.has_changed():
                     print('Data modified')
-                    print([form.cleaned_data for form in course_formset.deleted_forms])
                     for course_form in course_formset:
+                        if course_form in course_formset.deleted_forms:
+                            continue
                         Subject_Name = course_form.cleaned_data.get('Subject_Name')
                         Subject_Code = course_form.cleaned_data.get('Subject_Code')
                         Subject_Term_and_Year = course_form.cleaned_data.get('Subject_Term_and_Year')
@@ -330,6 +331,8 @@ def handleQExams(request):
                 if qexam_formset.has_changed():
                     print('Data modified')
                     for qexam_form in qexam_formset:
+                        if qexam_form in qexam_formset.deleted_forms:
+                            continue
                         Exam_Name_id = Exams.objects.get(exam_Name=qexam_form.cleaned_data.get('Exam_Name')).id
                         Attempt_Number = qexam_form.cleaned_data.get('Attempt_Number')
                         Grade = qexam_form.cleaned_data.get('Grade')
@@ -415,6 +418,8 @@ def handleTA(request):
             if ta_formset.has_changed():
                 print('Data modified')
                 for ta_form in ta_formset:
+                    if ta_form in ta_formset.deleted_forms:
+                        continue
                     Subject_Name = ta_form.cleaned_data.get('Subject_Name')
                     Subject_Code = ta_form.cleaned_data.get('Subject_Code')
                     In_Which_Semester = ta_form.cleaned_data.get('In_Which_Semester')
@@ -581,6 +586,8 @@ def handlePapers(request):
             if paper_formset.has_changed():
                 print('Data modified')
                 for paper_form in paper_formset:
+                    if paper_form in paper_formset.deleted_forms:
+                        continue
                     Title = paper_form.cleaned_data.get('Title')
                     Venue = paper_form.cleaned_data.get('Venue')
                     Coauthor = paper_form.cleaned_data.get('Coauthor')
