@@ -140,10 +140,12 @@ def activate(request, uidb64, token):
             # studentName.user = user
             studentProfile.objects.create(email=email, first_name=first_name, last_name=last_name)
             studentName.objects.create(username=user, name=full_name)
-            questionnaire_for = questionnaire.objects.get(status='Active').id
+            questionnaire_for = None
 
-            print("questionnaire_for")
-            print(questionnaire_for)
+            try:
+                questionnaire_for = questionnaire.objects.get(status='Active').id
+            except:
+                pass
 
             if questionnaire_for is not None:
                 questionnaireFor = questionnaire.objects.get(id=questionnaire_for)
@@ -194,17 +196,6 @@ def userLogin(request):
 
                     if studentProfessor == "student":
                         return redirect('questionnaire:studentHome')
-                        # sessionFullName = request.session['fullNameSession']
-                        # sessionUserName = request.session['userNameSession']
-                        # # print("student --> " + sessionFullName)
-                        # sessionid = request.session['idSession']
-                        # submissionList = submissionTrack.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
-                        # blankspace = ""
-                        # profile = studentProfile.objects.get(email=sessionUserName)
-                        # return render(request, 'registration/homeStudent.html',
-                        #               {'sessionFullName': sessionFullName, 'submissionList': submissionList,
-                        #                'profile': profile, 'blankspace': blankspace})
-
 
                     elif studentProfessor == "professor":
                         return redirect('professor:professorHome')

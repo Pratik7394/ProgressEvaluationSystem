@@ -33,11 +33,19 @@ class TeachingForm(ModelForm):
         # fields = ['Subject_Name', 'Subject_Code', 'In_Which_Semester', 'Instructor_Name',
         #  'Responsibilities', 'Lecture_or_Presentation_Given', 'Area_of_Improvement']
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class ResearchForm(ModelForm):
     class Meta:
         model = Research
         exclude = ['username', 'questionnaire_for']
         # fields = ['Topic', 'Proposal', 'Defense', 'Current_Academic_Advisor', 'Current_Research_Advisor']
+
+        widgets = {
+            'Proposal': DateInput(),
+            'Defense': DateInput()
+        }
 
 class PaperForm(ModelForm):
     class Meta:

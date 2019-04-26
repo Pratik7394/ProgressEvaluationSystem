@@ -107,7 +107,7 @@ def studentHome(request):
                     "-questionnaire_for_id").first()
             print("profile2")
             print(profile2)
-        except submissionTrack.DoesNotExist:
+        except Submission.DoesNotExist:
             profile2 = []
 
         return render(request, 'registration/homeStudent.html',
@@ -165,159 +165,109 @@ def viewSubmissions(request):
 
             ##################not started
             else:
-                # currentReport = Questionnaire.objects.get(id=questionnaire_id)
-                # try:
-                #     previousReport = Questionnaire.objects.get(id=currentReport.previous_term_id)
-                # except Questionnaire.DoesNotExist:
-                #     previousReport = None
-                #
-                # if previousReport:
-                #     print('Previous report exists')
-                #
-                #     # Load Research data
-                #     try:
-                #         research = Research.objects.get(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     except Research.DoesNotExist:
-                #         research = None
-                #     if research:
-                #         print('Research Data exists and Loaded for this term')
-                #         research_data = [Research(
-                #             username_id=research.username_id, questionnaire_for_id=questionnaire_id,
-                #             Topic=research.Topic,
-                #             Proposal=research.Proposal, Defense=research.Defense,
-                #             Current_Program_Year=research.Current_Program_Year,
-                #             Current_Academic_Advisor=research.Current_Academic_Advisor,
-                #             Current_GPA=research.Current_GPA,
-                #             Current_Research_Advisor=research.Current_Research_Advisor
-                #         )]
-                #         # Research.objects.bulk_create(research_data)
-                #
-                #     # Load Courses
-                #     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     if courses.exists():
-                #         print('Course data exists and Loaded for this term')
-                #         course_data = [Course(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
-                #             Subject_Term_and_Year=c.Subject_Term_and_Year, Grade=c.Grade
-                #         ) for c in courses]
-                #         Course.objects.bulk_create(course_data)
-                #
-                #     # Load Qualifying Exam Attempts
-                #     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     if qexams.exists():
-                #         print('QExam data exists and Loaded for this term')
-                #         qexam_data = [QExam(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Exam_Name=c.Exam_Name_id, Attempt_Number=c.Attempt_Number, Grade=c.Grade
-                #         ) for c in qexams]
-                #         QExam.objects.bulk_create(qexam_data)
-                #
-                #     # Load Teaching Assistantships
-                #     teaching_assists = TA.objects.filter(username_id=userTableID,
-                #                                          questionnaire_for_id=previousReport.id)
-                #     if teaching_assists.exists():
-                #         print('TA Data exists and Loaded for this term')
-                #         ta_data = [TA(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
-                #             Responsibilities=c.Responsibilities,
-                #             In_Which_Semester=c.In_Which_Semester, Instructor_Name=c.Instructor_Name,
-                #             Lecture_or_Presentation_Given=c.Lecture_or_Presentation_Given,
-                #             Area_of_Improvement=c.Area_of_Improvement
-                #         ) for c in teaching_assists]
-                #         TA.objects.bulk_create(ta_data)
-                #
-                #     # Load Research Papers
-                #     studentAuthor_id = Student.objects.get(username_id=userTableID)
-                #     papers = Paper.objects.filter(Author_id=studentAuthor_id, questionnaire_for_id=previousReport.id)
-                #     if papers.exists():
-                #         print('Papers present and noted')
-                #         paper_data = [Paper(
-                #             Author_id=c.Author_id, questionnaire_for_id=questionnaire_id, Title=c.Title,
-                #             Venue=c.Venue, List_of_Authors=c.List_of_Authors, Status_of_Paper=c.Status_of_Paper
-                #         ) for c in papers]
-                #         Paper.objects.bulk_create(paper_data)
+                currentReport = Questionnaire.objects.get(id=questionnaire_id)
+                try:
+                    previousReport = Questionnaire.objects.get(id=currentReport.previous_term_id)
+                except Questionnaire.DoesNotExist:
+                    previousReport = None
+
+                if previousReport:
+                    print('Previous report exists')
+                    print('Current Questionnaire:' + str(currentReport))
+                    print('Previous Questionnaire:' + str(previousReport))
+
+                    # Load Research data
+                    try:
+                        research = Research.objects.get(username_id=userTableID, questionnaire_for_id=previousReport.id)
+                    except Research.DoesNotExist:
+                        research = None
+                    if research:
+                        print('Research Data exists and Loaded for this term')
+                        research_data = [Research(
+                            username_id=research.username_id, questionnaire_for_id=questionnaire_id,
+                            Topic=research.Topic,
+                            Proposal=research.Proposal, Defense=research.Defense,
+                            Proposal_Status=research.Proposal_Status, Defense_Status=research.Defense_Status,
+                            Thesis_Committee=research.Thesis_Committee,
+                            Current_GPA=research.Current_GPA,
+                            Current_Research_Advisor=research.Current_Research_Advisor
+                        )]
+                        try:
+                            with transaction.atomic():
+                                Research.objects.bulk_create(research_data)
+                                messages.success(request, 'Your Research details are preloaded.')
+                        except IntegrityError:
+                            print()# If the transaction failed
+
+                    # Load Courses
+                    courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
+                    if courses.exists():
+                        print('Course data exists and Loaded for this term')
+                        course_data = [Course(
+                            username_id=c.username_id, questionnaire_for_id=questionnaire_id,
+                            Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
+                            Subject_Term_and_Year=c.Subject_Term_and_Year, Grade=c.Grade
+                        ) for c in courses]
+                        try:
+                            with transaction.atomic():
+                                Course.objects.bulk_create(course_data)
+                                messages.success(request, 'Your courses are preloaded.')
+                        except IntegrityError:
+                            print()# If the transaction failed
+
+                    # Load Qualifying Exam Attempts
+                    qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
+                    if qexams.exists():
+                        print('QExam data exists and Loaded for this term')
+                        qexam_data = [QExam(
+                            username_id=c.username_id, questionnaire_for_id=questionnaire_id,
+                            Exam_Name_id=c.Exam_Name_id, Attempt_Number=c.Attempt_Number, Grade=c.Grade
+                        ) for c in qexams]
+                        try:
+                            with transaction.atomic():
+                                QExam.objects.bulk_create(qexam_data)
+                                messages.success(request, 'Your Qualifying exam attempts are preloaded.')
+                        except IntegrityError:
+                            print()# If the transaction failed
+
+                    # Load Teaching Assistantships
+                    teaching_assists = TA.objects.filter(username_id=userTableID,
+                                                         questionnaire_for_id=previousReport.id)
+                    if teaching_assists.exists():
+                        print('TA Data exists and Loaded for this term')
+                        ta_data = [TA(
+                            username_id=c.username_id, questionnaire_for_id=questionnaire_id,
+                            Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
+                            Responsibilities=c.Responsibilities,
+                            In_Which_Semester=c.In_Which_Semester, Instructor_Name=c.Instructor_Name,
+                            Lecture_or_Presentation_Given=c.Lecture_or_Presentation_Given,
+                            Area_of_Improvement=c.Area_of_Improvement
+                        ) for c in teaching_assists]
+                        try:
+                            with transaction.atomic():
+                                TA.objects.bulk_create(ta_data)
+                                messages.success(request, 'Your TA experiences are preloaded.')
+                        except IntegrityError:
+                            print()# If the transaction failed
+
+                    # Load Research Papers
+                    studentAuthor_id = Student.objects.get(username_id=userTableID)
+                    papers = Paper.objects.filter(Author_id=studentAuthor_id, questionnaire_for_id=previousReport.id)
+                    if papers.exists():
+                        print('Papers present and noted')
+                        paper_data = [Paper(
+                            Author_id=c.Author_id, questionnaire_for_id=questionnaire_id, Title=c.Title,
+                            Venue=c.Venue, List_of_Authors=c.List_of_Authors, Status_of_Paper=c.Status_of_Paper,
+                            Publish_Year=c.Publish_Year, Publish_Term=c.Publish_Term
+                        ) for c in papers]
+                        try:
+                            with transaction.atomic():
+                                Paper.objects.bulk_create(paper_data)
+                                messages.success(request, 'Your Research papers are preloaded.')
+                        except IntegrityError:
+                            print()# If the transaction failed
 
                 return redirect(reverse('questionnaire:form-courses'))
-
-            ##################not started
-            else:
-                # currentReport = Questionnaire.objects.get(id=questionnaire_id)
-                # try:
-                #     previousReport = Questionnaire.objects.get(id=currentReport.previous_term_id)
-                # except Questionnaire.DoesNotExist:
-                #     previousReport = None
-                #
-                # if previousReport:
-                #     print('Previous report exists')
-                #
-                #     # Load Research data
-                #     try:
-                #         research = Research.objects.get(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     except Research.DoesNotExist:
-                #         research = None
-                #     if research:
-                #         print('Research Data exists and Loaded for this term')
-                #         research_data = [Research(
-                #             username_id=research.username_id, questionnaire_for_id=questionnaire_id,
-                #             Topic=research.Topic,
-                #             Proposal=research.Proposal, Defense=research.Defense,
-                #             Current_Program_Year=research.Current_Program_Year,
-                #             Current_Academic_Advisor=research.Current_Academic_Advisor,
-                #             Current_GPA=research.Current_GPA,
-                #             Current_Research_Advisor=research.Current_Research_Advisor
-                #         )]
-                #         # Research.objects.bulk_create(research_data)
-                #
-                #     # Load Courses
-                #     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     if courses.exists():
-                #         print('Course data exists and Loaded for this term')
-                #         course_data = [Course(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
-                #             Subject_Term_and_Year=c.Subject_Term_and_Year, Grade=c.Grade
-                #         ) for c in courses]
-                #         Course.objects.bulk_create(course_data)
-                #
-                #     # Load Qualifying Exam Attempts
-                #     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
-                #     if qexams.exists():
-                #         print('QExam data exists and Loaded for this term')
-                #         qexam_data = [QExam(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Exam_Name=c.Exam_Name_id, Attempt_Number=c.Attempt_Number, Grade=c.Grade
-                #         ) for c in qexams]
-                #         QExam.objects.bulk_create(qexam_data)
-                #
-                #     # Load Teaching Assistantships
-                #     teaching_assists = TA.objects.filter(username_id=userTableID,
-                #                                          questionnaire_for_id=previousReport.id)
-                #     if teaching_assists.exists():
-                #         print('TA Data exists and Loaded for this term')
-                #         ta_data = [TA(
-                #             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
-                #             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
-                #             Responsibilities=c.Responsibilities,
-                #             In_Which_Semester=c.In_Which_Semester, Instructor_Name=c.Instructor_Name,
-                #             Lecture_or_Presentation_Given=c.Lecture_or_Presentation_Given,
-                #             Area_of_Improvement=c.Area_of_Improvement
-                #         ) for c in teaching_assists]
-                #         TA.objects.bulk_create(ta_data)
-                #
-                #     # Load Research Papers
-                #     studentAuthor_id = Student.objects.get(username_id=userTableID)
-                #     papers = Paper.objects.filter(Author_id=studentAuthor_id, questionnaire_for_id=previousReport.id)
-                #     if papers.exists():
-                #         print('Papers present and noted')
-                #         paper_data = [Paper(
-                #             Author_id=c.Author_id, questionnaire_for_id=questionnaire_id, Title=c.Title,
-                #             Venue=c.Venue, Coauthor=c.Coauthor, Status_of_Paper=c.Status_of_Paper
-                #         ) for c in papers]
-                #         Paper.objects.bulk_create(paper_data)
-
-                    return redirect(reverse('questionnaire:form-courses'))
 
 @login_required()
 def handleCourses(request):
@@ -603,7 +553,7 @@ def handleResearch(request):
         research_data = {
             'username_id': research.username_id, 'questionnaire_for_id': research.questionnaire_for_id,
             'Topic': research.Topic, 'Proposal': research.Proposal, 'Defense': research.Defense,
-            'Proposal_Status': research.Proposal_Status, 'Defence_Status': research.Defence_Status,
+            'Proposal_Status': research.Proposal_Status, 'Defense_Status': research.Defense_Status,
             'Current_Academic_Advisor': research.Current_Academic_Advisor, 'Current_GPA': research.Current_GPA,
             'Current_Research_Advisor': research.Current_Research_Advisor, 'Thesis_Committee': research.Thesis_Committee
         }
