@@ -8,12 +8,8 @@
     <br>
     <form class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <table border="3" cellpadding="15" cellspacing="0">
-{#            <tbody>#}
-{#            #}
+            {{ research_form.non_field_errors}}
             {{ research_form|crispy}}
-{#            </tbody>#}
-        </table>
         <br>
         <blackcolor>
             <div class="form-group">

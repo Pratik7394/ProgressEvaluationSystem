@@ -9,22 +9,29 @@
               enctype="multipart/form-data">
             {% csrf_token %}
             {{ ta_formset.management_form }}
-            <table  class="d" border="3" cellpadding="15" cellspacing="0">
+            <ol>
                 {% for form in ta_formset.forms %}
-                <tbody>
-                    <tr>
-                        <td>{{ form.Subject_Name|as_crispy_field }}</td>
-                        <td>{{ form.Subject_Code|as_crispy_field }}</td>
-                        <td>{{ form.In_Which_Semester|as_crispy_field }}</td>
-                        <td>{{ form.Instructor_Name|as_crispy_field }}</td>
-                        <td>{{ form.Responsibilities|as_crispy_field }}</td>
-                        <td>{{ form.Lecture_or_Presentation_Given|as_crispy_field }}</td>
-                        <td>{{ form.Area_of_Improvement|as_crispy_field }}</td>
-                        <td>{{ form.DELETE|as_crispy_field }}</td>
-                    </tr>
-                </tbody>
+                    {% if form.non_field_errors %}
+                        <ul class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            <li>
+                                {{ error|escape }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <li>
+                    {{ form.Subject_Name|as_crispy_field }} {{ form.Subject_Code|as_crispy_field }}
+                    {{ form.In_Which_Semester|as_crispy_field }}
+                    {{ form.Instructor_Name|as_crispy_field }}
+                    {{ form.Responsibilities|as_crispy_field }}
+                    {{ form.Lecture_or_Presentation_Given|as_crispy_field }}
+                    {{ form.Area_of_Improvement|as_crispy_field }}
+                    {{ form.DELETE|as_crispy_field }}
+                    </li>
                 {% endfor %}
-            </table>
+            </ol>
+
             <br>
             <blackcolor>
                 <div class="form-group">
