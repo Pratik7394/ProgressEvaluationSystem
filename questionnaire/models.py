@@ -66,6 +66,7 @@ class submissionTrack(models.Model):
     Email = models.EmailField(blank=True, null=True)
     Current_Research_Advisor = models.CharField(max_length=500, blank=True)
     Current_Academic_Advisor = models.CharField(max_length=500, blank=True)
+    Current_Program_Year = models.IntegerField(blank=True, null=True)
 
     #############feedback############
     Feedback = models.TextField(blank=True)
@@ -190,10 +191,10 @@ class research(models.Model):
     Topic = models.CharField(max_length=5000)
     Current_Research_Advisor = models.ForeignKey(professorName, related_name='research_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
-    Proposal = models.DateField(default=datetime.datetime.now)
+    Proposal = models.DateField()
     Proposal_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
-    Defense = models.DateField(default=datetime.datetime.now)
-    Defence_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
+    Defense = models.DateField()
+    Defense_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
     Thesis_Committee = models.TextField(max_length=5000,blank=True)
 
     #   Academics

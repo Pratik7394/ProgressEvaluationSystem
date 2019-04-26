@@ -21,13 +21,7 @@
                         </ul>
                     {% endif %}
                     <li>
-                    {{ form.Subject_Name|as_crispy_field }} {{ form.Subject_Code|as_crispy_field }}
-                    {{ form.In_Which_Semester|as_crispy_field }}
-                    {{ form.Instructor_Name|as_crispy_field }}
-                    {{ form.Responsibilities|as_crispy_field }}
-                    {{ form.Lecture_or_Presentation_Given|as_crispy_field }}
-                    {{ form.Area_of_Improvement|as_crispy_field }}
-                    {{ form.DELETE|as_crispy_field }}
+                    {{ form.as_table }}
                     </li>
                 {% endfor %}
             </ol>

@@ -48,7 +48,7 @@ class questionnaireAdmin(admin.ModelAdmin):
                 username = User.objects.get(id=userid)
                 program_joining_date = studentProfile.objects.get(email=username).program_joining_date
                 print(program_joining_date)
-                year = ''
+                year = 0
                 if program_joining_date is not None:
                     now = datetime.now()
                     now = now.date()
