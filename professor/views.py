@@ -1,26 +1,18 @@
-import csv
-from django.shortcuts import render, HttpResponse
-from django.db.models import Q
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
-from questionnaire.models import questionnaire, qualifyingExam, course, submissionTrack, examAttempt, techingAssistant, \
-    paper, research
+from questionnaire.models import course, submissionTrack, examAttempt, techingAssistant, paper, research
 from django.contrib import messages
-from django.template import Context, loader
-import array as arr
-from django.db import connection
-from itertools import chain
 from professor.filter import UserFilter
-from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from itertools import chain
 from professor.forms import feedbackform
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_encode
 from django.core.mail import EmailMessage
 from registration.tokens import account_activation_token
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_text
-# from django.contrib import messages
+from django.utils.encoding import force_bytes
+from registration.models import studentName
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
@@ -28,95 +20,13 @@ from django.utils.encoding import force_bytes, force_text
 @login_required
 def professorHome(request):
     if request.method == 'POST':
-        # back = "back"
+        if 'clear' in request.POST:
+            return redirect('professor:professorHome')
         if 'export' in request.POST:
-            print("back")
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
-
-        elif 'clear' in request.POST:
-            sessionFullName = request.session['fullNameSession']
-            print(sessionFullName)
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
-
-
-        else:
-            var = ""
-            submission_list = submissionTrack.objects.all()
-            for submission in submission_list:
-                var = submission.id
-                var = str(var)
-                if var in request.POST:
-                    break
-
-            print(var)
-            request.session['varSession'] = var
-
-            # questionnaire_id = request.session["questionnaireForIdSession"]
-            # questionnaireValue = submissionTrack.objects.get(id=var)
-            # print("row --> ")
-            # print(questionnaireValue)
-
-            questionnaire_id = submissionTrack.objects.get(id=var).questionnaire_for_id
-            questionnaireStatus = submissionTrack.objects.get(id=var).status
-            questionnaire_submit_username = submissionTrack.objects.get(id=var).username
-            # questionnaire_submit_fullname = request.session['fullNameSession']
-            print((questionnaireStatus))
-            context = {}
-            if questionnaireStatus == "Submitted":
-                userTableID = User.objects.get(username=questionnaire_submit_username).id
-                course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
-                examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
-                                                              questionnaire_for_id=questionnaire_id)
-                techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
-                                                                        questionnaire_for_id=questionnaire_id)
-                paper_dict = paper.objects.filter(Author_id=userTableID, questionnaire_for_id=questionnaire_id)
-                research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
-
-                print(course_dict)
-                print(examAttempt_dict)
-                print(techingAssistant_dict)
-                print(paper_dict)
-                print(research_dict)
-                obj = User.objects.get(id=userTableID)
-                firstname = obj.first_name
-                print(firstname)
-                lastname = obj.last_name
-                fullname = firstname + " " + lastname
-                print(fullname)
-
-                feedback = submissionTrack.objects.get(id=var).Feedback
-                feedback_form = feedbackform(instance=feedback)
-                blankspace = ""
-                context = {'fullname': fullname, 'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
-                           'techingAssistant_dict': techingAssistant_dict,
-                           'paper_dict': paper_dict, 'research_dict': research_dict, 'feedback_form': feedback_form,
-                           'blankspace': blankspace}
-
-            return render(request, 'professor/submission.html', context)
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     else:
         sessionFullName = request.session['fullNameSession']
-        print(sessionFullName)
-        # sessionUserName = request.session['userNameSession']
-        # print("student --> " + sessionFullName)
-        # sessionid = request.session['idSession']
         blankspace = ""
         details = submissionTrack.objects.all()
         filter = UserFilter(request.GET, queryset=details)
@@ -124,81 +34,64 @@ def professorHome(request):
         return render(request, 'registration/homeProfessor.html', context=user_dict)
 
 
-############################################CSV filter student list #############################
-def search_query(request):
-    user_list = submissionTrack.objects.all()
-    user_filter = UserFilter(request.GET, queryset=user_list)
-    return user_filter
+@login_required
+def filterName(request, item_id):
+    if request.method == 'POST':
+        if 'clear' in request.POST:
+            return redirect('professor:professorHome')
+
+        if 'export' in request.POST:
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    else:
+        print(item_id)
+        details = submissionTrack.objects.filter(username_id=item_id)
+        print(details)
+        fullname = ''
+
+        for detail in details:
+            fullname = detail.fullname
+            break
+
+        filter = UserFilter(request.GET, queryset=details)
+        user_dict = {'details': details, 'filter': filter, 'fullname': fullname}
+        return render(request, 'registration/homeProfessor.html', context=user_dict)
 
 
-def return_result(request):
-    data = search_query(request)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="students_record.csv"'
-    writer = csv.writer(response, delimiter=',')
-    writer.writerow(
-        ['first_name', 'last_name', 'current_GPA', 'SUNY_ID', 'Email', 'questionnaire_for', 'Current_Academic_Advisor',
-         'Current_Research_Advisor', 'status'])
-    for obj in data.qs:
-        writer.writerow([obj.first_name, obj.last_name, obj.current_GPA, obj.SUNY_ID, obj.Email, obj.questionnaire_for,
-                         obj.Current_Academic_Advisor, obj.Current_Research_Advisor, obj.status])
-
-    return response
-
-
-############################################CSV filter student list#############################
-
-
-###################profile of student###################
 @login_required
 def submissionView(request, item_id):
     if request.method == 'POST':
-        # back = "back"
         if 'save' in request.POST:
-            print("feedback")
             feedback = ''
             feedback_form = feedbackform(data=request.POST)
+
             if feedback_form.is_valid():
-                # var = request.session['varSession']
                 feedback = feedback_form.cleaned_data['Feedback']
-                feedback = feedback + " \n" + "--------------------------"
-                print(feedback)
+
             var = request.session['varSession']
             submissionTrack.objects.filter(id=var).update(Feedback=feedback)
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
+            submissionTrack.objects.filter(id=var).update(status="Review In Progress")
+            messages.warning(request,
+                             "Feedback successfully saved")
+            return redirect('professor:professorHome')
 
         if 'submit' in request.POST:
-            print("feedback")
             feedback = ''
             feedback_form = feedbackform(data=request.POST)
             var = request.session['varSession']
-            print(var)
-
             track = submissionTrack.objects.get(id=var)
-            print(track)
-
+            submissionTrack.objects.filter(id=var).update(status="Review Submitted")
             user = User.objects.get(username=track.username)
-            print(user)
             emailID = user.username
             questionnaireFor = track.questionnaire_for
-            print(questionnaireFor)
-            # print (track.idd)
 
             if feedback_form.is_valid():
                 feedback = feedback_form.cleaned_data['Feedback']
-                feedback = feedback + " \n" + "--------------------------"
+
+            submissionTrack.objects.filter(id=var).update(Feedback=feedback)
 
             current_site = get_current_site(request)
-            mail_subject = 'Feedback for your questionnarie' + " " + str(questionnaireFor)
+            mail_subject = 'Feedback for your questionnaire' + " " + str(questionnaireFor)
             message = render_to_string('professor/feedback_email.html', {
                 'feedback': feedback,
                 'user': user,
@@ -211,206 +104,195 @@ def submissionView(request, item_id):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            var = request.session['varSession']
-            submissionTrack.objects.filter(id=var).update(Feedback=feedback)
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
             messages.warning(request,
                              "Feedback successfully emailed")
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
+            return redirect('professor:professorHome')
 
         elif 'back' in request.POST:
-            print("back")
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
-
-        # elif 'export' in request.POST:
-        #     print("back")
-        #     sessionFullName = request.session['fullNameSession']
-        #     # sessionUserName = request.session['userNameSession']
-        #     # print("student --> " + sessionFullName)
-        #     # sessionid = request.session['idSession']
-        #     blankspace = ""
-        #     details = submissionTrack.objects.all()
-        #     filter = UserFilter(request.GET, queryset=details)
-        #     user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-        #                  'blankspace': blankspace}
-        #     return render(request, 'registration/homeProfessor.html', context=user_dict)
+            return redirect('professor:professorHome')
 
         else:
-            print("we have some problem in handling")
+            HttpResponse("Something is wrong on our side. Inform administrator, Then we will resolve it")
 
     else:
         questionnaire_id = submissionTrack.objects.get(id=item_id).questionnaire_for_id
         questionnaireStatus = submissionTrack.objects.get(id=item_id).status
         questionnaire_submit_username = submissionTrack.objects.get(id=item_id).username
-        # questionnaire_submit_fullname = request.session['fullNameSession']
         var = item_id
         request.session['varSession'] = var
-        print((questionnaireStatus))
+        print(questionnaireStatus)
         context = {}
-        if questionnaireStatus == "Submitted":
+        if (questionnaireStatus == "Submitted For Review") or (questionnaireStatus == "Review In Progress") or (
+                questionnaireStatus == "Review Submitted"):
             userTableID = User.objects.get(username=questionnaire_submit_username).id
             course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
             examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
                                                           questionnaire_for_id=questionnaire_id)
             techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
                                                                     questionnaire_for_id=questionnaire_id)
-            paper_dict = paper.objects.filter(Author_id=userTableID, questionnaire_for_id=questionnaire_id)
+            paper_dict = paper.objects.filter(Author_id=userTableID,
+                                              questionnaire_for_id=questionnaire_id)
             research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
 
-            print(course_dict)
-            print(examAttempt_dict)
-            print(techingAssistant_dict)
-            print(paper_dict)
-            print(research_dict)
-            obj = User.objects.get(id=userTableID)
-            firstname = obj.first_name
-            print(firstname)
-            lastname = obj.last_name
-            fullname = firstname + " " + lastname
-            print(fullname)
-            instance = submissionTrack.objects.filter(id=item_id).first()
-            # studentProfile_Form = studentProfileForm(instance=profile)
+            fullname = submissionTrack.objects.get(id=item_id).fullname
+            instance = submissionTrack.objects.get(id=item_id)
+            feedback = submissionTrack.objects.get(id=item_id).Feedback
             feedback_form = feedbackform(instance=instance)
             blankspace = ""
+
             context = {'fullname': fullname, 'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
-                       'techingAssistant_dict': techingAssistant_dict,
+                       'techingAssistant_dict': techingAssistant_dict, 'questionnaireStatus': questionnaireStatus,
                        'paper_dict': paper_dict, 'research_dict': research_dict, 'feedback_form': feedback_form,
-                       'blankspace': blankspace}
-        return render(request, 'professor/submission.html', context)
-
-
-@login_required
-def profile(request, item_id):
-    if request.method == 'POST':
-        # back = "back"
-        if 'feedback' in request.POST:
-            print("feedback")
-            feedback = ''
-            feedback_form = feedbackform(data=request.POST)
-            if feedback_form.is_valid():
-                var = request.session['varSession']
-                earlier_feedback = submissionTrack.objects.filter(id=var)
-                earlierfeedback = ""
-                for feedbacks in earlier_feedback:
-                    earlierfeedback = feedbacks.Feedback
-                # print("valid")
-                feedback = feedback_form.cleaned_data['Feedback']
-                feedback = str(earlierfeedback) + " \n" + "--------------------------" + "\n" + "-" + feedback
-            var = request.session['varSession']
-            submissionTrack.objects.filter(id=var).update(Feedback=feedback)
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
-
-        elif 'back' in request.POST:
-            sessionFullName = request.session['fullNameSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
-
-        elif 'export' in request.POST:
-            print("back")
-            sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # print("student --> " + sessionFullName)
-            # sessionid = request.session['idSession']
-            blankspace = ""
-            details = submissionTrack.objects.all()
-            filter = UserFilter(request.GET, queryset=details)
-            user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
-                         'blankspace': blankspace}
-            return render(request, 'registration/homeProfessor.html', context=user_dict)
+                       'blankspace': blankspace, 'feedback': feedback, }
 
         else:
-            var = ""
-            submission_list = submissionTrack.objects.all()
-            for submission in submission_list:
-                var = submission.id
-                var = str(var)
-                if var in request.POST:
-                    break
+            HttpResponse("Something is wrong on our side. Inform administrator, Then we will resolve it")
 
-            print(var)
-            request.session['varSession'] = var
-            # questionnaire_id = request.session["questionnaireForIdSession"]
-            # questionnaireValue = submissionTrack.objects.get(id=var)
-            # print("row --> ")
-            # print(questionnaireValue)
+        return render(request, 'professor/submission.html', context)
 
-            questionnaire_id = submissionTrack.objects.get(id=var).questionnaire_for_id
-            questionnaireStatus = submissionTrack.objects.get(id=var).status
-            questionnaire_submit_username = submissionTrack.objects.get(id=var).username
-            # questionnaire_submit_fullname = request.session['fullNameSession']
-            print((questionnaireStatus))
-            context = {}
-            if questionnaireStatus == "Submitted":
-                userTableID = User.objects.get(username=questionnaire_submit_username).id
-                course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
-                examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
-                                                              questionnaire_for_id=questionnaire_id)
-                techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
-                                                                        questionnaire_for_id=questionnaire_id)
-                paper_dict = paper.objects.filter(Author_id=userTableID, questionnaire_for_id=questionnaire_id)
-                research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
-
-                print(course_dict)
-                print(examAttempt_dict)
-                print(techingAssistant_dict)
-                print(paper_dict)
-                print(research_dict)
-                obj = User.objects.get(id=userTableID)
-                firstname = obj.first_name
-                print(firstname)
-                lastname = obj.last_name
-                fullname = firstname + " " + lastname
-                print(fullname)
-                feedback_form = feedbackform()
-                blankspace = ""
-                context = {'fullname': fullname, 'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
-                           'techingAssistant_dict': techingAssistant_dict,
-                           'paper_dict': paper_dict, 'research_dict': research_dict, 'feedback_form': feedback_form,
-                           'blankspace': blankspace}
-            return render(request, 'professor/submission.html', context)
+############################################CSV filter student list #############################
+# def search_query(request):
+#     user_list = submissionTrack.objects.all()
+#     user_filter = UserFilter(request.GET, queryset=user_list)
+#     return user_filter
+#
+#
+# def return_result(request):
+#     print("export2")
+#     data = search_query(request)
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="students_record.csv"'
+#     writer = csv.writer(response, delimiter=',')
+#     writer.writerow(
+#         ['fullname', 'current_GPA', 'Current_Program_Year','Email', 'questionnaire_for', 'Current_Academic_Advisor',
+#          'Current_Research_Advisor', 'status'])
+#     for obj in data.qs:
+#         writer.writerow([obj.fullname, obj.current_GPA, obj.Current_Program_Year, obj.Email, obj.questionnaire_for,
+#                          obj.Current_Academic_Advisor, obj.Current_Research_Advisor, obj.status])
+#
+#     return response
 
 
-    else:
-        submissionTrack_obj = \
-            submissionTrack.objects.filter(username_id=item_id, status="Submitted").order_by("-status")[0]
-        print(submissionTrack_obj)
-        submissionList = submissionTrack.objects.filter(status="Submitted", username_id=item_id)
+############################################CSV filter student list#############################
 
-        context = {
-            "submissionTrack_obj": submissionTrack_obj, 'submissionList': submissionList
-        }
-        return render(request, 'professor/studentProfile.html', context)
+
+###################profile of student###################
+
+# @login_required
+# def profile(request, item_id):
+#     if request.method == 'POST':
+#         # back = "back"
+#         if 'feedback' in request.POST:
+#             print("feedback")
+#             feedback = ''
+#             feedback_form = feedbackform(data=request.POST)
+#             if feedback_form.is_valid():
+#                 var = request.session['varSession']
+#                 earlier_feedback = submissionTrack.objects.filter(id=var)
+#                 earlierfeedback = ""
+#                 for feedbacks in earlier_feedback:
+#                     earlierfeedback = feedbacks.Feedback
+#                 # print("valid")
+#                 feedback = feedback_form.cleaned_data['Feedback']
+#                 feedback = str(earlierfeedback) + " \n" + "--------------------------" + "\n" + "-" + feedback
+#             var = request.session['varSession']
+#             submissionTrack.objects.filter(id=var).update(Feedback=feedback)
+#             sessionFullName = request.session['fullNameSession']
+#             # sessionUserName = request.session['userNameSession']
+#             # print("student --> " + sessionFullName)
+#             # sessionid = request.session['idSession']
+#             blankspace = ""
+#             details = submissionTrack.objects.all()
+#             filter = UserFilter(request.GET, queryset=details)
+#             user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
+#                          'blankspace': blankspace}
+#             return render(request, 'registration/homeProfessor.html', context=user_dict)
+#
+#         elif 'back' in request.POST:
+#             sessionFullName = request.session['fullNameSession']
+#             blankspace = ""
+#             details = submissionTrack.objects.all()
+#             filter = UserFilter(request.GET, queryset=details)
+#             user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
+#                          'blankspace': blankspace}
+#             return render(request, 'registration/homeProfessor.html', context=user_dict)
+#
+#         elif 'export' in request.POST:
+#             print("export1")
+#             print("back")
+#             sessionFullName = request.session['fullNameSession']
+#             # sessionUserName = request.session['userNameSession']
+#             # print("student --> " + sessionFullName)
+#             # sessionid = request.session['idSession']
+#             blankspace = ""
+#             details = submissionTrack.objects.all()
+#             filter = UserFilter(request.GET, queryset=details)
+#             user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName,
+#                          'blankspace': blankspace}
+#             return render(request, 'registration/homeProfessor.html', context=user_dict)
+#
+#         else:
+#             var = ""
+#             submission_list = submissionTrack.objects.all()
+#             for submission in submission_list:
+#                 var = submission.id
+#                 var = str(var)
+#                 if var in request.POST:
+#                     break
+#
+#             print(var)
+#             request.session['varSession'] = var
+#             # questionnaire_id = request.session["questionnaireForIdSession"]
+#             # questionnaireValue = submissionTrack.objects.get(id=var)
+#             # print("row --> ")
+#             # print(questionnaireValue)
+#
+#             questionnaire_id = submissionTrack.objects.get(id=var).questionnaire_for_id
+#             questionnaireStatus = submissionTrack.objects.get(id=var).status
+#             questionnaire_submit_username = submissionTrack.objects.get(id=var).username
+#             # questionnaire_submit_fullname = request.session['fullNameSession']
+#             print((questionnaireStatus))
+#             context = {}
+#             if questionnaireStatus == "Submitted":
+#                 userTableID = User.objects.get(username=questionnaire_submit_username).id
+#                 course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+#                 examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
+#                                                               questionnaire_for_id=questionnaire_id)
+#                 techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
+#                                                                         questionnaire_for_id=questionnaire_id)
+#                 paper_dict = paper.objects.filter(Author_id=userTableID, questionnaire_for_id=questionnaire_id)
+#                 research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+#
+#                 print(course_dict)
+#                 print(examAttempt_dict)
+#                 print(techingAssistant_dict)
+#                 print(paper_dict)
+#                 print(research_dict)
+#                 obj = User.objects.get(id=userTableID)
+#                 firstname = obj.first_name
+#                 print(firstname)
+#                 lastname = obj.last_name
+#                 fullname = firstname + " " + lastname
+#                 print(fullname)
+#                 feedback_form = feedbackform()
+#                 blankspace = ""
+#                 context = {'fullname': fullname, 'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
+#                            'techingAssistant_dict': techingAssistant_dict,
+#                            'paper_dict': paper_dict, 'research_dict': research_dict, 'feedback_form': feedback_form,
+#                            'blankspace': blankspace}
+#             return render(request, 'professor/submission.html', context)
+#
+#
+#     else:
+#         submissionTrack_obj = \
+#             submissionTrack.objects.filter(username_id=item_id, status="Submitted").order_by("-status")[0]
+#         print(submissionTrack_obj)
+#         submissionList = submissionTrack.objects.filter(status="Submitted", username_id=item_id)
+#
+#         context = {
+#             "submissionTrack_obj": submissionTrack_obj, 'submissionList': submissionList
+#         }
+#         return render(request, 'professor/studentProfile.html', context)
 
 # obj = User.objects.get(id=item_id)
 # # questionnaire = query.questionnaire_for

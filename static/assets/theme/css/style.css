@@ -278,28 +278,29 @@ figure[mbr-media-size] {
 }
 
 /*! Buttons */
-
-
 .button {
-  padding: 15px 25px;
-  font-size: 24px;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  color: #fff;
-  background-color: #555555;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
+    padding: 10px 20px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #555555;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px #999;
 }
 
-.button:hover {background-color: #555555}
+.button:hover {
+    background-color: #555555
+}
 
 .button:active {
-  background-color: #555555;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+    background-color: #555555;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
+
 
 .mbr-section-btn {
     margin-left: -.25rem;
@@ -671,8 +672,10 @@ nav .mbr-section-btn {
 blackcolor {
     color: black;
 }
+
 /* Black */
 .button5 {
     background-color: #555555;
 }
 
+/* size */

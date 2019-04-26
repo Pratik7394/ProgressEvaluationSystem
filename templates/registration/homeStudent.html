@@ -29,26 +29,21 @@
     <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
 
 
-    <!-- Dont remove this: Divyarth Singh -->
-    {#    <script>#}
-    {##}
-    {#        function setGetParameter() {#}
-    {#            var search_word = $("#search").val();#}
-    {#            $.ajax({#}
-    {#                type: "POST",#}
-    {#                url: {% url 'questionnaire:submissions' %},#}
-    {#                data: search_word,#}
-    {#                success: function (result) {#}
-    {#                    alert("Success");#}
-    {#                }#}
-    {#            });#}
-    {#        }#}
-    {#    </script>#}
+
     <style>
-        {#    table, th, td {#}
-        {#        border: 4px solid black;#}
-        {#    }#}
-        {#</style>#}
+
+        p.dashed {
+            border-style: dashed;
+        }
+
+        .input-xs {
+            height: 45px;
+            padding: 2px 6px;
+            font-size: 12px;
+            line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+            border-radius: 3px;
+        }
+
         table, td, th {
             border: 4px solid #19334d;
             text-align: left;
@@ -61,7 +56,7 @@
 
         th {
             padding: 14px;
-            background-color: white;
+            background-color: floralwhite;
             color: black;
         }
 
@@ -78,6 +73,12 @@
 
         tr:hover td {
             background-color: floralwhite;
+        }
+    </style>
+
+    <style>
+        html {
+            overflow-y: scroll;
         }
     </style>
 
@@ -109,12 +110,12 @@
         <div class="menu-logo">
             <div class="navbar-brand">
                 <span class="navbar-logo">
-                    <a href="{% url 'registration:homePageStudent' %}">
+                    <a href="{% url 'questionnaire:studentHome' %}">
                          <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
                     </a>
                 </span>
                 <span class="navbar-caption-wrap">
-                    <a class="navbar-caption text-white display-4" href="{% url 'registration:homePageStudent' %}">
+                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
                         PhD Evaluation
                     </a>
                 </span>
@@ -157,90 +158,93 @@
             <div align="left">
                 <form class="form" role="form" autocomplete="off" method="post"
                       enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <b>
-                        <blackcolor>
-                            <h2><u><strong>Profile</strong></u></h2>
-                            <br>
-                            <h4>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">First Name:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA"> {{ profile.first_name }}</p></div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">Last Name:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA">{{ profile.last_name }}</p></div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">SUNY ID:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA">{{ profile.SUNY_ID }}</p></div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">Native Country:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA">{{ profile.native_country }}</p></div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA">{{ profile2.current_GPA }}</p></div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">Current Research
-                                                Advisor:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA"> {{ profile2.Current_Research_Advisor }} </p>
-                                            </div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row mgbt-xs-0">
-                                            <label class="col-xs-5 control-label">Current Academic
-                                                Advisor:&nbsp</label>
-                                            <div class="col-xs-7 controls"><p
-                                                    style="color:#0A0AAA"> {{ profile2.Current_Academic_Advisor }} </p>
-                                            </div>
-                                            <!-- col-sm-10 -->
-                                        </div>
-                                    </div>
-                                    {#                                        <div class="col-sm-6">#}
-                                    {#                                            <div class="row mgbt-xs-0">#}
-                                    {#                                                <label class="col-xs-5 control-label">Number of paper#}
-                                    {#                                                    PUBLISHED:&nbsp</label>#}
-                                    {#                                                <div class="col-xs-7 controls"><p#}
-                                    {#                                                        style="color:#0A0AAA"> {{ profile.number_of_paper_PUBLISHED }} </p>#}
-                                    {#                                                </div>#}
-                                    {#                                                <!-- col-sm-10 -->#}
-                                    {#                                            </div>#}
-                                    {#                                        </div>#}
-                                </div>
+                    <div class="bg-light text-dark">
+                        {% csrf_token %}
+                        <b>
+                            <blackcolor>
+                                <h2><u><strong>Profile</strong></u></h2>
                                 <br>
-                            </h4>
-                        </blackcolor>
-                    </b>
+                                <h4>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspFirst Name:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA"> {{ profile.first_name }}</p></div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">Last Name:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA">{{ profile.last_name }}</p></div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspSUNY ID:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA">{{ profile.SUNY_ID }}</p></div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">Native Country:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA">{{ profile.native_country }}</p></div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspProgram Joining Date:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA">{{ profile.program_joining_date }}</p>
+                                                </div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA">{{ profile2.current_GPA }}</p></div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspCurrent Research
+                                                    Advisor:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA"> {{ profile2.Current_Research_Advisor }} </p>
+                                                </div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row mgbt-xs-0">
+                                                <label class="col-xs-5 control-label">Current Academic
+                                                    Advisor:&nbsp</label>
+                                                <div class="col-xs-7 controls"><p
+                                                        style="color:#0A0AAA"> {{ profile2.Current_Academic_Advisor }} </p>
+                                                </div>
+                                                <!-- col-sm-10 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </h4>
+                            </blackcolor>
+                        </b>
+                    </div>
                 </form>
             </div>
+        <br>
 
             <div align="left">
                 <b>
@@ -273,7 +277,7 @@
                                             <th>Questionnaire For</th>
                                             <th>Status</th>
                                             <th>View/Edit</th>
-{#                                            <th>Feedback</th>#}
+                                            {#                                            <th>Feedback</th>#}
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -284,53 +288,45 @@
                                                 <td>{{ submission.status }}</td>
                                                 <td>
                                                     <div class="form-group">
-
-                                                        {% if submission.status == "Saved" %}
-                                                            <button type="submit" class="button"
-                                                                    name={{ submission.id }}>
-                                                                Edit
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if submission.status == 'Submitted For Review' %}
-                                                            <button type="submit" class="button"
-                                                                    name={{ submission.id }}>
-                                                                View
-                                                            </button>
-                                                        {% endif %}
                                                         {% if submission.status == "Not Started" %}
-                                                            <button type="submit" class="button"
-                                                                    name={{ submission.id }}>
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}>
                                                                 Start
                                                             </button>
                                                         {% endif %}
+                                                        {% if submission.status == "Saved" %}
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}>
+                                                                Edit
+                                                            </button>
+                                                            &nbsp&nbsp&nbsp&nbsp
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}submit>
+                                                                Submit
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if submission.status == 'Submitted For Review' %}
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}>
+                                                                View
+                                                            </button>
+                                                        {% endif %}
                                                         {% if submission.status == "Review In Progress" %}
-                                                            {#                                                            <button type="submit" class="button"#}
-                                                            {#                                                                    name={{ submission.questionnaire_for_id }}>#}
-                                                            Review In Progress
-                                                            {#                                                            </button>#}
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}>
+                                                                View
+                                                            </button>
                                                         {% endif %}
                                                         {% if submission.status == "Review Submitted" %}
-                                                            {#                                                            <button type="submit" class="button"#}
-                                                            {#                                                                    name={{ submission.questionnaire_for_id }}>#}
-                                                            Review Completed
-                                                            {#                                                            </button>#}
+                                                            <button type="submit" class="button" name='var'
+                                                                    value={{ submission.id }}>
+                                                                View
+                                                            </button>
                                                         {% endif %}
                                                     </div>
                                                     {{ blankspace }}
                                                 </td>
                                             </tr>
-
-                                            {#                                                <a class="button" onclick="setGetParameter()" name="{{ submission.Questionnaire_For }}"#}
-                                            {#                                                           href="{% url 'questionnaire:submissions' item_id=submission.id %}">#}
-                                            {#                                                        href="{% url 'questionnaire:submissions' %}">#}
-                                            {#                                                            {{ submission.Questionnaire_For }}#}
-                                            {#                                                        </a>#}
-
-
-
-                                            {#                                                <input onclick="setGetParameter()" type="button"#}
-                                            {#                                                       class="btn btn-primary" value="View Details"/>#}
-
                                         {% empty %}
                                             <tr>
                                                 <td colspan="5">No data</td>
@@ -346,7 +342,6 @@
             </p>
         </div>
     </div>
-    {#    </div>#}
 
 </section>
 
