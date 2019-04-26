@@ -52,9 +52,11 @@ def filterName(request, item_id):
         for detail in details:
             fullname = detail.fullname
             break
-
+        sessionFullName = request.session['fullNameSession']
+        blankspace = ""
         filter = UserFilter(request.GET, queryset=details)
-        user_dict = {'details': details, 'filter': filter, 'fullname': fullname}
+        user_dict = {'details': details, 'filter': filter, 'fullname': fullname, 'sessionFullName': sessionFullName,
+                     'blankspace': blankspace}
         return render(request, 'registration/homeProfessor.html', context=user_dict)
 
 

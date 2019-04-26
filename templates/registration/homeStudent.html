@@ -32,6 +32,16 @@
 
     <style>
 
+        div.ex1 {
+            width: 1200px;
+            margin: auto;
+        {#border: 3px solid #73AD21;#}
+        }
+
+        .bg {
+            background-color: floralwhite;
+        }
+
         p.dashed {
             border-style: dashed;
         }
@@ -135,7 +145,7 @@
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
 
     {#    <div class="container align-center">#}
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center ex1">
         <div class="mbr-white col-md-10">
             <p class="mbr-text pb-3 mbr-fonts-style display-5">
 
@@ -158,7 +168,7 @@
             <div align="left">
                 <form class="form" role="form" autocomplete="off" method="post"
                       enctype="multipart/form-data">
-                    <div class="bg-light text-dark">
+                    <div class="bg text-dark">
                         {% csrf_token %}
                         <b>
                             <blackcolor>
