@@ -45,6 +45,8 @@ class studentProfile(models.Model):
     email = models.EmailField(unique=True)
     SUNY_ID = models.IntegerField(blank=True, null=True)
     native_country = models.CharField(max_length=100, blank=True)
+    program_joining_date = models.DateField(blank=True, null=True)
+
 
     def __str__(self):
         return self.email + " " + self.first_name + " " + self.last_name

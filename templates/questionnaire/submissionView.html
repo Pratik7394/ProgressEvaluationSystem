@@ -27,6 +27,14 @@
     <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
 
+
+    <style>
+        table.d {
+            table-layout: fixed;
+            width: 100%;
+        }
+    </style>
+
     <style>
         {#    table, th, td {#}
         {#        border: 4px solid black;#}
@@ -42,11 +50,33 @@
             width: 100%;
         }
 
+        th {
+            padding: 14px;
+            background-color: floralwhite;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
         th, td {
-            padding: 15px;
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
         }
     </style>
 
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+    </style>
 
 </head>
 <body>
@@ -67,8 +97,13 @@
         <div class="menu-logo">
             <div class="navbar-brand">
                 <span class="navbar-logo">
-                    <a href="{% url 'registration:homePageStudent' %}">
+                    <a href="{% url 'questionnaire:studentHome' %}">
                          <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
+                        PhD Evaluation
                     </a>
                 </span>
                 <span class="navbar-caption-wrap">
@@ -76,6 +111,7 @@
                         Logout
                     </a>
                 </span></div>
+
         </div>
     </nav>
 
@@ -87,211 +123,177 @@
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
 
 
-    <div class="container align-center">
-        <div class="row justify-content-md-center">
-            <div class="mbr-white col-md-10">
-                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Submission</h1>
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Submission Overview</h1>
 
-                <p class="mbr-text pb-3 mbr-fonts-style display-5">
-                <div align="left">
-                    <ul>
-                        <b>
-                            <blackcolor>
-                                <title>Questionnaire</title>
-                                <h1>Submission Overview</h1>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Your Name</th>
-                                        <th>Topic</th>
-                                        <th>Proposal</th>
-                                        <th>Defense</th>
-                                        <th>Academic Advisor</th>
-                                        <th>Research Advisor</th>
-                                    </tr>
-                                    <tr>
+            <p class="mbr-text pb-3 mbr-fonts-style display-5">
+            <div align="left">
+                <ul>
+                    <b>
+                        <blackcolor>
+                            <h1>RESEARCH</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    {#                                        <th>Your Name</th>#}
+                                    <th>Topic</th>
+                                    <th>Proposal</th>
+                                    <th>Defense</th>
+                                    <th>Academic Advisor</th>
+                                    <th>Research Advisor</th>
+                                </tr>
+                                <tr>
 
-                                        {% for user in research_dict %}
-                                            <td>  {{ questionnaire_submit_fullname }} </td>
-                                            <td>     {{ user.Topic }} </td>
-                                            <td>    {{ user.Proposal }} </td>
-                                            <td>    {{ user.Defense }} </td>
-                                            <td>      {{ user.Current_Academic_Advisor }} </td>
-                                            <td>     {{ user.Current_Research_Advisor }} </td>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                            </tr>
-                                        {% empty %}
-                                            <tr>
-                                                <td colspan="5">No data</td>
-                                            </tr>
-
-                                        {% endfor %}
-                                </table>
-
-                                <h1>COMPLETED COURSES</h1>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Courses Taken</th>
-                                        <th>Subject Code</th>
-                                        <th>Subject Term and Year</th>
-                                        <th>Grade</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in course_dict %}
-                                        <tr>
-                                            <td>{{ user.Subject_Name }}</td>
-                                            <td>{{ user.Subject_Code }}</td>
-                                            <td>{{ user.Subject_Term_and_Year }}</td>
-                                            <td>{{ user.Grade }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="5">No data</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-
-                                <h1>QUALIFYING EXAM</h1>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Exam Qualify</th>
-                                        <th>Attempt Number</th>
-                                        <th>Grade</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in examAttempt_dict %}
-                                        <tr>
-                                            <td>{{ user.Exam_Name }}</td>
-                                            <td>{{ user.Attempt_Number }}</td>
-                                            <td>{{ user.Grade }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="5">No data</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-
-                                <h1>TEACHING</h1>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Subject Name</th>
-                                        <th>Subject Code</th>
-                                        <th>Semester</th>
-                                        <th>Instructor Name</th>
-                                        <th>Responsibilities</th>
-                                        <th>Lectures or Presentation_Given</th>
-                                        <th>Area of Improvement</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for user in techingAssistant_dict %}
-                                        <tr>
-                                            <td>{{ user.Subject_Name }} </td>
-                                            <td>{{ user.Subject_Code }} </td>
-                                            <td>{{ user.In_Which_Semester }} </td>
-                                            <td>{{ user.Instructor_Name }} </td>
-                                            <td>{{ user.Responsibilities }} </td>
-                                            <td>{{ user.Lecture_or_Presentation_Given }} </td>
-                                            <td>{{ user.Area_of_Improvement }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="5">No data</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-
-
-                                {#                                <h1>THESIS</h1>#}
-                                {#                                <table class="table table-bordered">#}
-                                {#                                    <thead>#}
-                                {#                                    <tr>#}
-                                {#                                        <th>Thesis Topic</th>#}
-                                {#                                        <th>Thesis Proposal</th>#}
-                                {#                                        <th>Thesis Defense</th>#}
-                                {#                                    </tr>#}
-                                {#                                    </thead>#}
-                                {#                                    <tbody>#}
-                                {#                                    {% for user in research_object %}#}
-                                {#                                        <tr>#}
-                                {#                                            <td>{{ user.Topic }}</td>#}
-                                {#                                            <td>{{ user.Proposal }}</td>#}
-                                {#                                            <td>{{ user.Defense }}</td>#}
-                                {#                                        </tr>#}
-                                {#                                    {% empty %}#}
-                                {#                                        <tr>#}
-                                {#                                            <td colspan="5">No data</td>#}
-                                {#                                        </tr>#}
-                                {#                                    {% endfor %}#}
-                                {#                                </table>#}
-
-
-                                <h1>RESEARCH</h1>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>TOPIC</th>
-                                        <th>PROPOSAL</th>
-                                        <th>DEFENSE</th>
-                                        <th>CURRENT ACADEMIC ADVISOR</th>
-                                        <th>CURRENT RESEARCH ADVISOR</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
                                     {% for user in research_dict %}
+                                        {#                                            <td>  {{ fullname }} </td>#}
+                                        <td>     {{ user.Topic }} </td>
+                                        <td>    {{ user.Proposal }} </td>
+                                        <td>    {{ user.Defense }} </td>
+                                        <td>      {{ user.Current_Academic_Advisor }} </td>
+                                        <td>     {{ user.Current_Research_Advisor }} </td>
+                                        </thead>
+                                        <tbody>
                                         <tr>
-                                            <td>{{ user.Topic }}</td>
-                                            <td>{{ user.Proposal }}</td>
-                                            <td>{{ user.Defense }}</td>
-                                            <td>{{ user.Current_Academic_Advisor }}</td>
-                                            <td>{{ user.Current_Research_Advisor }}</td>
                                         </tr>
                                     {% empty %}
                                         <tr>
                                             <td colspan="5">No data</td>
                                         </tr>
+
                                     {% endfor %}
-                                </table>
-{#                            <br>#}
-{#                            <br>#}
-{#                                <h1>Feedback: </h1>#}
-{#                                {% for feedback in feedback_dict %}#}
-{#                                    <pre>{{ feedback.Feedback }}</pre>#}
-{#                                {% endfor %}#}
-{#                                <br>#}
-                                <br>
-                                <br>
+                            </table>
 
-                            </blackcolor>
-                        </b>
-                    </ul>
+                            <h1>COMPLETED COURSES</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Courses Taken</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Term and Year</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in course_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }}</td>
+                                        <td>{{ user.Subject_Code }}</td>
+                                        <td>{{ user.Subject_Term_and_Year }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
 
-                </div>
-                <br>
-                <div align="left">
-                    <form class="form" role="form" autocomplete="off" method="post"
-                          enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <button type="submit" class="button">
-                                Back
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                </p>
+                            <h1>QUALIFYING EXAM</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Exam Qualify</th>
+                                    <th>Attempt Number</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in examAttempt_dict %}
+                                    <tr>
+                                        <td>{{ user.Exam_Name }}</td>
+                                        <td>{{ user.Attempt_Number }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
 
+                            <h1>TEACHING ASSISTANT</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Subject Code</th>
+                                    <th>Semester</th>
+                                    <th>Instructor Name</th>
+                                    <th>Responsibilities</th>
+                                    <th>Lectures or Presentation_Given</th>
+                                    <th>Area of Improvement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in techingAssistant_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }} </td>
+                                        <td>{{ user.Subject_Code }} </td>
+                                        <td>{{ user.In_Which_Semester }} </td>
+                                        <td>{{ user.Instructor_Name }} </td>
+                                        <td>{{ user.Responsibilities }} </td>
+                                        <td>{{ user.Lecture_or_Presentation_Given }} </td>
+                                        <td>{{ user.Area_of_Improvement }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>PAPER</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>TITLE</th>
+                                    <th>VENUE</th>
+                                    <th>STATUS OF PAPER</th>
+                                    <th>AUTHOR</th>
+                                    <th>COAUTHOR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in paper_dict %}
+                                    <tr>
+                                        <td>{{ user.Title }}</td>
+                                        <td>{{ user.Venue }}</td>
+                                        <td>{{ user.Status_of_Paper }}</td>
+                                        <td>{{ user.Author }}</td>
+                                        <td>{{ user.Coauthor }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </blackcolor>
+                    </b>
+                </ul>
             </div>
+
+
+            <br>
+            <div align="left">
+                <form class="form" role="form" autocomplete="off" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <button type="submit" class="button">
+                            Back
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </p>
+
         </div>
     </div>
+    {#    </div>#}
 
 </section>
 

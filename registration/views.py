@@ -15,6 +15,8 @@ from registration.models import professorWhiteList, userInfo, studentProfile, an
 from questionnaire.models import submissionTrack, questionnaire
 # , studentWhiteList,
 from django.contrib import messages
+import datetime
+from datetime import datetime
 
 import socket
 
@@ -146,7 +148,7 @@ def activate(request, uidb64, token):
             if questionnaire_for is not None:
                 questionnaireFor = questionnaire.objects.get(id=questionnaire_for)
                 submissionTrack.objects.create(username=user, questionnaire_for=questionnaireFor,
-                                               status="Not Started", fullname=full_name)
+                                               status="Not Started", email=user.email, fullname=full_name)
 
         else:
             user = User.objects.get(id=uid)
@@ -258,38 +260,53 @@ def editProfileStudent(request):
         print("post")
         studentProfile_Form = studentProfileForm(data=request.POST)
         if studentProfile_Form.is_valid():
-            print("valid")
             sessionUserName = request.session['userNameSession']
             first_name = studentProfile_Form.cleaned_data['first_name']
             last_name = studentProfile_Form.cleaned_data['last_name']
             SUNY_ID = studentProfile_Form.cleaned_data['SUNY_ID']
             native_country = studentProfile_Form.cleaned_data['native_country']
             full_name = first_name + " " + last_name
-            # current_GPA = studentProfile_Form.cleaned_data['current_GPA']
-            # number_of_semester_completed = studentProfile_Form.cleaned_data['number_of_semester_completed']
-            # current_research_advisor = studentProfile_Form.cleaned_data['current_research_advisor']
-            # current_academic_advisor = studentProfile_Form.cleaned_data['current_academic_advisor']
-            # number_of_paper_PUBLISHED = studentProfile_Form.cleaned_data['number_of_paper_PUBLISHED']
-            # print("start update")
+            program_joining_date = studentProfile_Form.cleaned_data['program_joining_date']
+            print(program_joining_date)
+            now = datetime.now()
+            now = now.date()
+            print(now)
+            # d1 = datetime.strptime(program_joining_date, "%Y-%m-%d")
+            # d2 = datetime.strptime(now, "%Y-%m-%d")
+            diff =  now - program_joining_date
+            # d1 = da
+            diff = diff.days
+            print(diff)
+            days = 365
+            if diff < days:
+                year = 1
+            elif diff >= days or diff < (days*2):
+                year = 2
+            elif diff >= (days*2) or diff < (days*3):
+                year = 3
+            elif diff >= (days*3) or diff < (days * 4):
+                year = 4
+            elif diff >= (days*4) or diff < (days*5):
+                year = 5
+            elif diff >= (days*5) or diff < (days*6):
+                year = 6
+            elif diff >= (days*6) or diff < (days*7):
+                year = 7
+            else:
+                year = 8
+
+            print(year)
             studentProfile.objects.filter(email=sessionUserName).update(first_name=first_name, last_name=last_name,
                                                                         SUNY_ID=SUNY_ID,
-                                                                        native_country=native_country)
-
-            # current_GPA=current_GPA,
-            # number_of_semester_completed=number_of_semester_completed,
-            # current_research_advisor=current_research_advisor,
-            # current_academic_advisor=current_academic_advisor,
-            # number_of_paper_PUBLISHED=number_of_paper_PUBLISHED)
-            # print("update 2")
+                                                                        native_country=native_country,
+                                                                        program_joining_date=program_joining_date)
+            uid = User.objects.get(username=sessionUserName).id
+            submissionTrack.objects.filter(status=('Not Started' or 'Saved'), username_id=uid).update(Current_Program_Year = year)
             User.objects.filter(username=sessionUserName).update(first_name=first_name, last_name=last_name)
-            # print("update 3")
 
-            # print("update 1")
-            # username = str(sessionUserName)
+            submissionTrack.objects.filter(username_id=uid).update(fullname=full_name)
             sessionid = request.session['idSession']
-
             studentName.objects.filter(username_id=sessionid).update(name=full_name)
-
             sessionUserName = request.session['userNameSession']
             first_name = User.objects.get(username=sessionUserName).first_name
             last_name = User.objects.get(username=sessionUserName).last_name

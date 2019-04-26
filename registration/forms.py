@@ -2,6 +2,8 @@ from django import forms
 from registration.models import professorWhiteList, userInfo, User, studentProfile  # , studentWhiteList,
 from django.contrib.auth.password_validation import password_validators_help_texts, MinimumLengthValidator, \
     CommonPasswordValidator
+import datetime
+
 
 
 class userInfoForm(forms.ModelForm):
@@ -72,11 +74,17 @@ class userInfoForm2(forms.ModelForm):
         fields = ('studentOrProfessor',)
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class studentProfileForm(forms.ModelForm):
+
     class Meta():
         model = studentProfile
-        fields = ('first_name', 'last_name', 'SUNY_ID', 'native_country',)
-
+        fields = ('first_name', 'last_name', 'SUNY_ID', 'native_country', 'program_joining_date',)
+        widgets = {
+            'program_joining_date': DateInput()
+        }
     # def clean_studentOrProfessor(self):
     #     default = "default"
     #     studentOrProfessor = self.cleaned_data['studentOrProfessor']
