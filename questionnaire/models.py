@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from registration.models import studentName, professorName
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 import datetime
 
 
@@ -14,12 +15,23 @@ class questionnaire(models.Model):
         (Active, 'Active'),
         (Inactive, 'Inactive'),
     )
-    status = models.CharField(max_length=10, choices=choices)
+    status = models.CharField(max_length=10, choices=choices, default=Inactive)
     start_date = models.DateField(default=datetime.datetime.now)
     end_date = models.DateField()
 
     def __str__(self):
         return self.questionnaire_for
+
+    def save(self, *args, **kwargs):
+        if self.status == 'Active':
+            try:
+                temp = questionnaire.objects.get(status='Active')
+                if self != temp:
+                    temp.status = 'Inactive'
+                    temp.save()
+            except questionnaire.DoesNotExist:
+                pass
+        super(questionnaire, self).save(*args, **kwargs)
 
 
 class qualifyingExam(models.Model):
@@ -54,13 +66,12 @@ class submissionTrack(models.Model):
     Email = models.EmailField(blank=True, null=True)
     Current_Research_Advisor = models.CharField(max_length=500, blank=True)
     Current_Academic_Advisor = models.CharField(max_length=500, blank=True)
-    Current_Program_Year = models.IntegerField(blank=True, null=True)
 
     #############feedback############
     Feedback = models.TextField(blank=True)
 
     class Meta:
-        unique_together = ('username', 'questionnaire_for', 'status',)
+        unique_together = ('username', 'questionnaire_for')
 
     def __str__(self):
         return str(self.username) + " " + self.fullname + " " + str(
@@ -116,11 +127,8 @@ class techingAssistant(models.Model):
         return str(self.username) + " " + str(
             self.questionnaire_for) + " " + self.Subject_Code + " " + self.In_Which_Semester
 
-class paper(models.Model):
-    questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
-    Title = models.CharField(max_length=5000)
-    Venue = models.CharField(max_length=1000)
 
+class paper(models.Model):
     IP = 'In Progress'
     UR = 'Under Revision'
     PU = 'Published'
@@ -129,13 +137,38 @@ class paper(models.Model):
         (UR, UR),
         (PU, PU),
     )
+    FALL = 'Fall'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    term_choices = (
+        (FALL, FALL),
+        (SPRING, SPRING),
+        (SUMMER, SUMMER),
+    )
+    year_choices = []
+    for y in range((datetime.datetime.now().year - 6), (datetime.datetime.now().year + 1)):
+        year_choices.append((y, y))
+
+    questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
+    Title = models.CharField(max_length=5000)
+    Venue = models.CharField(max_length=1000)
     Status_of_Paper = models.CharField(max_length=15, choices=status_choices)
+    Publish_Year = models.IntegerField(choices=year_choices, blank=True, null=True)
+    Publish_Term = models.CharField(max_length=6, choices=term_choices, blank=True)
 
     Author = models.ForeignKey(studentName, db_column="name", on_delete=models.PROTECT, blank=True)
-    Coauthor = models.CharField(max_length=1000, blank=True)
+    List_of_Authors = models.CharField(max_length=1000)
 
     class Meta:
         unique_together = ('Author', 'questionnaire_for', 'Title')
+
+    def clean(self):
+        if self.Status_of_Paper == 'Published':
+            if self.Publish_Year or self.Publish_Term:
+                if not (self.Publish_Year and self.Publish_Term):
+                    raise ValidationError("Both Publish Year and Term should be selected.")
+            else:
+                raise ValidationError("Please select Publish Year and Term.")
 
     def __str__(self):
         return str(self.Author) + " " + str(self.questionnaire_for) + " " + self.Title
@@ -144,18 +177,33 @@ class paper(models.Model):
 class research(models.Model):
     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
-    Topic = models.CharField(max_length=5000, blank=True)
-    Proposal = models.CharField(max_length=5000, blank=True)
-    Defense = models.CharField(max_length=5000, blank=True)
-    Current_GPA = models.FloatField(validators=[MaxValueValidator(4.0)], blank=True, null=True)
-    Current_Academic_Advisor = models.ForeignKey(professorName, related_name='academic_advisor',
-                                                 on_delete=models.PROTECT, blank=True, null=True)
+    exp = 'Expected'
+    p = 'Passed'
+    np = 'Not Passed'
+    status_choices = (
+        (exp, exp),
+        (p, p),
+        (np, np),
+    )
+
+    #   Research
+    Topic = models.CharField(max_length=5000)
     Current_Research_Advisor = models.ForeignKey(professorName, related_name='research_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
-    Current_Program_Year = models.IntegerField(default="1", validators=[MinValueValidator(1)])
+    Proposal = models.DateField(default=datetime.datetime.now)
+    Proposal_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
+    Defense = models.DateField(default=datetime.datetime.now)
+    Defence_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
+    Thesis_Committee = models.TextField(max_length=5000,blank=True)
+
+    #   Academics
+    Current_Academic_Advisor = models.ForeignKey(professorName, related_name='academic_advisor',
+                                                 on_delete=models.PROTECT, blank=True, null=True)
+
+    Current_GPA = models.FloatField(validators=[MaxValueValidator(4)], null=True)
 
     class Meta:
-        unique_together = ('username', 'questionnaire_for')
+        unique_together = ('username', 'questionnaire_for',)
 
     def __str__(self):
         return str(self.username) + " " + str(self.questionnaire_for) + " " + self.Topic

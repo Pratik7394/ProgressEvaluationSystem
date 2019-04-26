@@ -15,6 +15,15 @@
         <table  class="d" border="3" cellpadding="15" cellspacing="0">
             <tbody>
             {% for form in qexam_formset.forms %}
+                {% if form.non_field_errors %}
+                    <ul class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        <li>
+                            {{ error|escape }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <tr>
                     <td>{{ form.Exam_Name|as_crispy_field }}</td>
                     <td>{{ form.Attempt_Number|as_crispy_field }}</td>
