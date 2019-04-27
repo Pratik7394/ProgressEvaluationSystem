@@ -126,7 +126,8 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         user_name = user.username
-        email = user.email
+        emailID = user.email
+        print(emailID)
         first_name = user.first_name
         last_name = user.last_name
         first_name = str(first_name)
@@ -138,7 +139,7 @@ def activate(request, uidb64, token):
         if studentProfessor == "student":
             user = User.objects.get(id=uid)
             # studentName.user = user
-            studentProfile.objects.create(email=email, first_name=first_name, last_name=last_name)
+            studentProfile.objects.create(email=emailID, first_name=first_name, last_name=last_name)
             studentName.objects.create(username=user, name=full_name)
             questionnaire_for = None
 
@@ -150,7 +151,7 @@ def activate(request, uidb64, token):
             if questionnaire_for is not None:
                 questionnaireFor = questionnaire.objects.get(id=questionnaire_for)
                 submissionTrack.objects.create(username=user, questionnaire_for=questionnaireFor,
-                                               status="Not Started", email=user.email, fullname=full_name)
+                                               status="Not Started", Email=emailID, fullname=full_name)
 
         else:
             user = User.objects.get(id=uid)
