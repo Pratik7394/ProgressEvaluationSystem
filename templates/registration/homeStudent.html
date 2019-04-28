@@ -11,12 +11,12 @@
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
-    <meta name="description" content="">
+    {#    <meta charset="UTF-8">#}
+    {#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
+    {#    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">#}
+    {#    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">#}
+    {#    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">#}
+    {#    <meta name="description" content="">#}
 
     <title>Hello {{ sessionFullName }}</title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
@@ -29,8 +29,15 @@
     <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
 
 
-
     <style>
+
+        .bg {
+            background-color: floralwhite;
+        }
+
+        .row-bottom-margin {
+            margin-bottom: 10px;
+        }
 
         div.ex1 {
             width: 1200px;
@@ -38,13 +45,10 @@
         {#border: 3px solid #73AD21;#}
         }
 
-        .bg {
-            background-color: floralwhite;
-        }
-
         p.dashed {
             border-style: dashed;
         }
+
 
         .input-xs {
             height: 45px;
@@ -147,7 +151,7 @@
     {#    <div class="container align-center">#}
     <div class="row justify-content-md-center ex1">
         <div class="mbr-white col-md-10">
-            <p class="mbr-text pb-3 mbr-fonts-style display-5">
+            {#            <p class="mbr-text pb-3 mbr-fonts-style display-5">#}
 
             <ul>
                 <b>
@@ -178,7 +182,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspFirst Name:&nbsp</label>
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspFirst
+                                                    Name:&nbsp</label>
                                                 <div class="col-xs-7 controls"><p
                                                         style="color:#0A0AAA"> {{ profile.first_name }}</p></div>
                                                 <!-- col-sm-10 -->
@@ -194,7 +199,8 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspSUNY ID:&nbsp</label>
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspSUNY
+                                                    ID:&nbsp</label>
                                                 <div class="col-xs-7 controls"><p
                                                         style="color:#0A0AAA">{{ profile.SUNY_ID }}</p></div>
                                                 <!-- col-sm-10 -->
@@ -210,7 +216,8 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspProgram Joining Date:&nbsp</label>
+                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspProgram Joining
+                                                    Date:&nbsp</label>
                                                 <div class="col-xs-7 controls"><p
                                                         style="color:#0A0AAA">{{ profile.program_joining_date }}</p>
                                                 </div>
@@ -254,7 +261,7 @@
                     </div>
                 </form>
             </div>
-        <br>
+            <br>
 
             <div align="left">
                 <b>
@@ -268,88 +275,75 @@
                 </b>
             </div>
 
-            <div align="left">
-                <form class="form" role="form" autocomplete="off" method="post"
-                      enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <b>
-                        <blackcolor>
-                            {#                                <h4>#}
-                            <br>
-                            <br>
-                            <h2><u><strong>Questionnaire</strong></u></h2>
-                            <br>
-                            <ul>
-                                <h4>
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <th>Questionnaire For</th>
-                                            <th>Status</th>
-                                            <th>View/Edit</th>
-                                            {#                                            <th>Feedback</th>#}
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+            <form class="form" role="form" autocomplete="off" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <blackcolor>
+                    <br>
+                    <h2><u><strong>Questionnaire</strong></u></h2>
+                    <br>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Questionnaire For</th>
+                            <th>Status</th>
+                            <th>View/Edit</th>
+                            {#                                            <th>Feedback</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                                        {% for submission in submissionList %}
-                                            <tr>
-                                                <td>{{ submission.questionnaire_for }}</td>
-                                                <td>{{ submission.status }}</td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        {% if submission.status == "Not Started" %}
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}>
-                                                                Start
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if submission.status == "Saved" %}
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}>
-                                                                Edit
-                                                            </button>
-                                                            &nbsp&nbsp&nbsp&nbsp
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}submit>
-                                                                Submit
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if submission.status == 'Submitted For Review' %}
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}>
-                                                                View
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if submission.status == "Review In Progress" %}
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}>
-                                                                View
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if submission.status == "Review Submitted" %}
-                                                            <button type="submit" class="button" name='var'
-                                                                    value={{ submission.id }}>
-                                                                View
-                                                            </button>
-                                                        {% endif %}
-                                                    </div>
-                                                    {{ blankspace }}
-                                                </td>
-                                            </tr>
-                                        {% empty %}
-                                            <tr>
-                                                <td colspan="5">No data</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
-                                </h4>
-                            </ul>
-                        </blackcolor>
-                    </b>
-                </form>
-            </div>
-            </p>
+                        {% for submission in submissionList %}
+                            <tr>
+                                <td>{{ submission.questionnaire_for }}</td>
+                                <td>{{ submission.status }}</td>
+                                <td>
+                                    {% if submission.status == "Not Started" %}
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}>
+                                            Start
+                                        </button>
+                                    {% endif %}
+                                    {% if submission.status == "Saved" %}
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}>
+                                            Edit
+                                        </button>
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}submit>
+                                            Submit
+                                        </button>
+                                    {% endif %}
+                                    {% if submission.status == 'Submitted For Review' %}
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}>
+                                            View
+                                        </button>
+                                    {% endif %}
+                                    {% if submission.status == "Review In Progress" %}
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}>
+                                            View
+                                        </button>
+                                    {% endif %}
+                                    {% if submission.status == "Review Submitted" %}
+                                        <button type="submit" class="button" name='var'
+                                                value={{ submission.id }}>
+                                            View
+                                        </button>
+                                    {% endif %}
+                                    {{ blankspace }}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No data</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </blackcolor>
+            </form>
         </div>
     </div>
 

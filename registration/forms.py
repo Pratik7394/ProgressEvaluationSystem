@@ -9,10 +9,20 @@ import datetime
 class userInfoForm(forms.ModelForm):
     password = forms.CharField(required=True, widget=forms.PasswordInput())
     username = forms.CharField(widget=forms.HiddenInput, initial="default")
+    confirm_password = forms.CharField(required=True, widget=forms.PasswordInput())
 
     class Meta():
         model = User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name',)
+        fields = ('username', 'email', 'first_name', 'last_name','password',)
+
+    def clean(self):
+        cleaned_data = super(userInfoForm, self).clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+        print(password)
+        print(confirm_password)
+        if password != confirm_password:
+            raise forms.ValidationError("Password does not match")
 
     def clean_username(self):
         default = "default"
@@ -56,7 +66,8 @@ class userInfoForm(forms.ModelForm):
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        print(password)
+        # confirmpassword = self.cleaned_data.get('')
+        # print(password)
 
         if CommonPasswordValidator().validate(password):
             raise forms.ValidationError("Password too common, Please chose some other password")
