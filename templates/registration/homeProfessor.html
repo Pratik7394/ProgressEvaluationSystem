@@ -11,13 +11,13 @@
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
 
-{#    <meta charset="UTF-8">#}
-{#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
-{#    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">#}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">#}
-{#    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">#}
-{#    <meta name="description" content="">#}
-<br>
+    {#    <meta charset="UTF-8">#}
+    {#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
+    {#    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">#}
+    {#    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">#}
+    {#    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">#}
+    {#    <meta name="description" content="">#}
+    <br>
     <title>Hello {{ sessionFullName }}</title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
@@ -30,7 +30,6 @@
 
 
     <style>
-
 
 
         {#table td.first th.first {#}
@@ -272,7 +271,7 @@
             {% load widget_tweaks %}
 
             <form method="get">
-                <div class="well well-sm bg">
+                <div class="well bg">
                     <blackcolor>
                         <h4 style="margin-top: 0">Filter</h4>
                     </blackcolor>
@@ -302,37 +301,37 @@
                             <div class="form-group col-sm-1 col-md-2">
                                 GPA From:
                                 <p class="dashed">
-                                    {% render_field filter.form.current_GPA_gt  rows="1" cols="1" class="form-control" %}
+                                    {% render_field filter.form.current_GPA_gt class="form-control" %}
                                 </p>
                             </div>
                             <div class="form-group col-sm-1 col-md-2">
                                 GPA To:
                                 <p class="dashed">
-                                    {% render_field filter.form.current_GPA_lt  class="form-control form-control-sm" size=2 %}
+                                    {% render_field filter.form.current_GPA_lt class="form-control" %}
                                 </p>
                             </div>
                             <div class="form-group col-sm-1 col-md-3">
                                 Email:
                                 <p class="dashed">
-                                    {% render_field filter.form.Email class="form-control " %}
+                                    {% render_field filter.form.Email class="form-control" %}
                                 </p>
                             </div>
                             <div class="form-group col-sm-1 col-md-3">
                                 Acaedmic Advisor:
                                 <p class="dashed">
-                                    {% render_field filter.form.Current_Academic_Advisor class="form-control " %}
+                                    {% render_field filter.form.Current_Academic_Advisor class="form-control" %}
                                 </p>
                             </div>
                             <div class="form-group col-sm-1 col-md-3">
                                 Research Advisor:
                                 <p class="dashed">
-                                    {% render_field filter.form.Current_Research_Advisor class="form-control " %}
+                                    {% render_field filter.form.Current_Research_Advisor class="form-control" %}
                                 </p>
                             </div>
                             <div class="form-group col-sm-1 col-md-3">
                                 Questionnaire Status:
                                 <p class="dashed">
-                                    {% render_field filter.form.status class="form-control " %}
+                                    {% render_field filter.form.status class="form-control" %}
                                 </p>
                             </div>
 
@@ -341,11 +340,9 @@
                                       enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <blackcolor>
-                                        <div class="form-group">
-                                            <button type="submit" class="button" name="search">
-                                                Search
-                                            </button>
-                                        </div>
+                                        <button type="submit" class="button" name="clear">
+                                            Search
+                                        </button>
                                     </blackcolor>
                                 </form>
                             </div>
