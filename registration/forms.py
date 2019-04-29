@@ -66,8 +66,8 @@ class userInfoForm(forms.ModelForm):
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        confirmpassword = self.cleaned_data.get('')
-        print(password)
+        # confirmpassword = self.cleaned_data.get('')
+        # print(password)
 
         if CommonPasswordValidator().validate(password):
             raise forms.ValidationError("Password too common, Please chose some other password")
