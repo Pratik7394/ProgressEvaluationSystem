@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required
 from registration.models import studentProfile
 from registration.models import studentName as Student, professorName as Professor
 from django.contrib import messages
-
+from django.db.models import Q
 import socket
-socket.getaddrinfo('127.0.0.1', 8080)
 
+socket.getaddrinfo('127.0.0.1', 8080)
 from django.db import IntegrityError, transaction
 from django.forms.formsets import formset_factory
 from questionnaire.models import (
@@ -35,46 +35,15 @@ from .forms import (
 def studentHome(request):
     if request.method == 'POST':
         print("view")
-        sessionid = request.session['idSession']
-        submissionList = Submission.objects.filter(username_id=sessionid)
-        print(submissionList)
+        # sessionid = request.session['idSession']
+        # submissionList = Submission.objects.filter(username_id=sessionid)
+        # print(submissionList)
         var = None
         var = request.POST['var']
         if "submit" in var:
             print("mission success")
-
-        # for submission in submissionList:
-        #     print("1st for")
-        #     var = submission.id
-        #     var = str(var)
-        #     if var in request.POST:
-        #         break
-        #     else:
-        #         var = None
-        # print(var)
-        #
-        # if var is None:
-        #     for submission in submissionList:
-        #         print("2nd for")
-        #         var = str(submission.id)+"submit"
-        #         var = str(var)
-        #         if var in request.POST:
-        #             break
-        #
-        #
-        #     var = var[:-6]
-        #     var = int(var)
-        #     submission = Submission.objects.get(id=var)
-        #     print(submission)
-        #     Submission.objects.filter(id=var).update(status="Submitted For Review")
-        #     return redirect('questionnaire:studentHome')
-
-
         request.session["questionnaireForIdSession"] = var
         return redirect('questionnaire:viewSubmissions')
-
-    # if 'editProfile' in request.POST:
-    #     return redirect('registration:editProfileStudent')
 
     else:
         sessionFullName = request.session['fullNameSession']
@@ -86,9 +55,13 @@ def studentHome(request):
         blankspace = ""
         profile = studentProfile.objects.get(email=sessionUserName)
         try:
-            Submission.objects.filter(status='Review Submitted', username_id=sessionid)
+            Submission.objects.filter(
+                Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
+                username_id=sessionid)
             profile2 = \
-                Submission.objects.filter(status="Review Submitted", username_id=sessionid).order_by(
+                Submission.objects.filter(
+                    Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
+                    username_id=sessionid).order_by(
                     "-questionnaire_for_id").first()
             print("profile2")
             print(profile2)
@@ -131,9 +104,9 @@ def viewSubmissions(request):
                 # userTableID = User.objects.get(username=questionnaire_submit_username).id
                 course_dict = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
                 examAttempt_dict = QExam.objects.filter(username_id=userTableID,
-                                                              questionnaire_for_id=questionnaire_id)
+                                                        questionnaire_for_id=questionnaire_id)
                 techingAssistant_dict = TA.objects.filter(username_id=userTableID,
-                                                                        questionnaire_for_id=questionnaire_id)
+                                                          questionnaire_for_id=questionnaire_id)
                 paper_dict = Paper.objects.filter(Author_id=Student.objects.get(username_id=userTableID).id,
                                                   questionnaire_for_id=questionnaire_id)
                 research_dict = Research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
@@ -185,6 +158,7 @@ def viewSubmissions(request):
                             # If the transaction failed
                             messages.error(request, "Your Research details couldn't be preloaded.")
 
+
                     # Load Courses
                     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
                     if courses.exists():
@@ -201,6 +175,7 @@ def viewSubmissions(request):
                         except IntegrityError:
                             # If the transaction failed
                             messages.error(request, "Your courses couldn't be preloaded.")
+
 
                     # Load Qualifying Exam Attempts
                     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
@@ -258,6 +233,7 @@ def viewSubmissions(request):
                             messages.error(request, "Your Research papers couldn't be preloaded.")
 
                 return redirect(reverse('questionnaire:form-research'))
+
 
 
 @login_required()
@@ -356,6 +332,7 @@ def handleResearch(request):
     return render(request, 'questionnaire/research.html', context)
 
 
+
 @login_required()
 def handleQExams(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -429,7 +406,7 @@ def handleQExams(request):
             else:
                 print('QExam invalid')
                 messages.error(request, 'There seems to be something wrong with your qualification exams data. ' +
-               'Please make sure all entries below are valid.')
+                               'Please make sure all entries below are valid.')
         else:
             return redirect(reverse('questionnaire:form-qexams'))
     elif qexams.exists():
@@ -447,6 +424,7 @@ def handleQExams(request):
         'formset': formset
     }
     return render(request, 'questionnaire/qexams.html', context)
+
 
 
 @login_required()
@@ -543,6 +521,7 @@ def handleTA(request):
     return render(request, 'questionnaire/teaching.html', context)
 
 
+
 @login_required()
 def handleCourses(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -573,7 +552,6 @@ def handleCourses(request):
         sub = Submission.objects.get(id=submissionTrack_id)
         if sub.status == "Not Started":
             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
-
         formset = FormSet(request.POST, initial=data)
         if formset.is_valid():
             print('Course valid')
@@ -611,6 +589,7 @@ def handleCourses(request):
                     messages.error(request, 'There was an error saving your courses.')
             else:
                 messages.error(request, 'Please modify data in order to Save!')
+
         else:
             print('Course invalid')
             messages.error(request,
@@ -632,6 +611,7 @@ def handleCourses(request):
     return render(request, 'questionnaire/courses.html', context)
 
 
+
 @login_required()
 def handlePapers(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -651,7 +631,7 @@ def handlePapers(request):
         data = [{
             'Author_id': c.Author_id, 'questionnaire_for_id': c.questionnaire_for_id, 'Title': c.Title,
             'Venue': c.Venue, 'List_of_Authors': c.List_of_Authors, 'Status_of_Paper': c.Status_of_Paper,
-            'Publish_Year':c.Publish_Year, 'Publish_Term':c.Publish_Term
+            'Publish_Year': c.Publish_Year, 'Publish_Term': c.Publish_Term
         } for c in papers]
     if request.method == 'POST':
         print('Paper POST')

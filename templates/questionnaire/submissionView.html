@@ -29,17 +29,16 @@
 
 
     <style>
+
+        .bg {
+            background-color: #e2e3e5;
+        }
+
         table.d {
             table-layout: fixed;
             width: 100%;
         }
-    </style>
 
-    <style>
-        {#    table, th, td {#}
-        {#        border: 4px solid black;#}
-        {#    }#}
-        {#</style>#}
         table, td, th {
             border: 4px solid #19334d;
             text-align: left;
@@ -117,6 +116,7 @@
 
 
 </section>
+<br>
 
 <!-- Dont remove this: Divyarth Singh -->
 {#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
@@ -125,8 +125,8 @@
 
     {#    <div class="container align-center">#}
     <div class="row justify-content-md-center">
-        <div class="mbr-white col-md-10">
-            <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Submission Overview</h1>
+        <div class="mbr-white col-md-10 bg">
+            <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1 align-center">Submission Overview</h1>
 
             <p class="mbr-text pb-3 mbr-fonts-style display-5">
             <div align="left">
@@ -262,7 +262,7 @@
                                         <td>{{ user.Venue }}</td>
                                         <td>{{ user.Status_of_Paper }}</td>
                                         <td>{{ user.Author }}</td>
-                                        <td>{{ user.Coauthor }}</td>
+                                        <td>{{ user.List_of_Authors }}</td>
                                     </tr>
                                 {% empty %}
                                     <tr>
