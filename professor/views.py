@@ -117,9 +117,13 @@ def submissionView(request, item_id):
             HttpResponse("Something is wrong on our side. Inform administrator, Then we will resolve it")
 
     else:
+        # print(item_id)
+        # sid = submissionTrack.objects.get(status="Submitted For Review").id
+        # print("sid --> " + str(sid))
         questionnaire_id = submissionTrack.objects.get(id=item_id).questionnaire_for_id
         questionnaireStatus = submissionTrack.objects.get(id=item_id).status
         questionnaire_submit_username = submissionTrack.objects.get(id=item_id).username
+
         var = item_id
         request.session['varSession'] = var
         print(questionnaireStatus)
@@ -127,13 +131,15 @@ def submissionView(request, item_id):
         if (questionnaireStatus == "Submitted For Review") or (questionnaireStatus == "Review In Progress") or (
                 questionnaireStatus == "Review Submitted"):
             userTableID = User.objects.get(username=questionnaire_submit_username).id
+            authorID = studentName.objects.get(username_id=userTableID).id
             course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
             examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
                                                           questionnaire_for_id=questionnaire_id)
             techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
                                                                     questionnaire_for_id=questionnaire_id)
-            paper_dict = paper.objects.filter(Author_id=userTableID,
+            paper_dict = paper.objects.filter(Author_id=authorID,
                                               questionnaire_for_id=questionnaire_id)
+            print(paper_dict)
             research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
 
             fullname = submissionTrack.objects.get(id=item_id).fullname
