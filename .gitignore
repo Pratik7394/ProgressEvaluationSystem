@@ -5,3 +5,5 @@ professor/migrations/__pycache__/__init__.cpython-37.pyc
 professor/migrations/.DS_Store
 questionnaire/.DS_Store
 *.pyc
+*.xml
+*.sqlite3

@@ -77,6 +77,10 @@
         tr:hover td {
             background-color: floralwhite;
         }
+
+        .bg {
+            background-color: #e2e3e5;
+        }
     </style>
 
     <style>
@@ -132,12 +136,12 @@
 
     {#    <div class="container align-center">#}
     <div class="row justify-content-md-center ex1">
-        <div class="mbr-white col-md-10">
+        <div class="mbr-white col-md-10 bg">
             <br>
             <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Submission Overview</h1>
 
             <p class="mbr-text pb-3 mbr-fonts-style display-5">
-            <div align="left">
+            <div class="align-left">
                 <ul>
                     <b>
                         <blackcolor>
@@ -271,7 +275,7 @@
                                         <td>{{ user.Venue }}</td>
                                         <td>{{ user.Status_of_Paper }}</td>
                                         <td>{{ user.Author }}</td>
-                                        <td>{{ user.Coauthor }}</td>
+                                        <td>{{ user.List_of_Authors }}</td>
                                     </tr>
                                 {% empty %}
                                     <tr>
