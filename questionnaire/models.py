@@ -99,7 +99,7 @@ class examAttempt(models.Model):
     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
     Exam_Name = models.ForeignKey(qualifyingExam, db_column="exam_Name", on_delete=models.PROTECT)
-    Attempt_Number = models.IntegerField(default="1", validators=[MaxValueValidator(4), MinValueValidator(1)])
+    Attempt_Number = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
     Grade = models.CharField(max_length=10)
 
     class Meta:
@@ -167,7 +167,7 @@ class paper(models.Model):
         if self.Status_of_Paper == 'Published':
             if self.Publish_Year or self.Publish_Term:
                 if not (self.Publish_Year and self.Publish_Term):
-                    raise ValidationError("Both Publish Year and Term should be selected.")
+                    raise ValidationError("Both Publish Year and Term should be selected for a 'Published' Paper.")
             else:
                 raise ValidationError("Please select Publish Year and Term.")
 
