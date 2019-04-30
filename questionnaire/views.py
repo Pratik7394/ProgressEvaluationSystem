@@ -1,22 +1,14 @@
-from registration.forms import userInfoForm, userInfoForm2  # loginForm
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
 from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from registration.models import studentProfile
 from registration.models import studentName as Student
 from django.contrib import messages
-
+from django.db.models import Q
 import socket
-socket.getaddrinfo('127.0.0.1', 8080)
 
+socket.getaddrinfo('127.0.0.1', 8080)
 from django.db import IntegrityError, transaction
 from django.forms.formsets import formset_factory
 from questionnaire.models import (
@@ -43,9 +35,9 @@ from .forms import (
 def studentHome(request):
     if request.method == 'POST':
         print("view")
-        sessionid = request.session['idSession']
-        submissionList = Submission.objects.filter(username_id=sessionid)
-        print(submissionList)
+        # sessionid = request.session['idSession']
+        # submissionList = Submission.objects.filter(username_id=sessionid)
+        # print(submissionList)
         var = None
         var = request.POST['var']
         if "submit" in var:
@@ -54,42 +46,8 @@ def studentHome(request):
         # print("a")
         print("var")
         print(var)
-
-
-
-
-        # for submission in submissionList:
-        #     print("1st for")
-        #     var = submission.id
-        #     var = str(var)
-        #     if var in request.POST:
-        #         break
-        #     else:
-        #         var = None
-        # print(var)
-        #
-        # if var is None:
-        #     for submission in submissionList:
-        #         print("2nd for")
-        #         var = str(submission.id)+"submit"
-        #         var = str(var)
-        #         if var in request.POST:
-        #             break
-        #
-        #
-        #     var = var[:-6]
-        #     var = int(var)
-        #     submission = Submission.objects.get(id=var)
-        #     print(submission)
-        #     Submission.objects.filter(id=var).update(status="Submitted For Review")
-        #     return redirect('questionnaire:studentHome')
-
-
         request.session["questionnaireForIdSession"] = var
         return redirect('questionnaire:viewSubmissions')
-
-    # if 'editProfile' in request.POST:
-    #     return redirect('registration:editProfileStudent')
 
     else:
         sessionFullName = request.session['fullNameSession']
@@ -101,9 +59,13 @@ def studentHome(request):
         blankspace = ""
         profile = studentProfile.objects.get(email=sessionUserName)
         try:
-            Submission.objects.filter(status='Review Submitted', username_id=sessionid)
+            Submission.objects.filter(
+                Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
+                username_id=sessionid)
             profile2 = \
-                Submission.objects.filter(status="Review Submitted", username_id=sessionid).order_by(
+                Submission.objects.filter(
+                    Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
+                    username_id=sessionid).order_by(
                     "-questionnaire_for_id").first()
             print("profile2")
             print(profile2)
@@ -146,9 +108,9 @@ def viewSubmissions(request):
                 # userTableID = User.objects.get(username=questionnaire_submit_username).id
                 course_dict = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
                 examAttempt_dict = QExam.objects.filter(username_id=userTableID,
-                                                              questionnaire_for_id=questionnaire_id)
+                                                        questionnaire_for_id=questionnaire_id)
                 techingAssistant_dict = TA.objects.filter(username_id=userTableID,
-                                                                        questionnaire_for_id=questionnaire_id)
+                                                          questionnaire_for_id=questionnaire_id)
                 paper_dict = Paper.objects.filter(Author_id=Student.objects.get(username_id=userTableID).id,
                                                   questionnaire_for_id=questionnaire_id)
                 research_dict = Research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
@@ -197,7 +159,7 @@ def viewSubmissions(request):
                                 Research.objects.bulk_create(research_data)
                                 messages.success(request, 'Your Research details are preloaded.')
                         except IntegrityError:
-                            print()# If the transaction failed
+                            print()  # If the transaction failed
 
                     # Load Courses
                     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
@@ -213,7 +175,7 @@ def viewSubmissions(request):
                                 Course.objects.bulk_create(course_data)
                                 messages.success(request, 'Your courses are preloaded.')
                         except IntegrityError:
-                            print()# If the transaction failed
+                            print()  # If the transaction failed
 
                     # Load Qualifying Exam Attempts
                     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
@@ -228,7 +190,7 @@ def viewSubmissions(request):
                                 QExam.objects.bulk_create(qexam_data)
                                 messages.success(request, 'Your Qualifying exam attempts are preloaded.')
                         except IntegrityError:
-                            print()# If the transaction failed
+                            print()  # If the transaction failed
 
                     # Load Teaching Assistantships
                     teaching_assists = TA.objects.filter(username_id=userTableID,
@@ -248,7 +210,7 @@ def viewSubmissions(request):
                                 TA.objects.bulk_create(ta_data)
                                 messages.success(request, 'Your TA experiences are preloaded.')
                         except IntegrityError:
-                            print()# If the transaction failed
+                            print()  # If the transaction failed
 
                     # Load Research Papers
                     studentAuthor_id = Student.objects.get(username_id=userTableID)
@@ -265,9 +227,10 @@ def viewSubmissions(request):
                                 Paper.objects.bulk_create(paper_data)
                                 messages.success(request, 'Your Research papers are preloaded.')
                         except IntegrityError:
-                            print()# If the transaction failed
+                            print()  # If the transaction failed
 
                 return redirect(reverse('questionnaire:form-courses'))
+
 
 @login_required()
 def handleCourses(request):
@@ -355,6 +318,7 @@ def handleCourses(request):
     }
     return render(request, 'questionnaire/step1.html', context)
 
+
 @login_required()
 def handleQExams(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -422,7 +386,7 @@ def handleQExams(request):
             else:
                 print('QExam invalid')
                 messages.error(request, 'There seems to be something wrong with your qualification exams data. ' +
-               'Please make sure all entries below are valid.')
+                               'Please make sure all entries below are valid.')
         else:
             return redirect(reverse('questionnaire:form-qexams'))
     elif qexams.exists():
@@ -440,6 +404,7 @@ def handleQExams(request):
         'qexam_formset': qexam_formset
     }
     return render(request, 'questionnaire/step2.html', context)
+
 
 @login_required()
 def handleTA(request):
@@ -533,6 +498,7 @@ def handleTA(request):
     }
     return render(request, 'questionnaire/step3.html', context)
 
+
 @login_required()
 def handleResearch(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -584,7 +550,7 @@ def handleResearch(request):
                 username_id=userTableID, questionnaire_for_id=questionnaire_id, Topic=Topic, Proposal=Proposal,
                 Defense=Defense, Current_Research_Advisor_id=Current_Research_Advisor_id, Current_GPA=Current_GPA,
                 Current_Academic_Advisor_id=Current_Academic_Advisor_id, Proposal_Status=Proposal_Status,
-                Defence_Status = Defence_Status, Thesis_Committee=Thesis_Committee
+                Defence_Status=Defence_Status, Thesis_Committee=Thesis_Committee
             )]
             try:
                 with transaction.atomic():
@@ -616,6 +582,7 @@ def handleResearch(request):
     }
     return render(request, 'questionnaire/step4.html', context)
 
+
 @login_required()
 def handlePapers(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -635,7 +602,7 @@ def handlePapers(request):
         paper_data = [{
             'Author_id': c.Author_id, 'questionnaire_for_id': c.questionnaire_for_id, 'Title': c.Title,
             'Venue': c.Venue, 'List_of_Authors': c.List_of_Authors, 'Status_of_Paper': c.Status_of_Paper,
-            'Publish_Year':c.Publish_Year, 'Publish_Term':c.Publish_Term
+            'Publish_Year': c.Publish_Year, 'Publish_Term': c.Publish_Term
         } for c in papers]
     if request.method == 'POST':
         print('Paper POST')
