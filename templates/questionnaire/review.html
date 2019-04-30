@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <!-- Dont remove this: Divyarth Singh -->
+    <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
+    <meta name="description" content="">
+
+    <title>Submission View</title>
+    <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/dropdown/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/theme/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/mobirise/css/mbr-additional.css' %}" type="text/css">
+
+
+    <style>
+        table.d {
+            table-layout: fixed;
+            width: 100%;
+        }
+    </style>
+
+    <style>
+        {#    table, th, td {#}
+        {#        border: 4px solid black;#}
+        {#    }#}
+        {#</style>#}
+        table, td, th {
+            border: 4px solid #19334d;
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            padding: 14px;
+            background-color: floralwhite;
+            color: black;
+        }
+
+        td {
+            padding: 5px;
+            background-color: white;
+            color: black;
+        }
+
+        th, td {
+            font-size: 80%;
+            font-weight: 400;
+        }
+
+        tr:hover td {
+            background-color: floralwhite;
+        }
+    </style>
+
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+    </style>
+
+</head>
+<body>
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="{% url 'questionnaire:studentHome' %}">
+                         <img src="{% static 'assets/images/logo2.png' %}" alt="PhD Evaluation" style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
+                        PhD Evaluation
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
+                        Home
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                        Logout
+                    </a>
+                </span></div>
+
+        </div>
+    </nav>
+
+
+</section>
+
+<!-- Dont remove this: Divyarth Singh -->
+{#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
+<section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
+
+
+    {#    <div class="container align-center">#}
+    <div class="row justify-content-md-center">
+        <div class="mbr-white col-md-10">
+            <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Review Submission</h1>
+
+            <p class="mbr-text pb-3 mbr-fonts-style display-5">
+            <div align="left">
+                <ul>
+                    <b>
+                        <blackcolor>
+                            <h1>RESEARCH</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    {#                                        <th>Your Name</th>#}
+                                    <th>Topic</th>
+                                    <th>Proposal</th>
+                                    <th>Defense</th>
+                                    <th>Academic Advisor</th>
+                                    <th>Research Advisor</th>
+                                </tr>
+                                <tr>
+
+                                    {% for user in research_dict %}
+                                        {#                                            <td>  {{ fullname }} </td>#}
+                                        <td>     {{ user.Topic }} </td>
+                                        <td>    {{ user.Proposal }} </td>
+                                        <td>    {{ user.Defense }} </td>
+                                        <td>      {{ user.Current_Academic_Advisor }} </td>
+                                        <td>     {{ user.Current_Research_Advisor }} </td>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5">No data</td>
+                                        </tr>
+
+                                    {% endfor %}
+                            </table>
+
+                            <h1>COMPLETED COURSES</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Courses Taken</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Term and Year</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in course_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }}</td>
+                                        <td>{{ user.Subject_Code }}</td>
+                                        <td>{{ user.Subject_Term_and_Year }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>QUALIFYING EXAM</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Exam Qualify</th>
+                                    <th>Attempt Number</th>
+                                    <th>Grade</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in examAttempt_dict %}
+                                    <tr>
+                                        <td>{{ user.Exam_Name }}</td>
+                                        <td>{{ user.Attempt_Number }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>TEACHING ASSISTANT</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Subject Code</th>
+                                    <th>Semester</th>
+                                    <th>Instructor Name</th>
+                                    <th>Responsibilities</th>
+                                    <th>Lectures or Presentation_Given</th>
+                                    <th>Area of Improvement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in techingAssistant_dict %}
+                                    <tr>
+                                        <td>{{ user.Subject_Name }} </td>
+                                        <td>{{ user.Subject_Code }} </td>
+                                        <td>{{ user.In_Which_Semester }} </td>
+                                        <td>{{ user.Instructor_Name }} </td>
+                                        <td>{{ user.Responsibilities }} </td>
+                                        <td>{{ user.Lecture_or_Presentation_Given }} </td>
+                                        <td>{{ user.Area_of_Improvement }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>PAPER</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>TITLE</th>
+                                    <th>VENUE</th>
+                                    <th>STATUS OF PAPER</th>
+                                    <th>AUTHOR</th>
+                                    <th>COAUTHOR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in paper_dict %}
+                                    <tr>
+                                        <td>{{ user.Title }}</td>
+                                        <td>{{ user.Venue }}</td>
+                                        <td>{{ user.Status_of_Paper }}</td>
+                                        <td>{{ user.Author }}</td>
+                                        <td>{{ user.Coauthor }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </blackcolor>
+                    </b>
+                </ul>
+            </div>
+
+
+            <br>
+            <div align="left">
+                <form class="form" role="form" autocomplete="off" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <button type="submit" class="button">
+                            Back
+                        </button>
+                        &nbsp&nbsp&nbsp&nbsp
+
+                          {% for submission in submissionList %}
+                          {% if submission.status == "Saved" %}
+                              &nbsp&nbsp&nbsp&nbsp
+                              <button type="submit" class="button" name='submit' value= {{submission.id}}>
+                                  Submit
+                              </button>
+                          {% endif %}
+                            {% endfor %}
+
+                    </div>
+                </form>
+            </div>
+            </p>
+
+        </div>
+    </div>
+
+</section>
+
+
+<script src="{% static 'assets/web/assets/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/popper/popper.min.js' %}"></script>
+<script src="{% static 'assets/tether/tether.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/smoothscroll/smooth-scroll.js' %}"></script>
+<script src="{% static 'assets/parallax/jarallax.min.js' %}"></script>
+<script src="{% static 'assets/dropdown/js/script.min.js' %}"></script>
+<script src="{% static 'assets/touchswipe/jquery.touch-swipe.min.js' %}"></script>
+<script src="{% static 'assets/theme/js/script.js' %}"></script>
+
+
+</body>
+</html>

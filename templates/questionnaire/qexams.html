@@ -1,0 +1,87 @@
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="card-header">
+        <h2 class="mb-0 my-2"><b>Qualifying Exams(All Attempts)</b></h2>
+    </div>
+
+    <form id="formset" class="form" role="form" autocomplete="off" method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ formset.management_form }}
+        <table  class="d" border="3" cellpadding="1" cellspacing="0">
+            <thead>
+            <tr>
+                <th>Qualifying Exam Name</th>
+                <th>Attempt Number</th>
+                <th>Grade</th>
+                <th>Select for Deletion</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for form in formset.forms %}
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <strong style="color:red">{{ error|escape }}</strong><br>
+                    {% endfor %}
+                {% endif %}
+
+                <tr>
+                    <td>{{ form.Exam_Name }}
+                    {% if form.Exam_Name.errors %}
+                        {% for error in form.Exam_Name.errors %}
+                            <br><strong style="color:red">{{ error|escape }}</strong>
+                        {% endfor %}
+                    {% endif %}
+                    </td>
+                    <td>{{ form.Attempt_Number }}
+                    {% if form.Attempt_Number.errors %}
+                        {% for error in form.Attempt_Number.errors %}
+                            <br><strong style="color:red">{{ error|escape }}</strong>
+                        {% endfor %}
+                    {% endif %}
+                    </td>
+                    <td>{{ form.Grade }}
+                    {% if form.Grade.errors %}
+                        {% for error in form.Grade.errors %}
+                            <br><strong style="color:red">{{ error|escape }}</strong>
+                        {% endfor %}
+                    {% endif %}
+                    </td>
+                    <td>{{ form.DELETE }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <blackcolor>
+            <div class="form-group">
+                <button type="submit" class="button" name="save">
+                    Save
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="prev">
+                    Previous
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="next">
+                    Next
+                </button>
+            </div>
+        </blackcolor>
+    </form>
+
+    {% if formset.non_form_errors %}
+        {% for error in formset.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+
+{% endblock content %}
+
+{% block footer%}
+{% endblock footer%}

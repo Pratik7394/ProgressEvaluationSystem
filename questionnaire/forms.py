@@ -26,10 +26,15 @@ class TeachingForm(ModelForm):
         model = TA
         exclude = ['username', 'questionnaire_for']
         widgets = {
-            'Responsibilities': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
-            'Lecture_or_Presentation_Given': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
+            'Responsibilities': forms.Textarea(attrs={'rows': 5, 'cols': 15}),
+            'Lecture_or_Presentation_Given': forms.Textarea(attrs={'rows': 5, 'cols': 15}),
             'Area_of_Improvement': forms.Textarea(attrs={'rows': 4, 'cols': 15}),
+            'Subject_Name': forms.TextInput(attrs={'size':16}),
+            'Subject_Code': forms.TextInput(attrs={'size': 16}),
+            'In_Which_Semester': forms.TextInput(attrs={'size': 16}),
+            'Instructor_Name': forms.TextInput(attrs={'size': 16}),
         }
+
         # fields = ['Subject_Name', 'Subject_Code', 'In_Which_Semester', 'Instructor_Name',
         #  'Responsibilities', 'Lecture_or_Presentation_Given', 'Area_of_Improvement']
 
@@ -44,7 +49,8 @@ class ResearchForm(ModelForm):
 
         widgets = {
             'Proposal': DateInput(),
-            'Defense': DateInput()
+            'Defense': DateInput(),
+            'Thesis_Committee': forms.Textarea(attrs={'rows': 7, 'cols': 55}),
         }
 
 class PaperForm(ModelForm):
@@ -52,3 +58,6 @@ class PaperForm(ModelForm):
         model = Paper
         exclude = ['username', 'questionnaire_for']
         # fields = ['Title', 'Venue', 'Status_of_Paper', 'Coauthor']
+        widgets = {
+            'List_of_Authors': forms.Textarea(attrs={'rows': 3, 'cols': 17}),
+        }
