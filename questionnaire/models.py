@@ -64,8 +64,8 @@ class submissionTrack(models.Model):
     fullname = models.CharField(max_length=500)
     current_GPA = models.FloatField(blank=True, null=True)
     Email = models.EmailField(blank=True, null=True)
-    Current_Research_Advisor = models.CharField(max_length=500, blank=True)
-    Current_Academic_Advisor = models.CharField(max_length=500, blank=True)
+    Current_Research_Advisor = models.CharField(max_length=500, blank=True, null=True)
+    Current_Academic_Advisor = models.CharField(max_length=500, blank=True, null=True)
     Current_Program_Year = models.IntegerField(blank=True, null=True)
 
     #############feedback############

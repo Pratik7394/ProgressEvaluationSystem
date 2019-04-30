@@ -87,12 +87,18 @@ def viewSubmissions(request):
 
         if "submit" in submissionTrack_id:
             submissionTrack_id = submissionTrack_id[:-6]
-            # print(submissionTrack_id)
-            # id = submissionTrack_id.split()[0]
-            # print(id)
-            id = int(submissionTrack_id)
-            print(submissionTrack_id)
             Submission.objects.filter(id=submissionTrack_id).update(status="Submitted For Review")
+            userTableID = Submission.objects.get(id=submissionTrack_id).username_id
+            questionnaire_id = Submission.objects.get(id=submissionTrack_id).questionnaire_for_id
+            Acaedmic_Advisor = Research.objects.get(username_id=userTableID,
+                                                    questionnaire_for_id=questionnaire_id).Current_Academic_Advisor
+            Research_Advisor = Research.objects.get(username_id=userTableID,
+                                                    questionnaire_for_id=questionnaire_id).Current_Research_Advisor
+            print(Acaedmic_Advisor)
+            print(Research_Advisor)
+            Submission.objects.filter(id=submissionTrack_id).update(status="Submitted For Review")
+            Submission.objects.filter(id=submissionTrack_id).update(Current_Research_Advisor=Research_Advisor,
+                                                                    Current_Academic_Advisor=Acaedmic_Advisor)
             return redirect('questionnaire:studentHome')
 
         else:
@@ -544,13 +550,13 @@ def handleResearch(request):
             Current_Academic_Advisor_id = research_form.cleaned_data.get('Current_Academic_Advisor_id')
             Current_Research_Advisor_id = research_form.cleaned_data.get('Current_Research_Advisor_id')
             Thesis_Committee = research_form.cleaned_data.get('Thesis_Committee')
-            Defence_Status = research_form.cleaned_data.get('Defence_Status')
+            Defense_Status = research_form.cleaned_data.get('Defense_Status')
             Proposal_Status = research_form.cleaned_data.get('Proposal_Status')
             newresearch = [Research(
                 username_id=userTableID, questionnaire_for_id=questionnaire_id, Topic=Topic, Proposal=Proposal,
                 Defense=Defense, Current_Research_Advisor_id=Current_Research_Advisor_id, Current_GPA=Current_GPA,
                 Current_Academic_Advisor_id=Current_Academic_Advisor_id, Proposal_Status=Proposal_Status,
-                Defence_Status=Defence_Status, Thesis_Committee=Thesis_Committee
+                Defense_Status=Defense_Status, Thesis_Committee=Thesis_Committee
             )]
             try:
                 with transaction.atomic():
