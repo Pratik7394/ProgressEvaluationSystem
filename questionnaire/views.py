@@ -40,8 +40,9 @@ def studentHome(request):
         # print(submissionList)
         var = None
         var = request.POST['var']
-        if "submit" in var:
+        if "review" in var:
             print("mission success")
+            print(var)
         request.session["questionnaireForIdSession"] = var
         return redirect('questionnaire:viewSubmissions')
 
@@ -80,15 +81,11 @@ def viewSubmissions(request):
     else:
         submissionTrack_id = request.session["questionnaireForIdSession"]
 
-        if "submit" in submissionTrack_id:
+        if "review" in submissionTrack_id:
+            print("yes")
             submissionTrack_id = submissionTrack_id[:-6]
-            # print(submissionTrack_id)
-            # id = submissionTrack_id.split()[0]
-            # print(id)
-            id = int(submissionTrack_id)
-            print(submissionTrack_id)
-            Submission.objects.filter(id=submissionTrack_id).update(status="Submitted For Review")
-            return redirect('questionnaire:studentHome')
+            request.session["questionnaireForIdSession"] = submissionTrack_id
+            return redirect('questionnaire:review')
 
         else:
             submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -100,7 +97,6 @@ def viewSubmissions(request):
             userTableID = User.objects.get(username=questionnaire_submit_username).id
 
             if questionnaireStatus in ["Submitted For Review", "Review In Progress", "Review Submitted"]:
-                # userTableID = User.objects.get(username=questionnaire_submit_username).id
                 course_dict = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
                 examAttempt_dict = QExam.objects.filter(username_id=userTableID,
                                                         questionnaire_for_id=questionnaire_id)
@@ -710,11 +706,11 @@ def handlePapers(request):
 @login_required()
 def handleReview(request):
     if request.method == 'POST':
-        if 'submit' in request.POST:
-            print("view")
-            submission_id = request.POST['submit']
+        submissionTrack_id = request.POST['var']
+        if "submit" in submissionTrack_id:
+            submissionTrack_id = submissionTrack_id[:-6]
             userTableID = User.objects.get(username=request.session['userNameSession']).id
-            questionnaire_id = Submission.objects.get(id=submission_id).questionnaire_for_id
+            questionnaire_id = Submission.objects.get(id=submissionTrack_id).questionnaire_for_id
             current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
             try:
                 Submission.objects.filter(username_id=userTableID,questionnaire_for_id=questionnaire_id).update(
@@ -723,19 +719,12 @@ def handleReview(request):
                     Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
                 )
             except Submission.DoesNotExist:
-                messages.error('Error while fetching submission record')
-                print('Error while fetching submission record')
-            print("updated")
-            sessionid = request.session['idSession']
-            try:
-                Submission.objects.filter(status='Review Submitted', username_id=sessionid)
-                profile2 = Submission.objects.filter(status="Review Submitted", username_id=sessionid).order_by(
-                        "-questionnaire_for_id").first()
-            except Submission.DoesNotExist:
-                profile2 = []
+                messages.error('Error while submitting record, Inform Admin')
             return redirect('questionnaire:studentHome')
+
         else:
             return redirect('questionnaire:form-papers')
+
     else:
         print("in review page")
         questionnaireStatus = Submission.objects.get(id=request.session["questionnaireForIdSession"]).status

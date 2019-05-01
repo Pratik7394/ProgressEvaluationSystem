@@ -126,7 +126,7 @@
     <div class="row justify-content-md-center ex1">
         <div class="mbr-white col-md-10">
             <br>
-        <br>
+            <br>
             <b>
                 <blackcolor>
                     <div class="container align-center">
@@ -251,8 +251,8 @@
                     </blackcolor>
                 </b>
             </div>
-        <br>
-        <br>
+            <br>
+            <br>
 
             <form class="form" role="form" autocomplete="off" method="post"
                   enctype="multipart/form-data">
@@ -288,9 +288,13 @@
                                                 Edit
                                             </button>
                                             &nbsp&nbsp&nbsp&nbsp
+{#                                            <button type="submit" class="button" name='var'#}
+{#                                                    value={{ submission.id }}submit>#}
+{#                                                Submit#}
+{#                                            </button>#}
                                             <button type="submit" class="button" name='var'
-                                                    value={{ submission.id }}submit>
-                                                Submit
+                                                    value={{ submission.id }}review>
+                                                Review
                                             </button>
                                         {% endif %}
                                         {% if submission.status == 'Submitted For Review' %}
