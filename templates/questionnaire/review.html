@@ -33,10 +33,6 @@
     </style>
 
     <style>
-        {#    table, th, td {#}
-        {#        border: 4px solid black;#}
-        {#    }#}
-        {#</style>#}
         table, td, th {
             border: 4px solid #19334d;
             text-align: left;
@@ -113,7 +109,6 @@
                         Logout
                     </a>
                 </span></div>
-
         </div>
     </nav>
 
@@ -135,59 +130,55 @@
                 <ul>
                     <b>
                         <blackcolor>
-                            <h1>RESEARCH</h1>
+                            <h1>RESEARCH & ACADEMICS</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    {#                                        <th>Your Name</th>#}
-                                    <th>Topic</th>
+                                    <th>Thesis Topic</th>
+                                    <th>Research Advisor</th>
                                     <th>Proposal</th>
                                     <th>Defense</th>
+                                    <th>Thesis Committee</th>
+                                    <th>GPA</th>
                                     <th>Academic Advisor</th>
-                                    <th>Research Advisor</th>
                                 </tr>
-                                <tr>
-
-                                    {% for user in research_dict %}
-                                        {#                                            <td>  {{ fullname }} </td>#}
-                                        <td>     {{ user.Topic }} </td>
-                                        <td>    {{ user.Proposal }} </td>
-                                        <td>    {{ user.Defense }} </td>
-                                        <td>      {{ user.Current_Academic_Advisor }} </td>
-                                        <td>     {{ user.Current_Research_Advisor }} </td>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                        </tr>
+                                </thead>
+                                <tbody>
+                                {% for data in research_dict %}
+                                    <tr>
+                                        <td>{{ data.Topic }}</td>
+                                        <td>{{ data.Current_Research_Advisor }}</td>
+                                        <td>{{ data.Proposal }}&nbsp&nbsp({{ data.Proposal_Status }})</td>
+                                        <td>{{ data.Defense }}&nbsp&nbsp({{ data.Defense_Status }})</td>
+                                        <td>{{ data.Thesis_Committee }}</td>
+                                        <td>{{ data.Current_GPA }}</td>
+                                        <td>{{ data.Current_Academic_Advisor }}</td>
                                     {% empty %}
-                                        <tr>
-                                            <td colspan="5">No data</td>
-                                        </tr>
-
-                                    {% endfor %}
+                                        <td colspan="7">No data</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
                             </table>
 
-                            <h1>COMPLETED COURSES</h1>
+                            <h1>COURSES TAKEN</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Courses Taken</th>
-                                    <th>Subject Code</th>
-                                    <th>Subject Term and Year</th>
+                                    <th>Course Name</th>
+                                    <th>Course Code</th>
+                                    <th>Course Term</th>
                                     <th>Grade</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for user in course_dict %}
+                                {% for data in course_dict %}
                                     <tr>
-                                        <td>{{ user.Subject_Name }}</td>
-                                        <td>{{ user.Subject_Code }}</td>
-                                        <td>{{ user.Subject_Term_and_Year }}</td>
-                                        <td>{{ user.Grade }}</td>
-                                    </tr>
+                                        <td>{{ data.Subject_Name }}</td>
+                                        <td>{{ data.Subject_Code }}</td>
+                                        <td>{{ data.Subject_Year }}&nbsp{{ data.Subject_Term }}</td>
+                                        <td>{{ data.Grade }}</td>
                                 {% empty %}
-                                    <tr>
-                                        <td colspan="5">No data</td>
+                                        <td colspan="4">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -196,21 +187,19 @@
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Exam Qualify</th>
+                                    <th>Qualifying Exam Name</th>
                                     <th>Attempt Number</th>
                                     <th>Grade</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for user in examAttempt_dict %}
+                                {% for data in examAttempt_dict %}
                                     <tr>
-                                        <td>{{ user.Exam_Name }}</td>
-                                        <td>{{ user.Attempt_Number }}</td>
-                                        <td>{{ user.Grade }}</td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="5">No data</td>
+                                        <td>{{ data.Exam_Name }}</td>
+                                        <td>{{ data.Attempt_Number }}</td>
+                                        <td>{{ data.Grade }}</td>
+                                    {% empty %}
+                                        <td colspan="3">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -219,55 +208,51 @@
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Subject Name</th>
-                                    <th>Subject Code</th>
-                                    <th>Semester</th>
-                                    <th>Instructor Name</th>
+                                    <th>Course Name</th>
+                                    <th>Course Code</th>
+                                    <th>Course Instructor Name</th>
+                                    <th>Course Term</th>
                                     <th>Responsibilities</th>
                                     <th>Lectures or Presentation_Given</th>
                                     <th>Area of Improvement</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for user in techingAssistant_dict %}
+                                {% for data in techingAssistant_dict %}
                                     <tr>
-                                        <td>{{ user.Subject_Name }} </td>
-                                        <td>{{ user.Subject_Code }} </td>
-                                        <td>{{ user.In_Which_Semester }} </td>
-                                        <td>{{ user.Instructor_Name }} </td>
-                                        <td>{{ user.Responsibilities }} </td>
-                                        <td>{{ user.Lecture_or_Presentation_Given }} </td>
-                                        <td>{{ user.Area_of_Improvement }}</td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="5">No data</td>
+                                        <td>{{ data.Subject_Name }} </td>
+                                        <td>{{ data.Subject_Code }} </td>
+                                        <td>{{ data.Instructor_Name }} </td>
+                                        <td>{{ data.Subject_Year }}&nbsp{{ data.Subject_Term }} </td>
+                                        <td>{{ data.Responsibilities }} </td>
+                                        <td>{{ data.Lecture_or_Presentation_Given }} </td>
+                                        <td>{{ data.Area_of_Improvement }}</td>
+                                    {% empty %}
+                                        <td colspan="7">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
 
-                            <h1>PAPER</h1>
+                            <h1>RESEARCH PAPER</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>TITLE</th>
-                                    <th>VENUE</th>
-                                    <th>STATUS OF PAPER</th>
-                                    <th>AUTHOR</th>
-                                    <th>COAUTHOR</th>
+                                    <th>Title</th>
+                                    <th>List of Authors</th>
+                                    <th>Paper Status</th>
+                                    <th>Published In</th>
+                                    <th>Venue</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for user in paper_dict %}
+                                {% for data in paper_dict %}
                                     <tr>
-                                        <td>{{ user.Title }}</td>
-                                        <td>{{ user.Venue }}</td>
-                                        <td>{{ user.Status_of_Paper }}</td>
-                                        <td>{{ user.Author }}</td>
-                                        <td>{{ user.Coauthor }}</td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
+                                        <td>{{ data.Title }}</td>
+                                        <td>{{ data.List_of_Authors }}</td>
+                                        <td>{{ data.Status_of_Paper }}</td>
+                                        <td>{{ data.Publish_Year }}&nbsp{{ data.Publish_Term }} </td>
+                                        <td>{{ data.Venue }}</td>
+                                    {% empty %}
                                         <td colspan="5">No data</td>
                                     </tr>
                                 {% endfor %}
@@ -290,17 +275,16 @@
                         </button>
                         &nbsp&nbsp&nbsp&nbsp
 
-                          {% for submission in submissionList %}
-                          {% if submission.status == "Saved" %}
-                              &nbsp&nbsp&nbsp&nbsp
-                              <button type="submit" class="button" name="submit"
-                                      onclick="return confirm('Are you sure you want to submit questionnaire?' +
-                                      '\nYou can\'t modify your data after this.')" value= {{submission.id}}>
-                                  Submit
-                              </button>
-                          {% endif %}
-                            {% endfor %}
-
+                        {% for submission in submissionList %}
+                        {% if submission.status == "Saved" %}
+                            &nbsp&nbsp&nbsp&nbsp
+                            <button type="submit" class="button" name="submit"
+                                    onclick="return confirm('Are you sure you want to submit questionnaire?' +
+                                    '\nYou can\'t modify your data after this.')" value= {{submission.id}}>
+                            Submit
+                            </button>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </form>
             </div>
