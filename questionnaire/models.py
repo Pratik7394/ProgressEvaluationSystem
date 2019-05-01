@@ -64,8 +64,8 @@ class submissionTrack(models.Model):
     fullname = models.CharField(max_length=500)
     current_GPA = models.FloatField(blank=True, null=True)
     Email = models.EmailField(blank=True, null=True)
-    Current_Research_Advisor = models.CharField(max_length=500, blank=True)
-    Current_Academic_Advisor = models.CharField(max_length=500, blank=True)
+    Current_Research_Advisor = models.CharField(max_length=500, blank=True, null=True)
+    Current_Academic_Advisor = models.CharField(max_length=500, blank=True, null=True)
     Current_Program_Year = models.IntegerField(blank=True, null=True)
 
     #############feedback############
@@ -82,24 +82,48 @@ class submissionTrack(models.Model):
 class course(models.Model):
     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
+
+    FALL = 'Fall'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    term_choices = (
+        (FALL, FALL),
+        (SPRING, SPRING),
+        (SUMMER, SUMMER),
+    )
+    year_choices = []
+    for y in range((datetime.datetime.now().year - 6), (datetime.datetime.now().year + 1)):
+        year_choices.append((y, y))
+
+    Subject_Year = models.IntegerField(choices=year_choices, blank=True, null=True)
+    Subject_Term = models.CharField(max_length=6, choices=term_choices, blank=True)
+
     Subject_Name = models.CharField(max_length=200)
     Subject_Code = models.CharField(max_length=50)
-    Subject_Term_and_Year = models.CharField(max_length=50)
+
     Grade = models.CharField(max_length=20)
 
     class Meta:
-        unique_together = ('username', 'questionnaire_for', 'Subject_Name', 'Subject_Code',)
+        unique_together = ('username', 'questionnaire_for', 'Subject_Name', 'Subject_Year', 'Subject_Term')
 
     def __str__(self):
-        return str(self.username) + " " + str(
-            self.questionnaire_for) + " " + self.Subject_Name + " " + self.Subject_Term_and_Year
+        return str(self.username) + " " + str(self.questionnaire_for) + " " + \
+               self.Subject_Name + " " + str(self.Subject_Year) + " " + self.Subject_Term
+
+    def clean(self):
+        if self.Subject_Name:
+            if self.Subject_Year or self.Subject_Term:
+                if not (self.Subject_Year and self.Subject_Term):
+                    raise ValidationError("Both Subject Year and Term should be selected.")
+            else:
+                raise ValidationError("Please select Subject Year and Term.")
 
 
 class examAttempt(models.Model):
     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
     Exam_Name = models.ForeignKey(qualifyingExam, db_column="exam_Name", on_delete=models.PROTECT)
-    Attempt_Number = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
+    Attempt_Number = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(1)])
     Grade = models.CharField(max_length=10)
 
     class Meta:
@@ -113,20 +137,42 @@ class examAttempt(models.Model):
 class techingAssistant(models.Model):
     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
+
+    FALL = 'Fall'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    term_choices = (
+        (FALL, FALL),
+        (SPRING, SPRING),
+        (SUMMER, SUMMER),
+    )
+    year_choices = []
+    for y in range((datetime.datetime.now().year - 6), (datetime.datetime.now().year + 1)):
+        year_choices.append((y, y))
+
+    Subject_Year = models.IntegerField(choices=year_choices, blank=True, null=True)
+    Subject_Term = models.CharField(max_length=6, choices=term_choices, blank=True)
     Subject_Name = models.CharField(max_length=200)
     Subject_Code = models.CharField(max_length=50)
-    In_Which_Semester = models.CharField(max_length=50)
     Instructor_Name = models.CharField(max_length=200)
     Responsibilities = models.TextField(max_length=5000)
     Lecture_or_Presentation_Given = models.TextField(max_length=5000)
     Area_of_Improvement = models.TextField(max_length=5000)
 
     class Meta:
-        unique_together = ('username', 'questionnaire_for', 'Subject_Name', 'In_Which_Semester',)
+        unique_together = ('username', 'questionnaire_for', 'Subject_Name', 'Subject_Year', 'Subject_Term')
 
     def __str__(self):
-        return str(self.username) + " " + str(
-            self.questionnaire_for) + " " + self.Subject_Code + " " + self.In_Which_Semester
+        return str(self.username) + " " + str(self.questionnaire_for) + " " + self.Subject_Name + " " + \
+               str(self.Subject_Year) + " " + self.Subject_Term
+
+    def clean(self):
+        if self.Subject_Name:
+            if self.Subject_Year or self.Subject_Term:
+                if not (self.Subject_Year and self.Subject_Term):
+                    raise ValidationError("Both Subject Year and Term should be selected.")
+            else:
+                raise ValidationError("Please select Subject Year and Term.")
 
 
 class paper(models.Model):
@@ -152,13 +198,13 @@ class paper(models.Model):
 
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
     Title = models.CharField(max_length=5000)
-    Venue = models.CharField(max_length=1000)
+    Venue = models.CharField(max_length=5000)
     Status_of_Paper = models.CharField(max_length=15, choices=status_choices)
     Publish_Year = models.IntegerField(choices=year_choices, blank=True, null=True)
     Publish_Term = models.CharField(max_length=6, choices=term_choices, blank=True)
 
     Author = models.ForeignKey(studentName, db_column="name", on_delete=models.PROTECT, blank=True)
-    List_of_Authors = models.CharField(max_length=1000)
+    List_of_Authors = models.CharField(max_length=5000)
 
     class Meta:
         unique_together = ('Author', 'questionnaire_for', 'Title',)
@@ -201,7 +247,7 @@ class research(models.Model):
     Current_Academic_Advisor = models.ForeignKey(professorName, related_name='academic_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
 
-    Current_GPA = models.FloatField(validators=[MaxValueValidator(4)], null=True)
+    Current_GPA = models.FloatField(validators=[MaxValueValidator(4),MinValueValidator(0)], null=True)
 
     class Meta:
         unique_together = ('username', 'questionnaire_for',)

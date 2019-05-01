@@ -39,7 +39,7 @@
         </div>
         <table class="d" style="width:75%">
             <tr>
-                <th>Topic</th>
+                <th>Thesis Topic</th>
                 <td>{{ form.Topic }}
                 {% if form.Topic.errors %}
                     {% for error in form.Topic.errors %}
@@ -59,7 +59,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Proposal</th>
+                <th>Thesis Proposal</th>
                 <td>{{ form.Proposal }}&nbsp{{ form.Proposal_Status }}
                 {% if form.Proposal.errors %}
                     {% for error in form.Proposal.errors %}
@@ -69,7 +69,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Defense</th>
+                <th>Thesis Defense</th>
                 <td>{{ form.Defense }}&nbsp{{ form.Defense_Status }}
                 {% if form.Defense.errors %}
                     {% for error in form.Defense.errors %}

@@ -18,8 +18,7 @@
                     <th>Title</th>
                     <th>List of Authors</th>
                     <th>Status of Paper</th>
-                    <th>Publish Year</th>
-                    <th>Publish Term</th>
+                    <th>Publish Year and Term</th>
                     <th>Venue</th>
                     <th>Select for Deletion</th>
                 </tr>
@@ -53,14 +52,13 @@
                         {% endfor %}
                     {% endif %}
                     </td>
-                    <td>{{ form.Publish_Year }}
+                    <td>{{ form.Publish_Year }}&nbsp{{ form.Publish_Term }}
                     {% if form.Publish_Year.errors %}
                         {% for error in form.Publish_Year.errors %}
                             <br><strong style="color:red">{{ error|escape }}</strong>
+                        &nbsp
                         {% endfor %}
                     {% endif %}
-                    </td>
-                    <td>{{ form.Publish_Term }}
                     {% if form.Publish_Term.errors %}
                         {% for error in form.Publish_Term.errors %}
                             <br><strong style="color:red">{{ error|escape }}</strong>

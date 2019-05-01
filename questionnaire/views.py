@@ -72,7 +72,6 @@ def studentHome(request):
                       {'profile2': profile2, 'sessionFullName': sessionFullName, 'submissionList': submissionList,
                        'profile': profile, 'blankspace': blankspace, 'submit': submit})
 
-
 @login_required()
 def viewSubmissions(request):
     if request.method == 'POST':
@@ -166,7 +165,7 @@ def viewSubmissions(request):
                         data = [Course(
                             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
                             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
-                            Subject_Term_and_Year=c.Subject_Term_and_Year, Grade=c.Grade
+                            Subject_Year=c.Subject_Year, Subject_Term=c.Subject_Term, Grade=c.Grade
                         ) for c in courses]
                         try:
                             with transaction.atomic():
@@ -202,7 +201,7 @@ def viewSubmissions(request):
                             username_id=c.username_id, questionnaire_for_id=questionnaire_id,
                             Subject_Name=c.Subject_Name, Subject_Code=c.Subject_Code,
                             Responsibilities=c.Responsibilities,
-                            In_Which_Semester=c.In_Which_Semester, Instructor_Name=c.Instructor_Name,
+                            Subject_Year=c.Subject_Year, Subject_Term=c.Subject_Term, Instructor_Name=c.Instructor_Name,
                             Lecture_or_Presentation_Given=c.Lecture_or_Presentation_Given,
                             Area_of_Improvement=c.Area_of_Improvement
                         ) for c in teaching_assists]
@@ -233,7 +232,6 @@ def viewSubmissions(request):
                             messages.error(request, "Your Research papers couldn't be preloaded.")
 
                 return redirect(reverse('questionnaire:form-research'))
-
 
 
 @login_required()
@@ -332,7 +330,6 @@ def handleResearch(request):
     return render(request, 'questionnaire/research.html', context)
 
 
-
 @login_required()
 def handleQExams(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -426,7 +423,6 @@ def handleQExams(request):
     return render(request, 'questionnaire/qexams.html', context)
 
 
-
 @login_required()
 def handleTA(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -445,7 +441,7 @@ def handleTA(request):
         data = [{
             'username_id': c.username_id, 'questionnaire_for_id': c.questionnaire_for_id,
             'Subject_Name': c.Subject_Name, 'Subject_Code': c.Subject_Code, 'Responsibilities': c.Responsibilities,
-            'In_Which_Semester': c.In_Which_Semester, 'Instructor_Name': c.Instructor_Name,
+            'Subject_Year': c.Subject_Year,  'Subject_Term': c.Subject_Term,'Instructor_Name': c.Instructor_Name,
             'Lecture_or_Presentation_Given': c.Lecture_or_Presentation_Given,
             'Area_of_Improvement': c.Area_of_Improvement
         } for c in teaching_assists]
@@ -473,7 +469,8 @@ def handleTA(request):
                     if not Subject_Name:
                         continue
                     Subject_Code = form.cleaned_data.get('Subject_Code')
-                    In_Which_Semester = form.cleaned_data.get('In_Which_Semester')
+                    Subject_Year = form.cleaned_data.get('Subject_Year')
+                    Subject_Term = form.cleaned_data.get('Subject_Term')
                     Instructor_Name = form.cleaned_data.get('Instructor_Name')
                     Responsibilities = form.cleaned_data.get('Responsibilities')
                     Lecture_or_Presentation_Given = form.cleaned_data.get('Lecture_or_Presentation_Given')
@@ -482,7 +479,7 @@ def handleTA(request):
                     new_teaching_assists.append(TA(
                         username_id=userTableID, questionnaire_for_id=questionnaire_id, Subject_Name=Subject_Name,
                         Subject_Code=Subject_Code, Responsibilities=Responsibilities,
-                        In_Which_Semester=In_Which_Semester, Instructor_Name=Instructor_Name,
+                        Subject_Year=Subject_Year, Subject_Term=Subject_Term, Instructor_Name=Instructor_Name,
                         Lecture_or_Presentation_Given=Lecture_or_Presentation_Given,
                         Area_of_Improvement=Area_of_Improvement
                     ))
@@ -521,7 +518,6 @@ def handleTA(request):
     return render(request, 'questionnaire/teaching.html', context)
 
 
-
 @login_required()
 def handleCourses(request):
     submissionTrack_id = request.session["questionnaireForIdSession"]
@@ -534,14 +530,14 @@ def handleCourses(request):
     questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
     userTableID = User.objects.get(username=request.session['userNameSession']).id
     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).order_by(
-        '-Subject_Term_and_Year', 'Grade', 'Subject_Name')
+        '-Subject_Year','Subject_Term', 'Grade', 'Subject_Name')
     data = [{}]
     if courses.exists():
         print('Course data exists and noted')
         data = [{
             'username_id': c.username_id, 'questionnaire_for_id': c.questionnaire_for_id,
             'Subject_Name': c.Subject_Name, 'Subject_Code': c.Subject_Code,
-            'Subject_Term_and_Year': c.Subject_Term_and_Year, 'Grade': c.Grade
+            'Subject_Year': c.Subject_Year, 'Subject_Term': c.Subject_Term, 'Grade': c.Grade
         } for c in courses]
     if request.method == 'POST':
         print('Course POST')
@@ -565,13 +561,14 @@ def handleCourses(request):
                     if not Subject_Name:
                         continue
                     Subject_Code = form.cleaned_data.get('Subject_Code')
-                    Subject_Term_and_Year = form.cleaned_data.get('Subject_Term_and_Year')
+                    Subject_Year = form.cleaned_data.get('Subject_Year')
+                    Subject_Term = form.cleaned_data.get('Subject_Term')
                     Grade = form.cleaned_data.get('Grade')
 
                     new_courses.append(Course(
                         username_id=userTableID, questionnaire_for_id=questionnaire_id,
                         Subject_Name=Subject_Name,
-                        Subject_Code=Subject_Code, Subject_Term_and_Year=Subject_Term_and_Year, Grade=Grade
+                        Subject_Code=Subject_Code, Subject_Year=Subject_Year, Subject_Term=Subject_Term, Grade=Grade
                     ))
                 try:
                     with transaction.atomic():
@@ -609,7 +606,6 @@ def handleCourses(request):
         'formset': formset
     }
     return render(request, 'questionnaire/courses.html', context)
-
 
 
 @login_required()
@@ -709,19 +705,25 @@ def handlePapers(request):
     }
     return render(request, 'questionnaire/papers.html', context)
 
+
 @login_required()
 def handleReview(request):
     if request.method == 'POST':
         if 'submit' in request.POST:
             print("view")
             submission_id = request.POST['submit']
+            userTableID = User.objects.get(username=request.session['userNameSession']).id
             questionnaire_id = Submission.objects.get(id=submission_id).questionnaire_for_id
-            current_data = Research.objects.get(username_id=submission_id, questionnaire_for_id=questionnaire_id)
-            Submission.objects.filter(username_id=submission_id,questionnaire_for_id=questionnaire_id).update(
-                current_GPA=current_data.Current_GPA, status="Submitted For Review",
-                Current_Research_Advisor=str(current_data.Current_Research_Advisor),
-                Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
-            )
+            current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+            try:
+                Submission.objects.filter(username_id=userTableID,questionnaire_for_id=questionnaire_id).update(
+                    current_GPA=current_data.Current_GPA, status="Submitted For Review",
+                    Current_Research_Advisor=str(current_data.Current_Research_Advisor),
+                    Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
+                )
+            except Submission.DoesNotExist:
+                messages.error('Error while fetching submission record')
+                print('Error while fetching submission record')
             print("updated")
             sessionid = request.session['idSession']
             try:

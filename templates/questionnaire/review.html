@@ -293,7 +293,9 @@
                           {% for submission in submissionList %}
                           {% if submission.status == "Saved" %}
                               &nbsp&nbsp&nbsp&nbsp
-                              <button type="submit" class="button" name='submit' value= {{submission.id}}>
+                              <button type="submit" class="button" name="submit"
+                                      onclick="return confirm('Are you sure you want to submit questionnaire?' +
+                                      '\nYou can\'t modify your data after this.')" value= {{submission.id}}>
                                   Submit
                               </button>
                           {% endif %}
