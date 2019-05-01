@@ -5,20 +5,13 @@
 
 <html lang="en">
 
-{#<html>#}
+
 <head>
 
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
 
-    {#    <meta charset="UTF-8">#}
-    {#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
-    {#    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">#}
-    {#    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">#}
-    {#    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">#}
-    {#    <meta name="description" content="">#}
-    <br>
-    <title>Hello {{ sessionFullName }}</title>
+    <title>Home {{ sessionFullName }}</title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
@@ -30,10 +23,6 @@
 
 
     <style>
-
-
-        {#table td.first th.first {#}
-        {#    display: none;#}
 
         table.tbl tr td:first-child {
             display: none;
@@ -50,7 +39,6 @@
         div.ex1 {
             width: 1200px;
             margin: auto;
-        {#border: 3px solid #73AD21;#}
         }
 
         p.dashed {
@@ -199,8 +187,8 @@
     </script>
 
 </head>
-<body>
 
+<body>
 
 <section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
 
@@ -208,12 +196,6 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </button>
         <div class="menu-logo">
             <div class="navbar-brand">
@@ -242,20 +224,17 @@
 {#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
 
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
-    {#    <div class="container align-center">#}
-    {#<div id="page-wrapper" style="display:inline-block;" class="container">#}
     <div class="row justify-content-md-center ex1">
         <div class="mbr-white col-md-10">
             <b>
                 <blackcolor>
                     <div class="container align-center">
-                        <div align="centre">
-                            {% if user.is_authenticated %}
-                                <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }}</u></h2>
-                            {% else %}
-                                <h2>Welcome to the site!</h2>
-                            {% endif %}
-                        </div>
+                        {% if user.is_authenticated %}
+                            <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }}</u></h2>
+                            <br>
+                        {% else %}
+                            <h2>Welcome to the site!</h2>
+                        {% endif %}
                     </div>
                     {% if messages %}
                         <p class="messages">
@@ -277,25 +256,20 @@
                     </blackcolor>
                     <blackcolor>
                         <div class="row row-bottom-margin">
-
                             {% if fullname is not '' %}
-
                                 <div class="form-group col-sm-1 col-md-3">
                                     Name:
                                     <p class="dashed">
                                         {% render_field filter.form.fullname class="form-control" value=fullname %}
                                     </p>
                                 </div>
-
                             {% else %}
-
                                 <div class="form-group col-sm-1 col-md-3">
                                     Name:
                                     <p class="dashed">
                                         {% render_field filter.form.fullname class="form-control" %}
                                     </p>
                                 </div>
-
                             {% endif %}
 
                             <div class="form-group col-sm-1 col-md-2">
@@ -304,30 +278,35 @@
                                     {% render_field filter.form.current_GPA_gt class="form-control" %}
                                 </p>
                             </div>
+
                             <div class="form-group col-sm-1 col-md-2">
                                 GPA To:
                                 <p class="dashed">
                                     {% render_field filter.form.current_GPA_lt class="form-control" %}
                                 </p>
                             </div>
+
                             <div class="form-group col-sm-1 col-md-3">
                                 Email:
                                 <p class="dashed">
                                     {% render_field filter.form.Email class="form-control" %}
                                 </p>
                             </div>
+
                             <div class="form-group col-sm-1 col-md-3">
                                 Acaedmic Advisor:
                                 <p class="dashed">
                                     {% render_field filter.form.Current_Academic_Advisor class="form-control" %}
                                 </p>
                             </div>
+
                             <div class="form-group col-sm-1 col-md-3">
                                 Research Advisor:
                                 <p class="dashed">
                                     {% render_field filter.form.Current_Research_Advisor class="form-control" %}
                                 </p>
                             </div>
+
                             <div class="form-group col-sm-1 col-md-3">
                                 Questionnaire Status:
                                 <p class="dashed">
@@ -404,26 +383,19 @@
                     </tbody>
                 </table>
 
+                <br>
 
-                <div align="left">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <button type="submit" class="button" name="export"
-                                    onclick="exportTableToCSV('student_filter_result.csv')">
-                                Export List
-                            </button>
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                            <button type="submit" class="button" name="clear">
-                                Clear Search
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
+                <button type="submit" class="button" name="export"
+                        onclick="exportTableToCSV('student_filter_result.csv')">
+                    Export List
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="clear">
+                    Clear Search
+                </button>
             </form>
         </div>
     </div>
-    {#</div>#}
 </section>
 
 

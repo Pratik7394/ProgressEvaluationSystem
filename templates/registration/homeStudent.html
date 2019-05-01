@@ -25,6 +25,10 @@
 
     <style>
 
+        table.tbl tr td:first-child {
+            display: none;
+        }
+
         .bg {
             background-color: floralwhite;
         }
@@ -36,7 +40,6 @@
         div.ex1 {
             width: 1200px;
             margin: auto;
-        {#border: 3px solid #73AD21;#}
         }
 
         p.dashed {
@@ -75,18 +78,12 @@
         }
     </style>
 
+
     <style>
         html {
             overflow-y: scroll;
         }
     </style>
-
-    <style>
-        p.dashed {
-            border-style: dashed;
-        }
-    </style>
-
 
 </head>
 
@@ -99,12 +96,6 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </button>
         <div class="menu-logo">
             <div class="navbar-brand">
@@ -132,27 +123,30 @@
 <!-- Dont remove this: Divyarth Singh -->
 {#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
-
-    {#    <div class="container align-center">#}
     <div class="row justify-content-md-center ex1">
         <div class="mbr-white col-md-10">
-            {#            <p class="mbr-text pb-3 mbr-fonts-style display-5">#}
-
-            <ul>
-                <b>
-                    <blackcolor>
+            <br>
+        <br>
+            <b>
+                <blackcolor>
+                    <div class="container align-center">
                         {% if user.is_authenticated %}
+                            <h2 style="margin-top: 0"><u>Welcome {{ sessionFullName }}</u></h2>
                             <br>
-                            <br>
-                            <h1>Welcome {{ sessionFullName }}</h1>
                         {% else %}
                             <h2>Welcome to the site!</h2>
                         {% endif %}
-                    </blackcolor>
-                </b>
-            </ul>
-
-            <br>
+                    </div>
+                    {% if messages %}
+                        <p class="messages">
+                            {% for message in messages %}
+                                <p style="color:red">
+                                    {{ message }}
+                                </p>
+                            {% endfor %}
+                    {% endif %}
+                </blackcolor>
+            </b>
 
             <div align="left">
                 <form class="form" role="form" autocomplete="off" method="post"
@@ -161,86 +155,84 @@
                         {% csrf_token %}
                         <b>
                             <blackcolor>
-                                <h2><u><strong>Profile</strong></u></h2>
+                                <h2><u>Profile</u></h2>
                                 <br>
-                                <h4>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspFirst
-                                                    Name:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA"> {{ profile.first_name }}</p></div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">Last Name:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA">{{ profile.last_name }}</p></div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspSUNY
-                                                    ID:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA">{{ profile.SUNY_ID }}</p></div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">Native Country:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA">{{ profile.native_country }}</p></div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspProgram Joining
-                                                    Date:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA">{{ profile.program_joining_date }}</p>
-                                                </div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA">{{ profile2.current_GPA }}</p></div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">&nbsp&nbsp&nbspCurrent Research
-                                                    Advisor:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA"> {{ profile2.Current_Research_Advisor }} </p>
-                                                </div>
-                                                <!-- col-sm-10 -->
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row mgbt-xs-0">
-                                                <label class="col-xs-5 control-label">Current Academic
-                                                    Advisor:&nbsp</label>
-                                                <div class="col-xs-7 controls"><p
-                                                        style="color:#0A0AAA"> {{ profile2.Current_Academic_Advisor }} </p>
-                                                </div>
-                                                <!-- col-sm-10 -->
-                                            </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">&nbsp&nbsp&nbsp&nbspFirst
+                                                Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray"> {{ profile.first_name }}</p></div>
+                                            <!-- col-sm-10 -->
                                         </div>
                                     </div>
-                                    <br>
-                                </h4>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Last Name:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray">{{ profile.last_name }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">&nbsp&nbsp&nbsp&nbspSUNY
+                                                ID:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray">{{ profile.SUNY_ID }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Native Country:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray">{{ profile.native_country }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">&nbsp&nbsp&nbsp&nbspProgram Joining
+                                                Date:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray">{{ profile.program_joining_date }}</p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current GPA:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray">{{ profile2.current_GPA }}</p></div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">&nbsp&nbsp&nbsp&nbspCurrent Research
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray"> {{ profile2.Current_Research_Advisor }} </p>
+                                            </div>
+                                            <!-- col-sm-10 -->
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row mgbt-xs-0">
+                                            <label class="col-xs-5 control-label">Current Academic
+                                                Advisor:&nbsp</label>
+                                            <div class="col-xs-7 controls"><p
+                                                    style="color:darkslategray"> {{ profile2.Current_Academic_Advisor }} </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </blackcolor>
                         </b>
                     </div>
@@ -259,75 +251,77 @@
                     </blackcolor>
                 </b>
             </div>
+        <br>
+        <br>
 
             <form class="form" role="form" autocomplete="off" method="post"
                   enctype="multipart/form-data">
-                {% csrf_token %}
-                <blackcolor>
-                    <br>
-                    <h2><u><strong>Questionnaire</strong></u></h2>
-                    <br>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Questionnaire For</th>
-                            <th>Status</th>
-                            <th>View/Edit</th>
-                            {#                                            <th>Feedback</th>#}
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        {% for submission in submissionList %}
+                <div class="bg">
+                    {% csrf_token %}
+                    <blackcolor>
+                        <br>
+                        <h2><u>Questionnaire</u></h2>
+                        <br>
+                        <table>
+                            <thead>
                             <tr>
-                                <td>{{ submission.questionnaire_for }}</td>
-                                <td>{{ submission.status }}</td>
-                                <td>
-                                    {% if submission.status == "Not Started" %}
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}>
-                                            Start
-                                        </button>
-                                    {% endif %}
-                                    {% if submission.status == "Saved" %}
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}>
-                                            Edit
-                                        </button>
-                                        &nbsp&nbsp&nbsp&nbsp
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}submit>
-                                            Submit
-                                        </button>
-                                    {% endif %}
-                                    {% if submission.status == 'Submitted For Review' %}
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}>
-                                            View
-                                        </button>
-                                    {% endif %}
-                                    {% if submission.status == "Review In Progress" %}
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}>
-                                            View
-                                        </button>
-                                    {% endif %}
-                                    {% if submission.status == "Review Submitted" %}
-                                        <button type="submit" class="button" name='var'
-                                                value={{ submission.id }}>
-                                            View
-                                        </button>
-                                    {% endif %}
-                                    {{ blankspace }}
-                                </td>
+                                <th>Questionnaire For</th>
+                                <th>Status</th>
+                                <th>View/Edit</th>
                             </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="5">No data</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </blackcolor>
+                            </thead>
+                            <tbody>
+                            {% for submission in submissionList %}
+                                <tr>
+                                    <td>{{ submission.questionnaire_for }}</td>
+                                    <td>{{ submission.status }}</td>
+                                    <td>
+                                        {% if submission.status == "Not Started" %}
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}>
+                                                Start
+                                            </button>
+                                        {% endif %}
+                                        {% if submission.status == "Saved" %}
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}>
+                                                Edit
+                                            </button>
+                                            &nbsp&nbsp&nbsp&nbsp
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}submit>
+                                                Submit
+                                            </button>
+                                        {% endif %}
+                                        {% if submission.status == 'Submitted For Review' %}
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}>
+                                                View
+                                            </button>
+                                        {% endif %}
+                                        {% if submission.status == "Review In Progress" %}
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}>
+                                                View
+                                            </button>
+                                        {% endif %}
+                                        {% if submission.status == "Review Submitted" %}
+                                            <button type="submit" class="button" name='var'
+                                                    value={{ submission.id }}>
+                                                View
+                                            </button>
+                                        {% endif %}
+                                        {{ blankspace }}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5">No data</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </blackcolor>
+                </div>
             </form>
         </div>
     </div>
