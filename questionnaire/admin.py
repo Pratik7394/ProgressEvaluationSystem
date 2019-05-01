@@ -84,7 +84,7 @@ class questionnaireAdmin(admin.ModelAdmin):
                     print(lastname)
                     questionnaire_for = questionnaire.objects.get(id=questionnaireid)
                     submissionTrack.objects.create(username=username, questionnaire_for=questionnaire_for,
-                                                   status="Not Started", fullname=fullname, Current_Program_Year=year)
+                                                   status="Not Started", fullname=fullname, Current_Program_Year=year, Email=username)
 
 # def createquery(questionary_for):
 
