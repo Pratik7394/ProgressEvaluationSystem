@@ -147,7 +147,8 @@ def viewSubmissions(request):
                             Proposal_Status=research.Proposal_Status, Defense_Status=research.Defense_Status,
                             Thesis_Committee=research.Thesis_Committee,
                             Current_GPA=research.Current_GPA,
-                            Current_Research_Advisor=research.Current_Research_Advisor
+                            Current_Research_Advisor=research.Current_Research_Advisor,
+                            Current_Academic_Advisor=research.Current_Academic_Advisor
                         )]
                         try:
                             with transaction.atomic():
