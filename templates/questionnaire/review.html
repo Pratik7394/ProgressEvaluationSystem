@@ -7,14 +7,8 @@
 <head>
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <link rel="shortcut icon" href="{% static 'assets/images/logo2.png' %}" type="image/x-icon">
-    <meta name="description" content="">
 
-    <title>Submission View</title>
+    <title>Submission Review</title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
@@ -30,9 +24,12 @@
             table-layout: fixed;
             width: 100%;
         }
-    </style>
 
-    <style>
+        div.ex1 {
+            width: 1500px;
+            margin: auto;
+        }
+
         table, td, th {
             border: 4px solid #19334d;
             text-align: left;
@@ -63,6 +60,10 @@
         tr:hover td {
             background-color: floralwhite;
         }
+
+        .bg {
+            background-color: #e2e3e5;
+        }
     </style>
 
     <style>
@@ -80,12 +81,6 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </button>
         <div class="menu-logo">
             <div class="navbar-brand">
@@ -100,85 +95,101 @@
                     </a>
                 </span>
                 <span class="navbar-caption-wrap">
-                    <a class="navbar-caption text-white display-4" href="{% url 'questionnaire:studentHome' %}">
-                        Home
-                    </a>
-                </span>
-                <span class="navbar-caption-wrap">
                     <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
                         Logout
                     </a>
-                </span></div>
+                </span>
+            </div>
         </div>
     </nav>
-
-
 </section>
+<br>
 
 <!-- Dont remove this: Divyarth Singh -->
 {#<section class="engine"><a href="https://mobirise.info/j">website templates</a></section>#}
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
 
-
-    {#    <div class="container align-center">#}
-    <div class="row justify-content-md-center">
-        <div class="mbr-white col-md-10">
+    <div class="row justify-content-md-center ex1">
+        <div class="mbr-white col-md-10 bg">
             <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">Review Submission</h1>
-
             <p class="mbr-text pb-3 mbr-fonts-style display-5">
             <div align="left">
                 <ul>
                     <b>
                         <blackcolor>
-                            <h1>RESEARCH & ACADEMICS</h1>
+                            <h1>ACAEDMIC</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Thesis Topic</th>
-                                    <th>Research Advisor</th>
-                                    <th>Proposal</th>
-                                    <th>Defense</th>
-                                    <th>Thesis Committee</th>
-                                    <th>GPA</th>
                                     <th>Academic Advisor</th>
+                                    <th>GPA</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for data in research_dict %}
+                                {% for user in research_dict %}
                                     <tr>
-                                        <td>{{ data.Topic }}</td>
-                                        <td>{{ data.Current_Research_Advisor }}</td>
-                                        <td>{{ data.Proposal }}&nbsp&nbsp({{ data.Proposal_Status }})</td>
-                                        <td>{{ data.Defense }}&nbsp&nbsp({{ data.Defense_Status }})</td>
-                                        <td>{{ data.Thesis_Committee }}</td>
-                                        <td>{{ data.Current_GPA }}</td>
-                                        <td>{{ data.Current_Academic_Advisor }}</td>
-                                    {% empty %}
-                                        <td colspan="7">No data</td>
+                                        <td>{{ user.Current_Academic_Advisor }} </td>
+                                        <td>{{ user.Current_GPA }} </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="2">No data</td>
                                     </tr>
                                 {% endfor %}
-                                </tbody>
                             </table>
 
-                            <h1>COURSES TAKEN</h1>
+                            <h1>RESEARCH</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Course Name</th>
-                                    <th>Course Code</th>
-                                    <th>Course Term</th>
+                                    <th>Topic</th>
+                                    <th>Proposal</th>
+                                    <th>Proposal Status</th>
+                                    <th>Defense</th>
+                                    <th>Defense Status</th>
+                                    <th>Thesis Committee</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in research_dict %}
+                                    <tr>
+                                        <td>{{ user.Topic }} </td>
+                                        <td>{{ user.Proposal }} </td>
+                                        <td>{{ user.Proposal_Status }} </td>
+                                        <td>{{ user.Defense }} </td>
+                                        <td>{{ user.Defense_Status }} </td>
+                                        <td>{{ user.Thesis_Committee }} </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6">No data</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <h1>COMPLETED COURSES</h1>
+                            <table class="d">
+                                <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Term</th>
+                                    <th>Subject Year</th>
                                     <th>Grade</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for data in course_dict %}
+                                {% for user in course_dict %}
                                     <tr>
-                                        <td>{{ data.Subject_Name }}</td>
-                                        <td>{{ data.Subject_Code }}</td>
-                                        <td>{{ data.Subject_Year }}&nbsp{{ data.Subject_Term }}</td>
-                                        <td>{{ data.Grade }}</td>
+                                        <td>{{ user.Subject_Name }}</td>
+                                        <td>{{ user.Subject_Code }}</td>
+                                        <td>{{ user.Subject_Term }}</td>
+                                        <td>{{ user.Subject_Year }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
                                 {% empty %}
-                                        <td colspan="4">No data</td>
+                                    <tr>
+                                        <td colspan="5">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -187,18 +198,20 @@
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Qualifying Exam Name</th>
+                                    <th>Exam Name</th>
                                     <th>Attempt Number</th>
                                     <th>Grade</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for data in examAttempt_dict %}
+                                {% for user in examAttempt_dict %}
                                     <tr>
-                                        <td>{{ data.Exam_Name }}</td>
-                                        <td>{{ data.Attempt_Number }}</td>
-                                        <td>{{ data.Grade }}</td>
-                                    {% empty %}
+                                        <td>{{ user.Exam_Name }}</td>
+                                        <td>{{ user.Attempt_Number }}</td>
+                                        <td>{{ user.Grade }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
                                         <td colspan="3">No data</td>
                                     </tr>
                                 {% endfor %}
@@ -208,52 +221,62 @@
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Course Name</th>
-                                    <th>Course Code</th>
-                                    <th>Course Instructor Name</th>
-                                    <th>Course Term</th>
+                                    <th>Subject Name</th>
+                                    <th>Subject Code</th>
+                                    <th>Term</th>
+                                    <th>Year</th>
+                                    <th>Instructor Name</th>
                                     <th>Responsibilities</th>
-                                    <th>Lectures or Presentation_Given</th>
+                                    <th>Lectures or Presentation Given</th>
                                     <th>Area of Improvement</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for data in techingAssistant_dict %}
+                                {% for user in techingAssistant_dict %}
                                     <tr>
-                                        <td>{{ data.Subject_Name }} </td>
-                                        <td>{{ data.Subject_Code }} </td>
-                                        <td>{{ data.Instructor_Name }} </td>
-                                        <td>{{ data.Subject_Year }}&nbsp{{ data.Subject_Term }} </td>
-                                        <td>{{ data.Responsibilities }} </td>
-                                        <td>{{ data.Lecture_or_Presentation_Given }} </td>
-                                        <td>{{ data.Area_of_Improvement }}</td>
-                                    {% empty %}
-                                        <td colspan="7">No data</td>
+                                        <td>{{ user.Subject_Name }} </td>
+                                        <td>{{ user.Subject_Code }} </td>
+                                        <td>{{ user.Subject_Term }} </td>
+                                        <td>{{ user.Subject_Year }} </td>
+                                        <td>{{ user.Instructor_Name }} </td>
+                                        <td>{{ user.Responsibilities }} </td>
+                                        <td>{{ user.Lecture_or_Presentation_Given }} </td>
+                                        <td>{{ user.Area_of_Improvement }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="8">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
 
-                            <h1>RESEARCH PAPER</h1>
+                            <h1>PAPER</h1>
                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>TITLE</th>
+                                    <th>VENUE</th>
+                                    <th>STATUS OF PAPER</th>
+                                    <th>Publish Term</th>
+                                    <th>Publish Year</th>
+                                    <th>AUTHOR</th>
                                     <th>List of Authors</th>
-                                    <th>Paper Status</th>
-                                    <th>Published In</th>
-                                    <th>Venue</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for data in paper_dict %}
+                                {% for user in paper_dict %}
                                     <tr>
-                                        <td>{{ data.Title }}</td>
-                                        <td>{{ data.List_of_Authors }}</td>
-                                        <td>{{ data.Status_of_Paper }}</td>
-                                        <td>{{ data.Publish_Year }}&nbsp{{ data.Publish_Term }} </td>
-                                        <td>{{ data.Venue }}</td>
-                                    {% empty %}
-                                        <td colspan="5">No data</td>
+                                        <td>{{ user.Title }}</td>
+                                        <td>{{ user.Venue }}</td>
+                                        <td>{{ user.Status_of_Paper }}</td>
+                                        <td>{{ user.Publish_Term }}</td>
+                                        <td>{{ user.Publish_Year }}</td>
+                                        <td>{{ user.Author }}</td>
+                                        <td>{{ user.List_of_Authors }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="7">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -263,29 +286,26 @@
                 </ul>
             </div>
 
-
-            <br>
             <div align="left">
                 <form class="form" role="form" autocomplete="off" method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <button type="submit" class="button">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                        <button type="submit" class="button" name="var">
                             Back
                         </button>
                         &nbsp&nbsp&nbsp&nbsp
-
                         {% for submission in submissionList %}
-                        {% if submission.status == "Saved" %}
-                            &nbsp&nbsp&nbsp&nbsp
-                            <button type="submit" class="button" name="submit"
-                                    onclick="return confirm('Are you sure you want to submit questionnaire?' +
-                                    '\nYou can\'t modify your data after this.')" value= {{submission.id}}>
-                            Submit
-                            </button>
-                        {% endif %}
+                            {% if submission.status == "Saved" %}
+                                &nbsp&nbsp&nbsp&nbsp
+                                <button type="submit" class="button" name="var"
+                                        onclick="return confirm('Are you sure you want to submit questionnaire?' +
+                                    '\nYou can\'t modify your data after this.')" value= {{ submission.id }}submit>
+                                    Submit
+                                </button>
+                            {% endif %}
                         {% endfor %}
-                    </div>
+
                 </form>
             </div>
             </p>
