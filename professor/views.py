@@ -131,15 +131,18 @@ def submissionView(request, item_id):
         if (questionnaireStatus == "Submitted For Review") or (questionnaireStatus == "Review In Progress") or (
                 questionnaireStatus == "Review Submitted"):
             userTableID = User.objects.get(username=questionnaire_submit_username).id
-            authorID = studentName.objects.get(username_id=userTableID).id
-            course_dict = course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+            course_dict = course.objects.filter(username_id=userTableID,
+                                                questionnaire_for_id=questionnaire_id).order_by(
+                '-Subject_Year', 'Subject_Term', 'Grade', 'Subject_Name')
             examAttempt_dict = examAttempt.objects.filter(username_id=userTableID,
-                                                          questionnaire_for_id=questionnaire_id)
+                                                          questionnaire_for_id=questionnaire_id).order_by(
+                'Exam_Name', 'Attempt_Number')
             techingAssistant_dict = techingAssistant.objects.filter(username_id=userTableID,
-                                                                    questionnaire_for_id=questionnaire_id)
-            paper_dict = paper.objects.filter(Author_id=authorID,
-                                              questionnaire_for_id=questionnaire_id)
-            print(paper_dict)
+                                                                    questionnaire_for_id=questionnaire_id).order_by(
+                '-Subject_Year', 'Subject_Term', 'Subject_Name')
+            paper_dict = paper.objects.filter(Author_id=studentName.objects.get(username_id=userTableID).id,
+                                              questionnaire_for_id=questionnaire_id).order_by(
+                '-Status_of_Paper', 'Title')
             research_dict = research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
 
             fullname = submissionTrack.objects.get(id=item_id).fullname

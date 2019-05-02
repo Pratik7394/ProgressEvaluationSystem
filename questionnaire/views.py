@@ -73,6 +73,7 @@ def studentHome(request):
                       {'profile2': profile2, 'sessionFullName': sessionFullName, 'submissionList': submissionList,
                        'profile': profile, 'blankspace': blankspace, 'submit': submit})
 
+
 @login_required()
 def viewSubmissions(request):
     if request.method == 'POST':
@@ -97,13 +98,18 @@ def viewSubmissions(request):
             userTableID = User.objects.get(username=questionnaire_submit_username).id
 
             if questionnaireStatus in ["Submitted For Review", "Review In Progress", "Review Submitted"]:
-                course_dict = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+                course_dict = Course.objects.filter(username_id=userTableID,
+                                                    questionnaire_for_id=questionnaire_id).order_by(
+                    '-Subject_Year', 'Subject_Term', 'Grade', 'Subject_Name')
                 examAttempt_dict = QExam.objects.filter(username_id=userTableID,
-                                                        questionnaire_for_id=questionnaire_id)
+                                                        questionnaire_for_id=questionnaire_id).order_by(
+                    'Exam_Name', 'Attempt_Number')
                 techingAssistant_dict = TA.objects.filter(username_id=userTableID,
-                                                          questionnaire_for_id=questionnaire_id)
+                                                          questionnaire_for_id=questionnaire_id).order_by(
+                    '-Subject_Year', 'Subject_Term', 'Subject_Name')
                 paper_dict = Paper.objects.filter(Author_id=Student.objects.get(username_id=userTableID).id,
-                                                  questionnaire_for_id=questionnaire_id)
+                                                  questionnaire_for_id=questionnaire_id).order_by(
+                    '-Status_of_Paper', 'Title')
                 research_dict = Research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
 
                 return render(request, 'questionnaire/submissionView.html',
@@ -154,7 +160,6 @@ def viewSubmissions(request):
                             # If the transaction failed
                             messages.error(request, "Your Research details couldn't be preloaded.")
 
-
                     # Load Courses
                     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
                     if courses.exists():
@@ -171,7 +176,6 @@ def viewSubmissions(request):
                         except IntegrityError:
                             # If the transaction failed
                             messages.error(request, "Your courses couldn't be preloaded.")
-
 
                     # Load Qualifying Exam Attempts
                     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
@@ -238,8 +242,9 @@ def handleResearch(request):
     if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):
         messages.error(request, "You currently don't have permission to access the requested page.")
         return redirect(reverse('questionnaire:studentHome'))
-
-    questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
     userTableID = User.objects.get(username=request.session['userNameSession']).id
     try:
         research = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
@@ -257,10 +262,6 @@ def handleResearch(request):
         }
     if request.method == 'POST':
         print('Research POST')
-        if 'next' in request.POST:
-            return redirect(reverse('questionnaire:form-qexams'))
-        if 'prev' in request.POST:
-            return redirect(reverse('questionnaire:studentHome'))
         sub = Submission.objects.get(id=submissionTrack_id)
         if sub.status == "Not Started":
             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -292,7 +293,7 @@ def handleResearch(request):
                     username_id=userTableID, questionnaire_for_id=questionnaire_id, Topic=Topic, Proposal=Proposal,
                     Defense=Defense, Current_Research_Advisor_id=Current_Research_Advisor_id, Current_GPA=Current_GPA,
                     Current_Academic_Advisor_id=Current_Academic_Advisor_id, Proposal_Status=Proposal_Status,
-                    Defense_Status = Defense_Status, Thesis_Committee=Thesis_Committee
+                    Defense_Status=Defense_Status, Thesis_Committee=Thesis_Committee
                 )]
                 try:
                     with transaction.atomic():
@@ -302,6 +303,10 @@ def handleResearch(request):
 
                         # notify our users that research details are saved
                         messages.success(request, 'Your research details are saved.')
+                        if 'next' in request.POST:
+                            return redirect(reverse('questionnaire:form-qexams'))
+                        if 'prev' in request.POST:
+                            return redirect(reverse('questionnaire:studentHome'))
                         return redirect(reverse('questionnaire:form-research'))
 
                 except IntegrityError:  # If the transaction failed
@@ -309,6 +314,10 @@ def handleResearch(request):
                     messages.error(request, 'There was an error saving your research details.')
                     # return redirect(reverse('questionnaire:form-research'))
             else:
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:form-qexams'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:studentHome'))
                 messages.error(request, 'Please modify data in order to Save!')
         else:
             print('Research data is invalid')
@@ -322,7 +331,8 @@ def handleResearch(request):
         print('Research GET')
         form = ResearchForm()
     context = {
-        'form': form
+        'form': form,
+        'QuestionnaireFor': questionnairefor
     }
     return render(request, 'questionnaire/research.html', context)
 
@@ -336,7 +346,9 @@ def handleQExams(request):
         return redirect(reverse('questionnaire:studentHome'))
 
     FormSet = formset_factory(QExamForm, can_delete=True, extra=1)
-    questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
     userTableID = User.objects.get(username=request.session['userNameSession']).id
     qexams = QExam.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).order_by(
         'Exam_Name', 'Attempt_Number')
@@ -349,60 +361,63 @@ def handleQExams(request):
         } for c in qexams]
     if request.method == 'POST':
         print('QExam POST')
-        if 'next' in request.POST:
-            return redirect(reverse('questionnaire:form-ta'))
-        if 'prev' in request.POST:
-            return redirect(reverse('questionnaire:form-research'))
-        if 'save' in request.POST:
-            sub = Submission.objects.get(id=submissionTrack_id)
-            if sub.status == "Not Started":
-                Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
+        sub = Submission.objects.get(id=submissionTrack_id)
+        if sub.status == "Not Started":
+            Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
 
-            formset = FormSet(request.POST, initial=data)
-            if formset.is_valid():
-                print('QExam valid')
-                new_qexams = []
-                if formset.has_changed():
-                    print('Data modified')
-                    for form in formset:
-                        if form in formset.deleted_forms:
-                            continue
-                        Exam_Name_id = ''
-                        try:
-                            Exam_Name_id = Exams.objects.get(exam_Name=form.cleaned_data.get('Exam_Name')).id
-                        except Exams.DoesNotExist:
-                            continue
-                        if not Exam_Name_id:
-                            continue
-                        Attempt_Number = form.cleaned_data.get('Attempt_Number')
-                        Grade = form.cleaned_data.get('Grade')
-                        new_qexams.append(QExam(
-                            username_id=userTableID, questionnaire_for_id=questionnaire_id,
-                            Exam_Name_id=Exam_Name_id,
-                            Attempt_Number=Attempt_Number, Grade=Grade
-                        ))
+        formset = FormSet(request.POST, initial=data)
+        if formset.is_valid():
+            print('QExam valid')
+            new_qexams = []
+            if formset.has_changed():
+                print('Data modified')
+                for form in formset:
+                    if form in formset.deleted_forms:
+                        continue
+                    Exam_Name_id = ''
                     try:
-                        with transaction.atomic():
-                            # Replace the old with the new
-                            QExam.objects.filter(username_id=userTableID,
-                                                 questionnaire_for_id=questionnaire_id).delete()
-                            QExam.objects.bulk_create(new_qexams)
+                        Exam_Name_id = Exams.objects.get(exam_Name=form.cleaned_data.get('Exam_Name')).id
+                    except Exams.DoesNotExist:
+                        continue
+                    if not Exam_Name_id:
+                        continue
+                    Attempt_Number = form.cleaned_data.get('Attempt_Number')
+                    Grade = form.cleaned_data.get('Grade')
+                    new_qexams.append(QExam(
+                        username_id=userTableID, questionnaire_for_id=questionnaire_id,
+                        Exam_Name_id=Exam_Name_id,
+                        Attempt_Number=Attempt_Number, Grade=Grade
+                    ))
+                try:
+                    with transaction.atomic():
+                        # Replace the old with the new
+                        QExam.objects.filter(username_id=userTableID,
+                                             questionnaire_for_id=questionnaire_id).delete()
+                        QExam.objects.bulk_create(new_qexams)
 
-                            # notify our users that Qualifying Exam Attempts are saved
-                            messages.success(request, 'Your qualification exam attempts are saved.')
-                            return redirect(reverse('questionnaire:form-qexams'))
+                        # notify our users that Qualifying Exam Attempts are saved
+                        messages.success(request, 'Your qualification exam attempts are saved.')
+                        if 'next' in request.POST:
+                            return redirect(reverse('questionnaire:form-ta'))
+                        if 'prev' in request.POST:
+                            return redirect(reverse('questionnaire:form-research'))
+                        return redirect(reverse('questionnaire:form-qexams'))
 
-                    except IntegrityError:  # If the transaction failed
-                        print('QExam failed')
-                        messages.error(request, 'There was an error saving your qualification exams.')
-                else:
-                    messages.error(request, 'Please modify data in order to Save!')
+                except IntegrityError:  # If the transaction failed
+                    print('QExam failed')
+                    messages.error(request, 'There was an error saving your qualification exams.')
             else:
-                print('QExam invalid')
-                messages.error(request, 'There seems to be something wrong with your qualification exams data. ' +
-                               'Please make sure all entries below are valid.')
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:form-ta'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:form-research'))
+                messages.error(request, 'Please modify data in order to Save!')
         else:
-            return redirect(reverse('questionnaire:form-qexams'))
+            print('QExam invalid')
+            messages.error(request, 'There seems to be something wrong with your qualification exams data. ' +
+                           'Please make sure all entries below are valid.')
+        # else:
+        #     return redirect(reverse('questionnaire:form-qexams'))
     elif qexams.exists():
         print('QExam existing')
         formset = FormSet(initial=data)
@@ -415,7 +430,8 @@ def handleQExams(request):
         })
 
     context = {
-        'formset': formset
+        'formset': formset,
+        'QuestionnaireFor': questionnairefor
     }
     return render(request, 'questionnaire/qexams.html', context)
 
@@ -429,26 +445,24 @@ def handleTA(request):
         return redirect(reverse('questionnaire:studentHome'))
 
     FormSet = formset_factory(TeachingForm, can_delete=True, extra=1)
-    questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
     userTableID = User.objects.get(username=request.session['userNameSession']).id
-    teaching_assists = TA.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+    teaching_assists = TA.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).order_by(
+        '-Subject_Year', 'Subject_Term', 'Subject_Name')
     data = [{}]
     if teaching_assists.exists():
         print('TA Data exists and Noted')
         data = [{
             'username_id': c.username_id, 'questionnaire_for_id': c.questionnaire_for_id,
             'Subject_Name': c.Subject_Name, 'Subject_Code': c.Subject_Code, 'Responsibilities': c.Responsibilities,
-            'Subject_Year': c.Subject_Year,  'Subject_Term': c.Subject_Term,'Instructor_Name': c.Instructor_Name,
+            'Subject_Year': c.Subject_Year, 'Subject_Term': c.Subject_Term, 'Instructor_Name': c.Instructor_Name,
             'Lecture_or_Presentation_Given': c.Lecture_or_Presentation_Given,
             'Area_of_Improvement': c.Area_of_Improvement
         } for c in teaching_assists]
     if request.method == 'POST':
         print('TA POST')
-        if 'next' in request.POST:
-            return redirect(reverse('questionnaire:form-courses'))
-        if 'prev' in request.POST:
-            return redirect(reverse('questionnaire:form-qexams'))
-
         sub = Submission.objects.get(id=submissionTrack_id)
         if sub.status == "Not Started":
             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -488,11 +502,19 @@ def handleTA(request):
 
                         # notify our users that TAs are saved
                         messages.success(request, 'Your teaching assist experiences are saved.')
+                        if 'next' in request.POST:
+                            return redirect(reverse('questionnaire:form-courses'))
+                        if 'prev' in request.POST:
+                            return redirect(reverse('questionnaire:form-qexams'))
                         return redirect(reverse('questionnaire:form-ta'))
                 except IntegrityError:  # If the transaction failed
                     print('TA failed')
                     messages.error(request, 'There was an error saving your teaching assist experiences .')
             else:
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:form-courses'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:form-qexams'))
                 messages.error(request, 'Please modify data in order to Save!')
         else:
             print('TA invalid')
@@ -510,7 +532,8 @@ def handleTA(request):
         })
 
     context = {
-        'formset': formset
+        'formset': formset,
+        'QuestionnaireFor': questionnairefor
     }
     return render(request, 'questionnaire/teaching.html', context)
 
@@ -524,10 +547,12 @@ def handleCourses(request):
         return redirect(reverse('questionnaire:studentHome'))
 
     FormSet = formset_factory(CourseForm, can_delete=True, extra=1)
-    questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
     userTableID = User.objects.get(username=request.session['userNameSession']).id
     courses = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).order_by(
-        '-Subject_Year','Subject_Term', 'Grade', 'Subject_Name')
+        '-Subject_Year', 'Subject_Term', 'Grade', 'Subject_Name')
     data = [{}]
     if courses.exists():
         print('Course data exists and noted')
@@ -538,10 +563,6 @@ def handleCourses(request):
         } for c in courses]
     if request.method == 'POST':
         print('Course POST')
-        if 'next' in request.POST:
-            return redirect(reverse('questionnaire:form-papers'))
-        if 'prev' in request.POST:
-            return redirect(reverse('questionnaire:form-ta'))
         sub = Submission.objects.get(id=submissionTrack_id)
         if sub.status == "Not Started":
             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -576,12 +597,20 @@ def handleCourses(request):
 
                         # notify our users that Courses are saved
                         messages.success(request, 'Your courses are saved.')
+                        if 'next' in request.POST:
+                            return redirect(reverse('questionnaire:form-papers'))
+                        if 'prev' in request.POST:
+                            return redirect(reverse('questionnaire:form-ta'))
                         return redirect(reverse('questionnaire:form-courses'))
 
                 except IntegrityError:  # If the transaction failed
                     print('Course failed')
                     messages.error(request, 'There was an error saving your courses.')
             else:
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:form-papers'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:form-ta'))
                 messages.error(request, 'Please modify data in order to Save!')
 
         else:
@@ -600,7 +629,8 @@ def handleCourses(request):
             'form-MAX_NUM_FORMS': ''
         })
     context = {
-        'formset': formset
+        'formset': formset,
+        'QuestionnaireFor': questionnairefor
     }
     return render(request, 'questionnaire/courses.html', context)
 
@@ -614,7 +644,9 @@ def handlePapers(request):
         return redirect(reverse('questionnaire:studentHome'))
 
     FormSet = formset_factory(PaperForm, can_delete=True, extra=1)
-    questionnaire_id = Submission.objects.get(id=request.session["questionnaireForIdSession"]).questionnaire_for_id
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
     userTableID = Student.objects.get(username_id=User.objects.get(username=request.session['userNameSession']).id)
     papers = Paper.objects.filter(Author_id=userTableID.id, questionnaire_for_id=questionnaire_id).order_by(
         '-Status_of_Paper', 'Title')
@@ -628,11 +660,6 @@ def handlePapers(request):
         } for c in papers]
     if request.method == 'POST':
         print('Paper POST')
-        if 'next' in request.POST:
-            return redirect(reverse('questionnaire:review'))
-        if 'prev' in request.POST:
-            return redirect(reverse('questionnaire:form-courses'))
-
         sub = Submission.objects.get(id=submissionTrack_id)
         if sub.status == "Not Started":
             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -665,8 +692,8 @@ def handlePapers(request):
                     if not Title:
                         continue
                     p = form.save(commit=False)
-                    p.Author_id=userTableID.id
-                    p.questionnaire_for_id=questionnaire_id
+                    p.Author_id = userTableID.id
+                    p.questionnaire_for_id = questionnaire_id
                     new_papers.append(p)
                 try:
                     with transaction.atomic():
@@ -676,12 +703,20 @@ def handlePapers(request):
                         for newpaper in new_papers:
                             newpaper.save()
                         messages.success(request, 'Your papers are saved.')
-                        return redirect(reverse('questionnaire:form-papers'), {'formset': formset})
+                        if 'next' in request.POST:
+                            return redirect(reverse('questionnaire:review'))
+                        if 'prev' in request.POST:
+                            return redirect(reverse('questionnaire:form-courses'))
+                        return redirect(reverse('questionnaire:form-papers'))
 
                 except IntegrityError:  # If the transaction failed
                     print('Paper failed')
                     messages.error(request, 'There was an error saving your papers.')
             else:
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:review'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:form-courses'))
                 messages.error(request, 'Please modify data in order to Save!')
         else:
             print('Paper invalid')
@@ -698,7 +733,8 @@ def handlePapers(request):
             'form-MAX_NUM_FORMS': ''
         })
     context = {
-        'formset': formset, 'questionnaireStatus': questionnaireStatus
+        'formset': formset,
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/papers.html', context)
 
@@ -713,7 +749,7 @@ def handleReview(request):
             questionnaire_id = Submission.objects.get(id=submissionTrack_id).questionnaire_for_id
             current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
             try:
-                Submission.objects.filter(username_id=userTableID,questionnaire_for_id=questionnaire_id).update(
+                Submission.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).update(
                     current_GPA=current_data.Current_GPA, status="Submitted For Review",
                     Current_Research_Advisor=str(current_data.Current_Research_Advisor),
                     Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
@@ -722,8 +758,8 @@ def handleReview(request):
                 messages.error('Error while submitting record, Inform Admin')
             return redirect('questionnaire:studentHome')
 
-        else:
-            return redirect('questionnaire:form-papers')
+        else: #Back button
+            return redirect('questionnaire:form-research')
 
     else:
         print("in review page")
@@ -743,18 +779,24 @@ def handleReview(request):
                         "-questionnaire_for_id").first()
             except Submission.DoesNotExist:
                 profile2 = []
-            course_dict = Course.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+
+            course_dict = Course.objects.filter(username_id=userTableID,
+                                                questionnaire_for_id=questionnaire_id).order_by(
+                '-Subject_Year', 'Subject_Term', 'Grade', 'Subject_Name')
             examAttempt_dict = QExam.objects.filter(username_id=userTableID,
-                                                          questionnaire_for_id=questionnaire_id)
+                                                    questionnaire_for_id=questionnaire_id).order_by(
+                'Exam_Name', 'Attempt_Number')
             techingAssistant_dict = TA.objects.filter(username_id=userTableID,
-                                                                    questionnaire_for_id=questionnaire_id)
+                                                      questionnaire_for_id=questionnaire_id).order_by(
+                '-Subject_Year', 'Subject_Term', 'Subject_Name')
             paper_dict = Paper.objects.filter(Author_id=Student.objects.get(username_id=userTableID).id,
-                                              questionnaire_for_id=questionnaire_id)
+                                              questionnaire_for_id=questionnaire_id).order_by(
+                '-Status_of_Paper', 'Title')
             research_dict = Research.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
 
             return render(request, 'questionnaire/review.html',
                           {'questionnaire_submit_fullname': request.session['fullNameSession'],
                            'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
                            'techingAssistant_dict': techingAssistant_dict, 'paper_dict': paper_dict,
-                           'research_dict': research_dict,'profile2': profile2, 'sessionFullName': sessionFullName,
+                           'research_dict': research_dict, 'profile2': profile2, 'sessionFullName': sessionFullName,
                            'submissionList': submissionList, 'profile': profile, 'blankspace': '', 'submit': 'submit'})
