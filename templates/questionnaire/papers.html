@@ -88,9 +88,11 @@
                     Previous
                 </button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                {% if questionnaireStatus == 'Saved' %}
                 <button type="submit" class="button" name="next">
-                    Next
+                    Review
                 </button>
+                {% endif %}
             </div>
         </blackcolor>
     </form>

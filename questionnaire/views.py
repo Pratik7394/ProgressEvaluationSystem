@@ -698,7 +698,7 @@ def handlePapers(request):
             'form-MAX_NUM_FORMS': ''
         })
     context = {
-        'formset': formset
+        'formset': formset, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/papers.html', context)
 
