@@ -69,7 +69,7 @@
 
 </head>
 <body>
-  <section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
+<section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
 
 
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
@@ -101,13 +101,13 @@
                     </a>
                 </span>
                 {% if user.is_authenticated %}
-                <span class="navbar-caption-wrap">
+                    <span class="navbar-caption-wrap">
                     <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
                         Logout
                     </a>
                 </span>
                 {% endif %}
-                {% block nav_header%}{% endblock nav_header%}
+                {% block nav_header %}{% endblock nav_header %}
             </div>
         </div>
     </nav>
@@ -116,22 +116,23 @@
 </section>
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
     <div class="container">
-    <br>
-    <h1 class="mb-0 my-2"><b>Questionnaire for {{ QuestionnaireFor }}</b></h1>
-        <br><br>
-      {% block progressbar %}{% endblock progressbar%}
+        <br>
+        <h1 class="mb-0 my-2"><b>Questionnaire for {{ QuestionnaireFor }}</b></h1>
+        <br>
+        {% block progressbar %}{% endblock progressbar %}
         <div class="row">
             <div class="row">
                 <div class="card border-primary">
                     <div class="card-body">
 
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div  role="alert" class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div role="alert"
+                                     class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         {% block content %}{% endblock %}
                     </div>
                 </div>
@@ -139,9 +140,11 @@
         </div>
     </div>
 </section>
-{% block footer%}{% endblock footer%}
+{% block footer %}{% endblock footer %}
 <!-- Include formset plugin - including jQuery dependency -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
 <script src="{% static 'assets/web/assets/jquery/jquery.formset.js' %}"></script>
 <script src="{% static 'assets/popper/popper.min.js' %}"></script>
 <script src="{% static 'assets/tether/tether.min.js' %}"></script>

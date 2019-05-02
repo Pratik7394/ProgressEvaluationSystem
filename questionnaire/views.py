@@ -332,7 +332,7 @@ def handleResearch(request):
         form = ResearchForm()
     context = {
         'form': form,
-        'QuestionnaireFor': questionnairefor
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/research.html', context)
 
@@ -431,7 +431,7 @@ def handleQExams(request):
 
     context = {
         'formset': formset,
-        'QuestionnaireFor': questionnairefor
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/qexams.html', context)
 
@@ -533,7 +533,7 @@ def handleTA(request):
 
     context = {
         'formset': formset,
-        'QuestionnaireFor': questionnairefor
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/teaching.html', context)
 
@@ -630,7 +630,7 @@ def handleCourses(request):
         })
     context = {
         'formset': formset,
-        'QuestionnaireFor': questionnairefor
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
     }
     return render(request, 'questionnaire/courses.html', context)
 

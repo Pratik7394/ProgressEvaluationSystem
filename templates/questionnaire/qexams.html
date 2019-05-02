@@ -1,72 +1,75 @@
 {% extends "./base.html" %}
-{% block progressbar%}
+{% block progressbar %}
 
-<style>
-  .nav{
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-  }
+    <style>
+        .nav {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            text-align: center;
+        }
 
-  .nav li{
+        .nav li {
 
-    display: inline-block;
-  }
+            display: inline-block;
+        }
 
-  .nav a {
-    color: #fff;
-    display: inline-block;
-    padding: 0.5em 0.75em;
-    background-color: #666;
-    border-radius: 4px;
-    text-decoration: none;
-  }
-  .nav a:hover{
-    background-color: #000;
-  }
+        .nav a {
+            color: #fff;
+            display: inline-block;
+            padding: 0.5em 0.75em;
+            background-color: #666;
+            border-radius: 4px;
+            text-decoration: none;
+        }
 
-  .nav .current{
-    background-color: red;
-  }
-  </style>
+        .nav a:hover {
+            background-color: #000;
+        }
 
-<nav>
+        .nav .current {
+            background-color: red;
+        }
+    </style>
 
-<ul class="nav" style="width:75%">
-  <li ><a href="{% url 'questionnaire:form-research' %}">Research </a></li>
+    <nav>
 
-  <li><a class="current" href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
-  <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
-  <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-  <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
-  <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
-    <!-- <li ><a href="{% url 'questionnaire:form-research' %}">Research </a></li> &nbsp -> &nbsp
+        <ul class="nav" style="width:75%">
+            <li><a href="{% url 'questionnaire:form-research' %}">Research </a></li>
+
+            <li><a class="current" href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+            <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
+            <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
+            <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+            {% if questionnaireStatus == 'Saved' %}
+                <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
+            {% endif %}
+            <!-- <li ><a href="{% url 'questionnaire:form-research' %}">Research </a></li> &nbsp -> &nbsp
 
     <li><a class="current" href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li> &nbsp -> &nbsp
     <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>&nbsp -> &nbsp
     <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>&nbsp -> &nbsp
     <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>&nbsp -> &nbsp
     <li><a href="{% url 'questionnaire:review' %}">Review</a></li>&nbsp -> &nbsp -->
-</ul>
+        </ul>
 
-</nav>
+    </nav>
 
-{% endblock progressbar%}
+{% endblock progressbar %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<form id="formset" class="form" role="form" autocomplete="off" method="post"
-      enctype="multipart/form-data">
-    {% csrf_token %}
+    <form id="formset" class="form" role="form" autocomplete="off" method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
 
-    {{ formset.management_form }}
-    <div class="card-header">
-        <h2 class="mb-0 my-2"><b>Qualifying Exams(All Attempts)</b></h2>
-    </div>
+        {{ formset.management_form }}
+        <div class="card-header">
+            <h2 class="mb-0 my-2"><b>Qualifying Exams(All Attempts)</b></h2>
+        </div>
 
 
-        <table  class="d" border="3" cellpadding="1" cellspacing="0">
+        <table class="d" border="3" cellpadding="1" cellspacing="0">
             <thead>
             <tr>
                 <th>Qualifying Exam Name</th>
@@ -85,25 +88,25 @@
 
                 <tr>
                     <td>{{ form.Exam_Name }}
-                    {% if form.Exam_Name.errors %}
-                        {% for error in form.Exam_Name.errors %}
-                            <br><strong style="color:red">{{ error|escape }}</strong>
-                        {% endfor %}
-                    {% endif %}
+                        {% if form.Exam_Name.errors %}
+                            {% for error in form.Exam_Name.errors %}
+                                <br><strong style="color:red">{{ error|escape }}</strong>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ form.Attempt_Number }}
-                    {% if form.Attempt_Number.errors %}
-                        {% for error in form.Attempt_Number.errors %}
-                            <br><strong style="color:red">{{ error|escape }}</strong>
-                        {% endfor %}
-                    {% endif %}
+                        {% if form.Attempt_Number.errors %}
+                            {% for error in form.Attempt_Number.errors %}
+                                <br><strong style="color:red">{{ error|escape }}</strong>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ form.Grade }}
-                    {% if form.Grade.errors %}
-                        {% for error in form.Grade.errors %}
-                            <br><strong style="color:red">{{ error|escape }}</strong>
-                        {% endfor %}
-                    {% endif %}
+                        {% if form.Grade.errors %}
+                            {% for error in form.Grade.errors %}
+                                <br><strong style="color:red">{{ error|escape }}</strong>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ form.DELETE }}</td>
                 </tr>
@@ -112,21 +115,21 @@
         </table>
         <br>
         <blackcolor>
-          <div class="form-group">
-              <button type="submit" class="button" name="save">
-                  Save & Add Another Entry
-              </button>
-              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <div class="form-group">
+                <button type="submit" class="button" name="save">
+                    Save & Add Another Entry
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             </div>
-              <div class="form-group">
-              <button type="submit" class="button" name="prev">
-                  Previous
-              </button>
-              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-              <button type="submit" class="button" name="next">
-                  Next
-              </button>
-          </div>
+            <div class="form-group">
+                <button type="submit" class="button" name="prev">
+                    Previous
+                </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="button" name="next">
+                    Next
+                </button>
+            </div>
         </blackcolor>
     </form>
 
@@ -139,5 +142,5 @@
 
 {% endblock content %}
 
-{% block footer%}
-{% endblock footer%}
+{% block footer %}
+{% endblock footer %}
