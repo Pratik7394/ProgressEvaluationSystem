@@ -159,7 +159,7 @@ def activate(request, uidb64, token):
 
         message = messages.warning(request,
                                    "Email verification done. You can login into your account now")
-        return HttpResponseRedirect('http://127.0.0.1:8000/registration/login/')
+        return redirect("registration:userLogin")
         # return render(request, 'registration/login.html', {'message': message})
         # return userLogin
     else:
