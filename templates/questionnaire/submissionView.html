@@ -147,9 +147,7 @@
                                 <tr>
                                     <th>Topic</th>
                                     <th>Proposal</th>
-                                    <th>Proposal Status</th>
                                     <th>Defense</th>
-                                    <th>Defense Status</th>
                                     <th>Thesis Committee</th>
                                 </tr>
                                 </thead>
@@ -157,15 +155,13 @@
                                 {% for user in research_dict %}
                                     <tr>
                                         <td>{{ user.Topic }} </td>
-                                        <td>{{ user.Proposal }} </td>
-                                        <td>{{ user.Proposal_Status }} </td>
-                                        <td>{{ user.Defense }} </td>
-                                        <td>{{ user.Defense_Status }} </td>
+                                        <td>{{ user.Proposal }} ({{ user.Proposal_Status }})</td>
+                                        <td>{{ user.Defense }} ({{ user.Defense_Status }})</td>
                                         <td>{{ user.Thesis_Committee }} </td>
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="6">No data</td>
+                                        <td colspan="4">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -177,7 +173,6 @@
                                     <th>Subject Name</th>
                                     <th>Subject Code</th>
                                     <th>Subject Term</th>
-                                    <th>Subject Year</th>
                                     <th>Grade</th>
                                 </tr>
                                 </thead>
@@ -186,13 +181,12 @@
                                     <tr>
                                         <td>{{ user.Subject_Name }}</td>
                                         <td>{{ user.Subject_Code }}</td>
-                                        <td>{{ user.Subject_Term }}</td>
-                                        <td>{{ user.Subject_Year }}</td>
+                                        <td>{{ user.Subject_Year }} {{ user.Subject_Term }}</td>
                                         <td>{{ user.Grade }}</td>
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="5">No data</td>
+                                        <td colspan="4">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
@@ -227,7 +221,6 @@
                                     <th>Subject Name</th>
                                     <th>Subject Code</th>
                                     <th>Term</th>
-                                    <th>Year</th>
                                     <th>Instructor Name</th>
                                     <th>Responsibilities</th>
                                     <th>Lectures or Presentation Given</th>
@@ -239,8 +232,7 @@
                                     <tr>
                                         <td>{{ user.Subject_Name }} </td>
                                         <td>{{ user.Subject_Code }} </td>
-                                        <td>{{ user.Subject_Term }} </td>
-                                        <td>{{ user.Subject_Year }} </td>
+                                        <td>{{ user.Subject_Year }} {{ user.Subject_Term }} </td>
                                         <td>{{ user.Instructor_Name }} </td>
                                         <td>{{ user.Responsibilities }} </td>
                                         <td>{{ user.Lecture_or_Presentation_Given }} </td>
@@ -248,21 +240,20 @@
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="8">No data</td>
+                                        <td colspan="7">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
 
                             <h1>PAPER</h1>
-                            <table class="d">
+                             <table class="d">
                                 <thead>
                                 <tr>
-                                    <th>TITLE</th>
-                                    <th>VENUE</th>
-                                    <th>STATUS OF PAPER</th>
+                                    <th>Title</th>
+                                    <th>Venue</th>
+                                    <th>Status Of paper</th>
                                     <th>Publish Term</th>
-                                    <th>Publish Year</th>
-                                    <th>AUTHOR</th>
+                                    <th>Author</th>
                                     <th>List of Authors</th>
                                 </tr>
                                 </thead>
@@ -272,14 +263,13 @@
                                         <td>{{ user.Title }}</td>
                                         <td>{{ user.Venue }}</td>
                                         <td>{{ user.Status_of_Paper }}</td>
-                                        <td>{{ user.Publish_Term }}</td>
-                                        <td>{{ user.Publish_Year }}</td>
+                                        <td>{{ user.Publish_Year }} {{ user.Publish_Term }}</td>
                                         <td>{{ user.Author }}</td>
                                         <td>{{ user.List_of_Authors }}</td>
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="7">No data</td>
+                                        <td colspan="6">No data</td>
                                     </tr>
                                 {% endfor %}
                             </table>
