@@ -1,4 +1,51 @@
 {% extends "./base.html" %}
+{% block progressbar%}
+<div class="ex1">
+<style>
+  .nav{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+  }
+
+  .nav li{
+    display: inline-block;
+  }
+
+  .nav a {
+    color: #fff;
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    background-color: #666;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .nav a:hover{
+    background-color: #000;
+  }
+
+  .nav .current{
+    background-color: red;
+  }
+  </style>
+
+<nav>
+
+<ul class="nav dot">
+    <li ><a  href="{% url 'questionnaire:form-research' %}">Research</a>
+    <!-- </li> -->
+    <!-- <li> -->
+    <li> <a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+    <li><a class="current" href="{% url 'questionnaire:form-ta' %}">TA</a></li>
+    <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
+    <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+    <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
+</ul>
+
+</nav>
+</div>
+{% endblock progressbar%}
 {% load crispy_forms_tags %}
 {% block content %}
         <div class="card-header">
@@ -87,19 +134,21 @@
 
             <br>
             <blackcolor>
-                <div class="form-group">
-                    <button type="submit" class="button" name="save">
-                        Save
-                    </button>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    <button type="submit" class="button" name="prev">
-                        Previous
-                    </button>
-                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    <button type="submit" class="button" name="next">
-                        Next
-                    </button>
+              <div class="form-group">
+                  <button type="submit" class="button" name="save">
+                      Save & Add Another Entry
+                  </button>
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 </div>
+                  <div class="form-group">
+                  <button type="submit" class="button" name="prev">
+                      Previous
+                  </button>
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  <button type="submit" class="button" name="next">
+                      Next
+                  </button>
+              </div>
             </blackcolor>
         </form>
 {% endblock content %}
