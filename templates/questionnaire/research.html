@@ -52,8 +52,9 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">
+    <form id="formset" class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ formset.management_form }}
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}
                 <strong style="color:red">{{ error|escape }}</strong><br>
@@ -63,6 +64,7 @@
             <h2 class="mb-0 my-2"><b>Academic details</b></h2>
         </div>
         <table class="d" style="width:40%">
+            {% for form in formset.forms %}
             <tr>
                 <th>GPA</th>
                 <td>{{ form.Current_GPA }}
@@ -83,11 +85,13 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endfor %}
         </table>
         <div class="card-header">
             <h2 class="mb-0 my-2"><b>Research details</b></h2>
         </div>
         <table class="d" style="width:75%">
+            {% for form in formset.forms %}
             <tr>
                 <th>Thesis Topic</th>
                 <td>{{ form.Topic }}
@@ -138,6 +142,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endfor %}
         </table>
 
         <br>
@@ -150,7 +155,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="button" name="prev">
-                    Previous
+                    Back to Home
                 </button>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <button type="submit" class="button" name="next">
