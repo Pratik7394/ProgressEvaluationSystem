@@ -24,6 +24,15 @@
 
     <style>
 
+        span.a {
+            display: inline; /* the default for span */
+            width: 100px;
+            height: 100px;
+            padding: 5px;
+            border: 1px solid blue;
+            background-color: yellow;
+        }
+
         table.tbl tr td:first-child {
             display: none;
         }
@@ -230,7 +239,10 @@
                 <blackcolor>
                     <div class="container align-center">
                         {% if user.is_authenticated %}
-                            <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }}</u></h2>
+                            <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }} <a
+                                    href="{% url 'registration:editProfileProfessor' %}">
+                                <img src="{% static 'assets/images/edit.png' %}" alt="not found" height=15
+                                     width=15></a></u></h2>
                             <br>
                         {% else %}
                             <h2>Welcome to the site!</h2>

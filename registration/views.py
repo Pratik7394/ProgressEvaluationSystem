@@ -1,4 +1,4 @@
-from registration.forms import userInfoForm, userInfoForm2, studentProfileForm  # loginForm
+from registration.forms import userInfoForm, userInfoForm2, studentProfileForm, professorProfileForm  # loginForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
@@ -265,24 +265,24 @@ def editProfileStudent(request):
             print(now)
             # d1 = datetime.strptime(program_joining_date, "%Y-%m-%d")
             # d2 = datetime.strptime(now, "%Y-%m-%d")
-            diff =  now - program_joining_date
+            diff = now - program_joining_date
             # d1 = da
             diff = diff.days
             print(diff)
             days = 365
             if diff < days:
                 year = 1
-            elif diff >= days or diff < (days*2):
+            elif diff >= days or diff < (days * 2):
                 year = 2
-            elif diff >= (days*2) or diff < (days*3):
+            elif diff >= (days * 2) or diff < (days * 3):
                 year = 3
-            elif diff >= (days*3) or diff < (days * 4):
+            elif diff >= (days * 3) or diff < (days * 4):
                 year = 4
-            elif diff >= (days*4) or diff < (days*5):
+            elif diff >= (days * 4) or diff < (days * 5):
                 year = 5
-            elif diff >= (days*5) or diff < (days*6):
+            elif diff >= (days * 5) or diff < (days * 6):
                 year = 6
-            elif diff >= (days*6) or diff < (days*7):
+            elif diff >= (days * 6) or diff < (days * 7):
                 year = 7
             else:
                 year = 8
@@ -293,7 +293,8 @@ def editProfileStudent(request):
                                                                         native_country=native_country,
                                                                         program_joining_date=program_joining_date)
             uid = User.objects.get(username=sessionUserName).id
-            submissionTrack.objects.filter(status=('Not Started' or 'Saved'), username_id=uid).update(Current_Program_Year = year)
+            submissionTrack.objects.filter(status=('Not Started' or 'Saved'), username_id=uid).update(
+                Current_Program_Year=year)
             User.objects.filter(username=sessionUserName).update(first_name=first_name, last_name=last_name)
 
             submissionTrack.objects.filter(username_id=uid).update(fullname=full_name)
@@ -303,24 +304,57 @@ def editProfileStudent(request):
             first_name = User.objects.get(username=sessionUserName).first_name
             last_name = User.objects.get(username=sessionUserName).last_name
             full_name = first_name + " " + last_name
+            request.session['firstNameSession'] = first_name
+            request.session['lastNameSession'] = last_name
             request.session['fullNameSession'] = full_name
-            # sessionFullName = request.session['fullNameSession']
-            # sessionUserName = request.session['userNameSession']
-            # sessionid = request.session['idSession']
-            # submissionList = submissionTrack.objects.filter(username_id=sessionid)
-            # profile = studentProfile.objects.get(email=sessionUserName)
-            # return render(request, 'registration/homeStudent.html',
-            #               {'sessionFullName': sessionFullName, 'submissionList': submissionList,
-            #                'profile': profile})
             return redirect('questionnaire:studentHome')
 
 
     else:
         sessionUserName = request.session['userNameSession']
         profile = studentProfile.objects.get(email=sessionUserName)
+        id = request.session['idSession']
+        studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
+        print("userinfo --> " + str(studentProfessor))
         studentProfile_Form = studentProfileForm(instance=profile)
         # print("hey all")
-        return render(request, 'registration/student_profile_edit.html', {'studentProfile_Form': studentProfile_Form, })
+        return render(request, 'registration/profile_edit.html',
+                      {'studentProfile_Form': studentProfile_Form, 'studentProfessor': studentProfessor})
+
+
+@login_required()
+def editProfileProfessor(request):
+    if request.method == "POST":
+        print("post")
+        professorProfile_Form = professorProfileForm(data=request.POST)
+        if professorProfile_Form.is_valid():
+            sessionUserName = request.session['userNameSession']
+            name = request.session['fullNameSession']
+            first_name = professorProfile_Form.cleaned_data['first_name']
+            last_name = professorProfile_Form.cleaned_data['last_name']
+            full_name = first_name + " " + last_name
+            uid = User.objects.get(username=sessionUserName).id
+            User.objects.filter(username=sessionUserName).update(first_name=first_name, last_name=last_name)
+            professorName.objects.filter(username_id=uid).update(name = full_name)
+            submissionTrack.objects.filter(Current_Research_Advisor=name).update(Current_Research_Advisor=full_name)
+            submissionTrack.objects.filter(Current_Academic_Advisor=name).update(Current_Academic_Advisor=full_name)
+            first_name = User.objects.get(username=sessionUserName).first_name
+            last_name = User.objects.get(username=sessionUserName).last_name
+            request.session['firstNameSession'] = first_name
+            request.session['lastNameSession'] = last_name
+            request.session['fullNameSession'] = full_name
+
+            return redirect('professor:professorHome')
+
+    else:
+        sessionUserName = request.session['userNameSession']
+        profile = User.objects.get(username=sessionUserName)
+        id = request.session['idSession']
+        studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
+        print("userinfo --> " + str(studentProfessor))
+        professorProfile_Form = professorProfileForm(instance=profile)
+        return render(request, 'registration/profile_edit.html',
+                      {'professorProfile_Form': professorProfile_Form, 'studentProfessor': studentProfessor})
 
 
 @login_required()

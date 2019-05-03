@@ -1,5 +1,5 @@
 from django import forms
-from registration.models import professorWhiteList, userInfo, User, studentProfile  # , studentWhiteList,
+from registration.models import professorWhiteList, userInfo, User, studentProfile, professorName  # , studentWhiteList,
 from django.contrib.auth.password_validation import password_validators_help_texts, MinimumLengthValidator, \
     CommonPasswordValidator
 import datetime
@@ -96,11 +96,10 @@ class studentProfileForm(forms.ModelForm):
         widgets = {
             'program_joining_date': DateInput()
         }
-    # def clean_studentOrProfessor(self):
-    #     default = "default"
-    #     studentOrProfessor = self.cleaned_data['studentOrProfessor']
-    #     if studentOrProfessor != default:
-    #         print("d --> " + default)
-    #         print("s--> " + studentOrProfessor)
-    #         raise forms.ValidationError("Dont try to play with site security")
-    #     return studentOrProfessor
+
+
+class professorProfileForm(forms.ModelForm):
+
+    class Meta():
+        model = User
+        fields = ('first_name', 'last_name',)
