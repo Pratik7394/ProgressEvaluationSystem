@@ -93,7 +93,8 @@ def submissionView(request, item_id):
             submissionTrack.objects.filter(id=var).update(Feedback=feedback)
 
             current_site = get_current_site(request)
-            mail_subject = 'Feedback for your questionnaire' + " " + str(questionnaireFor)
+#             mail_subject = 'Feedback for your questionnaire' + " " + str(questionnaireFor)
+            mail_subject = 'Thanks For Helping Us To Test Our Site, Testing Feedback Functionality'
             message = render_to_string('professor/feedback_email.html', {
                 'feedback': feedback,
                 'user': user,
