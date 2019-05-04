@@ -248,9 +248,17 @@ def forgotPassword(request):
 
 @login_required()
 def editProfileStudent(request):
+
+    sessionUserName = request.session['userNameSession']
+    id = request.session['idSession']
+    profile = studentProfile.objects.get(email=sessionUserName)
+    studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
+    studentProfile_Form = studentProfileForm(instance=profile)
+
     if request.method == "POST":
-        print("post")
+
         studentProfile_Form = studentProfileForm(data=request.POST)
+
         if studentProfile_Form.is_valid():
             sessionUserName = request.session['userNameSession']
             first_name = studentProfile_Form.cleaned_data['first_name']
@@ -309,23 +317,17 @@ def editProfileStudent(request):
             request.session['fullNameSession'] = full_name
             return redirect('questionnaire:studentHome')
 
+        else:
+            print("hi")
+            print(studentProfile_Form.errors)
 
-    else:
-        sessionUserName = request.session['userNameSession']
-        profile = studentProfile.objects.get(email=sessionUserName)
-        id = request.session['idSession']
-        studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
-        print("userinfo --> " + str(studentProfessor))
-        studentProfile_Form = studentProfileForm(instance=profile)
-        # print("hey all")
-        return render(request, 'registration/profile_edit.html',
+    return render(request, 'registration/profile_edit.html',
                       {'studentProfile_Form': studentProfile_Form, 'studentProfessor': studentProfessor})
 
 
 @login_required()
 def editProfileProfessor(request):
     if request.method == "POST":
-        print("post")
         professorProfile_Form = professorProfileForm(data=request.POST)
         if professorProfile_Form.is_valid():
             sessionUserName = request.session['userNameSession']
