@@ -238,6 +238,8 @@
             <b>
                 <blackcolor>
                     <div class="container align-center">
+                        <br>
+                        <br>
                         {% if user.is_authenticated %}
                             <h2 style="margin-top: 0"><u>Welcome Professor {{ sessionFullName }} <a
                                     href="{% url 'registration:editProfileProfessor' %}">
@@ -305,6 +307,13 @@
                                 </p>
                             </div>
 
+                            <div class="form-group col-sm-1 col-md-2">
+                                Questionnaire Year
+                                <p class="dashed">
+                                    {% render_field filter.form.questionnaire_for class="form-control" %}
+                                </p>
+                            </div>
+
                             <div class="form-group col-sm-1 col-md-3">
                                 Acaedmic Advisor:
                                 <p class="dashed">
@@ -350,11 +359,11 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th onclick="sortTable(1)">Full Name</th>
-                        <th onclick="sortTable(2)">GPA</th>
+                        <th onclick="sortTable(0)">Full Name</th>
+                        <th onclick="sortTable(1)">GPA</th>
                         <th>Year In Program</th>
                         <th>Email</th>
-                        <th onclick="sortTable(5)">Questionnaire Year</th>
+                        <th onclick="sortTable(4)">Questionnaire Year</th>
                         <th>Academic Advisor</th>
                         <th>Research Advisor</th>
                         <th>Status</th>

@@ -21,9 +21,10 @@ class UserFilter(django_filters.FilterSet):
     SUNY_ID = django_filters.CharFilter(lookup_expr='icontains')
     Email = django_filters.CharFilter(lookup_expr='icontains')
     Current_Program_Year = django_filters.CharFilter(lookup_expr='icontains')
-    questionnaire_for = django_filters.CharFilter(lookup_expr='icontains')
+    # questionnaire_for = django_filters.CharFilter(lookup_expr='icontains')
     Current_Academic_Advisor = django_filters.CharFilter(lookup_expr='icontains')
     Current_Research_Advisor = django_filters.CharFilter(lookup_expr='icontains')
+    questionnaire = django_filters.CharFilter(lookup_expr='icontains')
     # status = django_filters.CharFilter(lookup_expr='icontains')
     status_1 = django_filters.ChoiceFilter(choices=choices_select, lookup_expr='icontains')
 
@@ -38,8 +39,8 @@ class UserFilter(django_filters.FilterSet):
 
     class Meta:
         model = submissionTrack
-        fields = ['fullname', 'current_GPA', 'SUNY_ID', 'Email', 'Current_Program_Year', 'questionnaire_for',
-                  'Current_Academic_Advisor', 'Current_Research_Advisor', 'status']
+        fields = ['fullname', 'current_GPA', 'SUNY_ID', 'Email', 'Current_Program_Year',
+                  'Current_Academic_Advisor', 'Current_Research_Advisor', 'questionnaire_for', 'status']
 
 # from questionnaire.models import questionnaire, qualifyingExam, course, submissionTrack, examAttempt, techingAssistant, \
 #     paper, research

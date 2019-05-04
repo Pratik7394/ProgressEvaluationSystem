@@ -97,6 +97,15 @@ class studentProfileForm(forms.ModelForm):
             'program_joining_date': DateInput()
         }
 
+    def clean_program_joining_date(self):
+        program_joining = self.cleaned_data['program_joining_date']
+        date = str(program_joining)
+        print('date -->' + date)
+        if date == 'None':
+            print("inside")
+            raise forms.ValidationError("Programming Joining Date can not be empty")
+
+        return program_joining
 
 class professorProfileForm(forms.ModelForm):
 
