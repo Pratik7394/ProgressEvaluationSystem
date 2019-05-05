@@ -22,16 +22,16 @@ class questionnaire(models.Model):
     def __str__(self):
         return self.questionnaire_for
 
-    def save(self, *args, **kwargs):
-        if self.status == 'Active':
-            try:
-                temp = questionnaire.objects.get(status='Active')
-                if self != temp:
-                    temp.status = 'Inactive'
-                    temp.save()
-            except questionnaire.DoesNotExist:
-                pass
-        super(questionnaire, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.status == 'Active':
+    #         try:
+    #             temp = questionnaire.objects.get(status='Active')
+    #             if self != temp:
+    #                 temp.status = 'Inactive'
+    #                 temp.save()
+    #         except questionnaire.DoesNotExist:
+    #             pass
+    #     super(questionnaire, self).save(*args, **kwargs)
 
 
 class qualifyingExam(models.Model):
