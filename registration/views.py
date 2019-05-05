@@ -338,8 +338,8 @@ def editProfileProfessor(request):
             uid = User.objects.get(username=sessionUserName).id
             User.objects.filter(username=sessionUserName).update(first_name=first_name, last_name=last_name)
             professorName.objects.filter(username_id=uid).update(name = full_name)
-            submissionTrack.objects.filter(Current_Research_Advisor=name).update(Current_Research_Advisor=full_name)
-            submissionTrack.objects.filter(Current_Academic_Advisor=name).update(Current_Academic_Advisor=full_name)
+            # submissionTrack.objects.filter(Current_Research_Advisor=name).update(Current_Research_Advisor=full_name)
+            # submissionTrack.objects.filter(Current_Academic_Advisor=name).update(Current_Academic_Advisor=full_name)
             first_name = User.objects.get(username=sessionUserName).first_name
             last_name = User.objects.get(username=sessionUserName).last_name
             request.session['firstNameSession'] = first_name
