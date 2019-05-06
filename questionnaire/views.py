@@ -3,14 +3,14 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from registration.models import studentProfile
-from registration.models import studentName as Student, professorName as Professor, userInfo
+from registration.models import studentName as Student
+from registration.models import userInfo
 from django.contrib import messages
 from django.db.models import Q
-import socket
-
-socket.getaddrinfo('127.0.0.1', 8080)
 from django.db import IntegrityError, transaction
 from django.forms.formsets import formset_factory
+from registration.decorators import user_type_student
+
 from questionnaire.models import (
     submissionTrack as Submission,
     course as Course,
@@ -21,6 +21,7 @@ from questionnaire.models import (
     questionnaire as Questionnaire,
     qualifyingExam as Exams
 )
+
 from .forms import (
     CourseForm,
     QExamForm,
@@ -45,21 +46,16 @@ static_data = {
 def handler404(request):
     return render(request, '404.html', status=404)
 
+
 def handler500(request):
     return render(request, '500.html', status=500)
 
-@login_required()
+
+@login_required
+@user_type_student
 def studentHome(request):
     if request.method == 'POST':
-        print("view")
-        # sessionid = request.session['idSession']
-        # submissionList = Submission.objects.filter(username_id=sessionid)
-        # print(submissionList)
-        var = None
         var = request.POST['var']
-        if "review" in var:
-            print("mission success")
-            print(var)
         request.session["questionnaireForIdSession"] = var
         return redirect('questionnaire:viewSubmissions')
 
@@ -67,13 +63,7 @@ def studentHome(request):
         sessionFullName = request.session['fullNameSession']
         sessionUserName = request.session['userNameSession']
         sessionid = request.session['idSession']
-        studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
-        if studentProfessor == "professor":
-            messages.error(request, 'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
-            return redirect('professor:professorHome')
         submissionList = Submission.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
-        submit = "submit"
-        print(submissionList)
         blankspace = ""
         profile = studentProfile.objects.get(email=sessionUserName)
         try:
@@ -85,17 +75,16 @@ def studentHome(request):
                     Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
                     username_id=sessionid).order_by(
                     "-questionnaire_for_id").first()
-            print("profile2")
-            print(profile2)
         except Submission.DoesNotExist:
             profile2 = []
 
         return render(request, 'registration/homeStudent.html',
                       {'profile2': profile2, 'sessionFullName': sessionFullName, 'submissionList': submissionList,
-                       'profile': profile, 'blankspace': blankspace, 'submit': submit})
+                       'profile': profile, 'blankspace': blankspace, })
 
 
 @login_required()
+@user_type_student
 def viewSubmissions(request):
     if request.method == 'POST':
         return redirect('questionnaire:studentHome')
@@ -104,7 +93,6 @@ def viewSubmissions(request):
         submissionTrack_id = request.session["questionnaireForIdSession"]
 
         if "review" in submissionTrack_id:
-            print("yes")
             submissionTrack_id = submissionTrack_id[:-6]
             request.session["questionnaireForIdSession"] = submissionTrack_id
             return redirect('questionnaire:review')
@@ -115,10 +103,10 @@ def viewSubmissions(request):
             questionnaire_id = Submission.objects.get(id=submissionTrack_id).questionnaire_for_id
             questionnaire_submit_username = request.session['userNameSession']
             questionnaire_submit_fullname = request.session['fullNameSession']
-            print((questionnaireStatus))
             userTableID = User.objects.get(username=questionnaire_submit_username).id
 
-            if questionnaireStatus in ["Submitted For Review", "Review In Progress", "Review Submitted"]:
+            if questionnaireStatus == "Submitted For Review" or questionnaireStatus == "Review In Progress" \
+                    or questionnaireStatus == "Review Submitted":
                 course_dict = Course.objects.filter(username_id=userTableID,
                                                     questionnaire_for_id=questionnaire_id).order_by(
                     '-Subject_Year', 'Subject_Term', 'Grade', 'Subject_Name')
@@ -263,13 +251,10 @@ def viewSubmissions(request):
     # @param objectName: CamelCase string representation of the object name that matches with .html equivalent.
 '''
 
+@login_required
+@user_type_student
 def requestHandler(request, Object, objectName):
     sessionid = request.session['idSession']
-    studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
-    if studentProfessor == "professor":
-        messages.error(request,
-                       'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
-        return redirect('professor:professorHome')
     submissionTrack_id = request.session["questionnaireForIdSession"]
     questionnaireStatus = Submission.objects.get(id=submissionTrack_id).status
     if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):
@@ -351,7 +336,8 @@ def requestHandler(request, Object, objectName):
                         continue
                     if objectName == 'QExams':
                         try:
-                            unique_or_required_field = Exams.objects.get(exam_Name=form.cleaned_data.get('Exam_Name')).id
+                            unique_or_required_field = Exams.objects.get(
+                                exam_Name=form.cleaned_data.get('Exam_Name')).id
                         except Exams.DoesNotExist:
                             continue
                     elif objectName in ['Courses', 'Teaching']:
@@ -365,7 +351,6 @@ def requestHandler(request, Object, objectName):
                     # Hence we skip this form
                     if not unique_or_required_field:
                         continue
-
                     thisForm = form.save(commit=False)
                     if objectName == 'Papers':
                         thisForm.Author_id = userTableID
@@ -387,7 +372,7 @@ def requestHandler(request, Object, objectName):
                             eachInstance.save()
 
                         # notify our users that Qualifying Exam Attempts are saved
-                        messages.success(request, 'Your ' +  static_data['display'][objectName] + ' data is saved.')
+                        messages.success(request, 'Your ' + static_data['display'][objectName] + ' data is saved.')
 
                         if questionnaireStatus == "Not Started":
                             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -425,7 +410,8 @@ def requestHandler(request, Object, objectName):
 
                 except IntegrityError:  # If the transaction failed
                     print(objectName + ' failed')
-                    messages.error(request, 'There was an error saving your ' +  static_data['display'][objectName] + ' data.')
+                    messages.error(request,
+                                   'There was an error saving your ' + static_data['display'][objectName] + ' data.')
             else:
                 if not ('save' in request.POST):
                     if objectName == 'QExams':
@@ -456,7 +442,8 @@ def requestHandler(request, Object, objectName):
                 messages.error(request, 'No changes detected in ' + static_data['display'][objectName] + ' data!')
         else:
             print(objectName + ' invalid')
-            messages.error(request, 'There seems to be something wrong with your '  + static_data['display'][objectName] +
+            messages.error(request,
+                           'There seems to be something wrong with your ' + static_data['display'][objectName] +
                            ' data. Please make sure all entries below are valid.')
     elif current_data.exists():
         print(objectName + ' existing')
@@ -477,14 +464,10 @@ def requestHandler(request, Object, objectName):
 
 
 @login_required()
+@user_type_student
 def handleResearch(request):
     # return requestHandler(request, Research, 'Research')
     sessionid = request.session['idSession']
-    studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
-    if studentProfessor == "professor":
-        messages.error(request,
-                       'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
-        return redirect('professor:professorHome')
     submissionTrack_id = request.session["questionnaireForIdSession"]
     questionnaireStatus = Submission.objects.get(id=submissionTrack_id).status
     if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):
@@ -588,6 +571,7 @@ def handlePapers(request):
 
 
 @login_required()
+@user_type_student
 def handleReview(request):
     if request.method == 'POST':
         submissionTrack_id = request.POST['var']
@@ -647,4 +631,4 @@ def handleReview(request):
                            'course_dict': course_dict, 'examAttempt_dict': examAttempt_dict,
                            'techingAssistant_dict': techingAssistant_dict, 'paper_dict': paper_dict,
                            'research_dict': research_dict, 'profile2': profile2, 'sessionFullName': sessionFullName,
-                           'submissionList': submissionList, 'profile': profile, 'blankspace': '', 'submit': 'submit'})
+                           'submissionList': submissionList, 'profile': profile, })

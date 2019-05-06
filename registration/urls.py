@@ -11,11 +11,6 @@ urlpatterns = [
     path('index/', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('login/', views.userLogin, name='userLogin'),
-    path('home/', views.homepageStudent, name='homePageStudent'),
-    ########################use this for professor homepage
-    # path('Home/', views.homepageProfessor, name='homePageProfessor'),
-
-    # path('login/', views.userLoginCheck, name='userLoginCheck'),
     path('logout/', views.userLogout, name='userLogout'),
     path('editProfileStudent/', views.editProfileStudent, name='editProfileStudent'),
     path('editProfileProfessor/', views.editProfileProfessor, name='editProfileProfessor'),

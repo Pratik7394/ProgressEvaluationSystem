@@ -26,10 +26,10 @@ socket.getaddrinfo('127.0.0.1', 8080)
 # Create your views here.
 
 
-@login_required()
-def special(request):
-    del request.session['your key']
-    return HttpResponse("You are loged in, Nice!")
+# @login_required()
+# def special(request):
+#     del request.session['your key']
+#     return HttpResponse("You are loged in, Nice!")
 
 
 @login_required()
@@ -37,16 +37,16 @@ def userLogout(request):
     del request.session['fullNameSession']
     del request.session['userNameSession']
     del request.session['idSession']
+    del request.session['studentProfessor']
     logout(request)
-    return HttpResponseRedirect(reverse('registration:index'))
-
+    announcement_list = announcement.objects.all()
+    return render(request, 'registration/index.html',
+                  {'announcement_list': announcement_list})
 
 def index(request):
     announcement_list = announcement.objects.all()
     return render(request, 'registration/index.html',
                   {'announcement_list': announcement_list})
-    # return render(request, 'registration/index.html', {})
-
 
 def register(request):
     registered = False
@@ -194,7 +194,7 @@ def userLogin(request):
                     request.session['idSession'] = id
                     # id = User.objects.get(username=username).id
                     studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
-
+                    request.session['studentProfessor'] = studentProfessor
                     if studentProfessor == "student":
                         return redirect('questionnaire:studentHome')
 
@@ -359,14 +359,14 @@ def editProfileProfessor(request):
                       {'professorProfile_Form': professorProfile_Form, 'studentProfessor': studentProfessor})
 
 
-@login_required()
-def homepageStudent(request):
-    sessionFullName = request.session['fullNameSession']
-    sessionUserName = request.session['userNameSession']
-    sessionid = request.session['idSession']
-    submissionList = submissionTrack.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
-    blankspace = ""
-    profile = studentProfile.objects.get(email=sessionUserName)
-    return render(request, 'registration/homeStudent.html',
-                  {'sessionFullName': sessionFullName, 'submissionList': submissionList,
-                   'profile': profile, 'blankspace': blankspace})
+# @login_required()
+# def homepageStudent(request):
+#     sessionFullName = request.session['fullNameSession']
+#     sessionUserName = request.session['userNameSession']
+#     sessionid = request.session['idSession']
+#     submissionList = submissionTrack.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
+#     blankspace = ""
+#     profile = studentProfile.objects.get(email=sessionUserName)
+#     return render(request, 'registration/homeStudent.html',
+#                   {'sessionFullName': sessionFullName, 'submissionList': submissionList,
+#                    'profile': profile, 'blankspace': blankspace})
