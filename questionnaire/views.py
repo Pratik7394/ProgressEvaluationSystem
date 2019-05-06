@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from registration.models import studentProfile
-from registration.models import studentName as Student, professorName as Professor
+from registration.models import studentName as Student, professorName as Professor, userInfo
 from django.contrib import messages
 from django.db.models import Q
 import socket
@@ -41,6 +41,13 @@ static_data = {
 
 
 # Create your views here.
+
+def handler404(request):
+    return render(request, '404.html', status=404)
+
+def handler500(request):
+    return render(request, '500.html', status=500)
+
 @login_required()
 def studentHome(request):
     if request.method == 'POST':
@@ -60,6 +67,10 @@ def studentHome(request):
         sessionFullName = request.session['fullNameSession']
         sessionUserName = request.session['userNameSession']
         sessionid = request.session['idSession']
+        studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
+        if studentProfessor == "professor":
+            messages.error(request, 'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
+            return redirect('professor:professorHome')
         submissionList = Submission.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
         submit = "submit"
         print(submissionList)
@@ -253,6 +264,12 @@ def viewSubmissions(request):
 '''
 
 def requestHandler(request, Object, objectName):
+    sessionid = request.session['idSession']
+    studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
+    if studentProfessor == "professor":
+        messages.error(request,
+                       'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
+        return redirect('professor:professorHome')
     submissionTrack_id = request.session["questionnaireForIdSession"]
     questionnaireStatus = Submission.objects.get(id=submissionTrack_id).status
     if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):
@@ -462,6 +479,12 @@ def requestHandler(request, Object, objectName):
 @login_required()
 def handleResearch(request):
     # return requestHandler(request, Research, 'Research')
+    sessionid = request.session['idSession']
+    studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
+    if studentProfessor == "professor":
+        messages.error(request,
+                       'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
+        return redirect('professor:professorHome')
     submissionTrack_id = request.session["questionnaireForIdSession"]
     questionnaireStatus = Submission.objects.get(id=submissionTrack_id).status
     if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):

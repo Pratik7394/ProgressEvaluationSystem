@@ -116,8 +116,10 @@
 </section>
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
     <div class="container">
-        <br>
-        <h1 class="mb-0 my-2"><b>Questionnaire for {{ QuestionnaireFor }}</b></h1>
+        {% if QuestionnaireFor %}
+            <br>
+            <h1 class="mb-0 my-2"><b>Questionnaire for {{ QuestionnaireFor }}</b></h1>
+        {% endif %}
         <br>
         {% block progressbar %}{% endblock progressbar %}
         <div class="row">

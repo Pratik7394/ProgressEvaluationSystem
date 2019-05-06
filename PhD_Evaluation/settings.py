@@ -24,9 +24,9 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 SECRET_KEY = 'ivjglk59s&**#h71xtk)1nrh(%rd)-#bu3b&-5^pzm68q37=!o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'progressevaluationsystem.pythonanywhere.com']
 
 # Application definition
 

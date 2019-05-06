@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from registration.tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
-from registration.models import studentName
+from registration.models import studentName, userInfo
 from django.http import HttpResponseRedirect
 
 
@@ -26,6 +26,12 @@ def professorHome(request):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     else:
+        sessionid = request.session['idSession']
+        studentProfessor = userInfo.objects.get(user_id=sessionid).studentOrProfessor
+        if studentProfessor == "student":
+            messages.error(request,
+                           'You don\'t have priviledges to access requested page. You\'re registered as ' + studentProfessor)
+            return redirect('questionnaire:studentHome')
         sessionFullName = request.session['fullNameSession']
         blankspace = ""
         details = submissionTrack.objects.all()
@@ -107,8 +113,7 @@ def submissionView(request, item_id):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            messages.warning(request,
-                             "Feedback successfully emailed")
+            messages.warning(request, "Feedback successfully emailed")
             return redirect('professor:professorHome')
 
         elif 'back' in request.POST:

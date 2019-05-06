@@ -1,6 +1,7 @@
 from django.urls import path
 from django.conf.urls import url
 from questionnaire import views
+from django.conf.urls import handler404, handler500
 
 app_name = 'questionnaire'
 
@@ -15,3 +16,6 @@ urlpatterns = [
     path('step5/', views.handlePapers, name='form-papers'),
     path('step6/', views.handleReview, name='review'),
 ]
+
+handler404 = views.handler404
+handler500 = views.handler500
