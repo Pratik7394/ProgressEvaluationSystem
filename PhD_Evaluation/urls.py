@@ -25,5 +25,4 @@ urlpatterns = [
     path('questionnaire/', include('questionnaire.urls')),
     path('professor/', include('professor.urls')),
     path('registration/logout', views.userLogout, name='logout'),
-    path('registration/special', views.special, name='special'),
 ]
