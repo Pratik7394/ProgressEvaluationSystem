@@ -54,7 +54,7 @@
 {% block content %}
     <form id="formset" class="form" role="form" autocomplete="off" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ formset.management_form }}
+{#        {{ formset.management_form }}#}
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}
                 <strong style="color:red">{{ error|escape }}</strong><br>
@@ -64,7 +64,7 @@
             <h2 class="mb-0 my-2"><b>Academic details</b></h2>
         </div>
         <table class="d" style="width:40%">
-            {% for form in formset.forms %}
+{#            {% for form in formset.forms %}#}
             <tr>
                 <th>GPA</th>
                 <td>{{ form.Current_GPA }}
@@ -85,13 +85,13 @@
                     {% endif %}
                 </td>
             </tr>
-            {% endfor %}
+{#            {% endfor %}#}
         </table>
         <div class="card-header">
             <h2 class="mb-0 my-2"><b>Research details</b></h2>
         </div>
         <table class="d" style="width:75%">
-            {% for form in formset.forms %}
+{#            {% for form in formset.forms %}#}
             <tr>
                 <th>Thesis Topic</th>
                 <td>{{ form.Topic }}
@@ -142,7 +142,7 @@
                     {% endif %}
                 </td>
             </tr>
-            {% endfor %}
+{#            {% endfor %}#}
         </table>
 
         <br>

@@ -29,6 +29,16 @@ from .forms import (
     PaperForm
 )
 
+static_data = {
+    'display': {
+        'QExams': 'Qualifying Exams',
+        'Research': 'Academics and Research',
+        'Papers': 'Research Papers',
+        'Teaching': 'Teaching Assist',
+        'Courses': 'Courses'
+    }
+}
+
 
 # Create your views here.
 @login_required()
@@ -324,19 +334,19 @@ def requestHandler(request, Object, objectName):
                         continue
                     if objectName == 'QExams':
                         try:
-                            unique_field = Exams.objects.get(exam_Name=form.cleaned_data.get('Exam_Name')).id
+                            unique_or_required_field = Exams.objects.get(exam_Name=form.cleaned_data.get('Exam_Name')).id
                         except Exams.DoesNotExist:
                             continue
                     elif objectName in ['Courses', 'Teaching']:
-                        unique_field = form.cleaned_data.get('Subject_Name')
+                        unique_or_required_field = form.cleaned_data.get('Subject_Name')
                     elif objectName == 'Papers':
-                        unique_field = form.cleaned_data.get('Title')
+                        unique_or_required_field = form.cleaned_data.get('Title')
                     elif objectName == 'Research':
-                        unique_field = form.cleaned_data.get('Topic')
+                        unique_or_required_field = form.cleaned_data.get('Topic')
 
                     # If we don't have unique field, this would be an empty form.
                     # Hence we skip this form
-                    if not unique_field:
+                    if not unique_or_required_field:
                         continue
 
                     thisForm = form.save(commit=False)
@@ -360,7 +370,7 @@ def requestHandler(request, Object, objectName):
                             eachInstance.save()
 
                         # notify our users that Qualifying Exam Attempts are saved
-                        messages.success(request, 'Your ' + objectName + ' data is saved.')
+                        messages.success(request, 'Your ' +  static_data['display'][objectName] + ' data is saved.')
 
                         if questionnaireStatus == "Not Started":
                             Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
@@ -398,7 +408,7 @@ def requestHandler(request, Object, objectName):
 
                 except IntegrityError:  # If the transaction failed
                     print(objectName + ' failed')
-                    messages.error(request, 'There was an error saving your ' + objectName + ' data.')
+                    messages.error(request, 'There was an error saving your ' +  static_data['display'][objectName] + ' data.')
             else:
                 if not ('save' in request.POST):
                     if objectName == 'QExams':
@@ -426,10 +436,10 @@ def requestHandler(request, Object, objectName):
                             return redirect(reverse('questionnaire:form-qexams'))
                         if 'prev' in request.POST:
                             return redirect(reverse('questionnaire:studentHome'))
-                messages.error(request, 'Please modify ' + objectName + ' data in order to Save!')
+                messages.error(request, 'No changes detected in ' + static_data['display'][objectName] + ' data!')
         else:
             print(objectName + ' invalid')
-            messages.error(request, 'There seems to be something wrong with your ' + objectName +
+            messages.error(request, 'There seems to be something wrong with your '  + static_data['display'][objectName] +
                            ' data. Please make sure all entries below are valid.')
     elif current_data.exists():
         print(objectName + ' existing')
@@ -440,7 +450,7 @@ def requestHandler(request, Object, objectName):
             'form-TOTAL_FORMS': '1',
             'form-INITIAL_FORMS': '0',
             'form-MAX_NUM_FORMS': ''
-        })
+        }, initial=data)
 
     context = {
         'formset': formset,
@@ -451,7 +461,87 @@ def requestHandler(request, Object, objectName):
 
 @login_required()
 def handleResearch(request):
-    return requestHandler(request, Research, 'Research')
+    # return requestHandler(request, Research, 'Research')
+    submissionTrack_id = request.session["questionnaireForIdSession"]
+    questionnaireStatus = Submission.objects.get(id=submissionTrack_id).status
+    if not (questionnaireStatus == 'Not Started' or questionnaireStatus == 'Saved'):
+        messages.error(request, "You currently don't have permission to access the requested page.")
+        return redirect(reverse('questionnaire:studentHome'))
+
+    questionnaire = Submission.objects.get(id=request.session["questionnaireForIdSession"])
+    questionnaire_id = questionnaire.questionnaire_for_id
+    questionnairefor = questionnaire.questionnaire_for
+    userTableID = User.objects.get(username=request.session['userNameSession']).id
+    try:
+        research = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+    except Research.DoesNotExist:
+        research = None
+    data = {}
+    if research:
+        print('Research Data exists and Noted')
+        data = {
+            'username_id': research.username_id, 'questionnaire_for_id': research.questionnaire_for_id,
+            'Topic': research.Topic, 'Proposal': research.Proposal, 'Defense': research.Defense,
+            'Proposal_Status': research.Proposal_Status, 'Defense_Status': research.Defense_Status,
+            'Current_Academic_Advisor': research.Current_Academic_Advisor, 'Current_GPA': research.Current_GPA,
+            'Current_Research_Advisor': research.Current_Research_Advisor, 'Thesis_Committee': research.Thesis_Committee
+        }
+    if request.method == 'POST':
+        print('Research POST')
+        form = ResearchForm(request.POST, initial=data)
+        if form.is_valid():
+            print('Research data is valid')
+            if form.has_changed():
+                print('Research data is changed')
+                Topic = form.cleaned_data.get('Topic')
+                if Topic:
+                    thisForm = form.save(commit=False)
+                    thisForm.username_id = userTableID
+
+                    thisForm.questionnaire_for_id = questionnaire_id
+                    try:
+                        with transaction.atomic():
+                            # Replace the old with the new
+                            Research.objects.filter(username_id=userTableID,
+                                                    questionnaire_for_id=questionnaire_id).delete()
+                            thisForm.save()
+
+                            # notify our users that research details are saved
+                            messages.success(request, 'Your research details are saved.')
+
+                            if questionnaireStatus == "Not Started":
+                                Submission.objects.filter(id=submissionTrack_id).update(status="Saved")
+                            if 'next' in request.POST:
+                                return redirect(reverse('questionnaire:form-qexams'))
+                            if 'prev' in request.POST:
+                                return redirect(reverse('questionnaire:studentHome'))
+                            return redirect(reverse('questionnaire:form-research'))
+                    except IntegrityError:  # If the transaction failed
+                        print('Research data failed to save')
+                        messages.error(request, 'There was an error saving your research details.')
+                else:
+                    messages.error(request, 'There is some data missing. Couldn\'t save your data')
+            else:
+                if 'next' in request.POST:
+                    return redirect(reverse('questionnaire:form-qexams'))
+                if 'prev' in request.POST:
+                    return redirect(reverse('questionnaire:studentHome'))
+                messages.error(request, 'No changes detected!')
+        else:
+            print('Research data is invalid')
+            messages.error(request,
+                           'There seems to be something wrong with your research details. Please make sure every entry below is valid.')
+    elif research:
+        print('Research Get with existing data')
+        form = ResearchForm(initial=data)
+    else:
+        print('Research GET')
+        form = ResearchForm()
+    context = {
+        'form': form,
+        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
+    }
+    return render(request, 'questionnaire/research.html', context)
 
 
 @login_required()

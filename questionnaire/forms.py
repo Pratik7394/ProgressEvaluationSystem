@@ -52,6 +52,7 @@ class ResearchForm(ModelForm):
         # fields = ['Topic', 'Proposal', 'Defense', 'Current_Academic_Advisor', 'Current_Research_Advisor']
 
         widgets = {
+            'Current_GPA': forms.TextInput(),
             'Proposal': DateInput(),
             'Defense': DateInput(),
             'Thesis_Committee': forms.Textarea(attrs={'rows': 7, 'cols': 40}),
