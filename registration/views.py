@@ -40,6 +40,7 @@ def index(request):
 
 def register(request):
     registered = False
+
     if request.method == "POST":
 
         userInfo_form = userInfoForm(data=request.POST)
@@ -91,6 +92,15 @@ def register(request):
     else:
         userInfo_form = userInfoForm()
         userInfo_form2 = userInfoForm2()
+
+        if 'userNameSession' in request.session:
+            studentProfessor = request.session['studentProfessor']
+            if studentProfessor == "student":
+                return redirect('questionnaire:studentHome')
+
+            elif studentProfessor == "professor":
+                return redirect('professor:professorHome')
+
 
     return render(request, 'registration/register.html', {'userInfo_form': userInfo_form,
                                                           'userInfo_form2': userInfo_form2,
@@ -198,7 +208,15 @@ def userLogin(request):
                              "Something is wrong on our side. Inform administrator, Then we will resolve it")
             return redirect('registration:userLogin')
     else:
-        return render(request, 'registration/login.html', {})
+        if 'userNameSession' in request.session:
+            studentProfessor = request.session['studentProfessor']
+            if studentProfessor == "student":
+                return redirect('questionnaire:studentHome')
+
+            elif studentProfessor == "professor":
+                return redirect('professor:professorHome')
+        else:
+            return render(request, 'registration/login.html', {})
 
 
 ###################Dont remove it#############
