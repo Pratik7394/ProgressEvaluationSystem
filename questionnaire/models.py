@@ -22,18 +22,6 @@ class questionnaire(models.Model):
     def __str__(self):
         return self.questionnaire_for
 
-    # def save(self, *args, **kwargs):
-    #     if self.status == 'Active':
-    #         try:
-    #             temp = questionnaire.objects.get(status='Active')
-    #             if self != temp:
-    #                 temp.status = 'Inactive'
-    #                 temp.save()
-    #         except questionnaire.DoesNotExist:
-    #             pass
-    #     super(questionnaire, self).save(*args, **kwargs)
-
-
 class qualifyingExam(models.Model):
     exam_Name = models.CharField(max_length=200, unique=True)
 
@@ -113,10 +101,10 @@ class course(models.Model):
     def clean(self):
         if self.Subject_Name:
             if self.Subject_Year or self.Subject_Term:
-                if not (self.Subject_Year and self.Subject_Term):
-                    raise ValidationError("Both Subject Year and Term should be selected.")
-            else:
-                raise ValidationError("Please select Subject Year and Term.")
+                if not (self.Subject_Year and self.Subject_Term): # Raise a general error
+                    raise ValidationError({'Subject_Year': ["Select BOTH Subject Year and Term.",]})
+            else: # On front-end we're displaying error messages for Year and not for Term, hence add this error to Year
+                raise ValidationError({'Subject_Year': ["Please select Subject Year and Term.",]})
 
 
 class examAttempt(models.Model):
@@ -170,9 +158,9 @@ class techingAssistant(models.Model):
         if self.Subject_Name:
             if self.Subject_Year or self.Subject_Term:
                 if not (self.Subject_Year and self.Subject_Term):
-                    raise ValidationError("Both Subject Year and Term should be selected.")
+                    raise ValidationError({'Subject_Year': ["Select BOTH Subject Year and Term.",]})
             else:
-                raise ValidationError("Please select Subject Year and Term.")
+                raise ValidationError({'Subject_Year': ["Please select Subject Year and Term.",]})
 
 
 class paper(models.Model):
@@ -213,9 +201,9 @@ class paper(models.Model):
         if self.Status_of_Paper == 'Published':
             if self.Publish_Year or self.Publish_Term:
                 if not (self.Publish_Year and self.Publish_Term):
-                    raise ValidationError("Both Publish Year and Term should be selected for a 'Published' Paper.")
+                    raise ValidationError({'Publish_Year': ["Select BOTH Publish Year and Term for a 'Published' Paper.",]})
             else:
-                raise ValidationError("Please select Publish Year and Term.")
+                raise ValidationError({'Publish_Year': ["Please select Publish Year and Term.",]})
 
     def __str__(self):
         return str(self.Author) + " " + str(self.questionnaire_for) + " " + self.Title
