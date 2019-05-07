@@ -308,7 +308,7 @@
                             </div>
 
                             <div class="form-group col-sm-1 col-md-2">
-                                Questionnaire Year
+                                Questionnaire:
                                 <p class="dashed">
                                     {% render_field filter.form.questionnaire_for class="form-control" %}
                                 </p>
@@ -359,11 +359,11 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th onclick="sortTable(0)">Full Name</th>
-                        <th onclick="sortTable(1)">GPA</th>
+                        <th onclick="sortTable(1)">Full Name</th>
+                        <th onclick="sortTable(2)">GPA</th>
                         <th>Year In Program</th>
                         <th>Email</th>
-                        <th onclick="sortTable(4)">Questionnaire Year</th>
+                        <th onclick="sortTable(5)">Questionnaire Year</th>
                         <th>Academic Advisor</th>
                         <th>Research Advisor</th>
                         <th>Status</th>
@@ -381,7 +381,8 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'professor:filterName' item_id=filter.username.id %}">{{ filter.fullname }}</a>
+                                {#                                <a href="{% url 'professor:filterName' item_id=filter.username.id %}">{{ filter.fullname }}</a>#}
+                                {{ filter.fullname }}
                             </td>
                             <td>{{ filter.current_GPA }}</td>
                             <td>{{ filter.Current_Program_Year }}</td>

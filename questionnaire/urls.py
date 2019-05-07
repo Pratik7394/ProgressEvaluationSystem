@@ -6,7 +6,6 @@ from django.conf.urls import handler404, handler500
 app_name = 'questionnaire'
 
 urlpatterns = [
-    # path('submissions/(?P<item_id>[0-9]+)', views.viewSubmissions, name='submissions'),
     path('submissions/', views.viewSubmissions, name='viewSubmissions'),
     path('student/', views.studentHome, name='studentHome'),
     path('step1/', views.handleResearch, name='form-research'),
@@ -18,4 +17,5 @@ urlpatterns = [
 ]
 
 handler404 = views.handler404
+
 handler500 = views.handler500

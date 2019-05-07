@@ -1,10 +1,6 @@
 from django import forms
-from registration.models import professorWhiteList, userInfo, User, studentProfile, professorName  # , studentWhiteList,
-from django.contrib.auth.password_validation import password_validators_help_texts, MinimumLengthValidator, \
-    CommonPasswordValidator
-import datetime
-
-
+from registration.models import userInfo, User, studentProfile
+from django.contrib.auth.password_validation import MinimumLengthValidator, CommonPasswordValidator
 
 class userInfoForm(forms.ModelForm):
     password = forms.CharField(required=True, widget=forms.PasswordInput())
@@ -66,8 +62,6 @@ class userInfoForm(forms.ModelForm):
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        # confirmpassword = self.cleaned_data.get('')
-        # print(password)
 
         if CommonPasswordValidator().validate(password):
             raise forms.ValidationError("Password too common, Please chose some other password")
