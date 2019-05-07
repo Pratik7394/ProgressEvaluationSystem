@@ -110,11 +110,11 @@ def load_data(request, userTableID, questionnaire_id):
             current_research = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
         except Research.DoesNotExist:
             current_research = None
-            try:
-                research = Research.objects.get(username_id=userTableID, questionnaire_for_id=previousReport.id)
-            except Research.DoesNotExist:
-                research = None
-        if current_research and research:
+        try:
+            research = Research.objects.get(username_id=userTableID, questionnaire_for_id=previousReport.id)
+        except Research.DoesNotExist:
+            research = None
+        if research and not current_research:
             print('Research Data exists and Loaded for this term')
             data = [Research(
                 username_id=research.username_id, questionnaire_for_id=questionnaire_id,
