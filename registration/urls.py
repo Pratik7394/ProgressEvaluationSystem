@@ -1,8 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
 from registration import views
-# from django.urls import include
-# from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
 app_name = 'registration'

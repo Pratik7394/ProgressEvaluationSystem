@@ -9,28 +9,18 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from registration.models import professorWhiteList, userInfo, studentProfile, announcement, studentName, professorName
 from questionnaire.models import submissionTrack, questionnaire
-# , studentWhiteList,
 from django.contrib import messages
 import datetime
 from datetime import datetime
 
-import socket
-
-socket.getaddrinfo('127.0.0.1', 8080)
+# import socket
+# socket.getaddrinfo('127.0.0.1', 8080)
 
 
 # Create your views here.
-
-
-# @login_required()
-# def special(request):
-#     del request.session['your key']
-#     return HttpResponse("You are loged in, Nice!")
-
 
 @login_required()
 def userLogout(request):
@@ -57,8 +47,6 @@ def register(request):
 
         if userInfo_form.is_valid() and userInfo_form2.is_valid():
             email = userInfo_form.cleaned_data['email']
-            # firstName = userInfo_form.cleaned_data['first_name']
-            # lastName = userInfo_form.cleaned_data['last_name']
             user = userInfo_form.save()
             user.is_active = False
             user.username = email
@@ -79,10 +67,6 @@ def register(request):
             studentprofessor.studentOrProfessor = StudentOrProfessor  # change field
             studentprofessor.save()
             registered = True
-
-            ####STUDENT PROFILE####
-            # userProfile = studentProfile.objects.create(username=email)
-            # userProfile.save()
 
             # Email Verification
             current_site = get_current_site(request)
@@ -174,10 +158,7 @@ def userLogin(request):
             username = username.lower()
             password = request.POST.get('password')
             user = authenticate(username=username, password=password)
-            # full_name = request.user.get_full_name()
-            # print("name --> " + first_name)
-            # print("username --> " + username)
-            # username = request.session['username']
+
 
             if user is not None:
 
@@ -200,9 +181,7 @@ def userLogin(request):
 
                     elif studentProfessor == "professor":
                         return redirect('professor:professorHome')
-                        ###################need to be implemented
-                        # print("professor")
-                        # return render(request, 'registration/homeProfessor.html', {})
+
                     else:
                         messages.warning(request,
                                          "Something is wrong on our side. Inform administrator, Then we will resolve it")
@@ -215,17 +194,6 @@ def userLogin(request):
                 messages.warning(request, "Invalid login details!")
                 return redirect('registration:userLogin')
         else:
-            # sessionid = request.session['idSession']
-            # submissionList = submissionTrack.objects.filter(username_id=sessionid)
-            # var = None
-            # for submission in submissionList:
-            #     # print(submission.Questionnaire_For_id)
-            #     var = submission.questionnaire_for_id
-            #     var = str(var)
-            #     if var in request.POST:
-            #         break
-            # request.session["questionnaireForIdSession"] = var
-            # return redirect('questionnaire:submissions')
             messages.warning(request,
                              "Something is wrong on our side. Inform administrator, Then we will resolve it")
             return redirect('registration:userLogin')
@@ -271,10 +239,7 @@ def editProfileStudent(request):
             now = datetime.now()
             now = now.date()
             print(now)
-            # d1 = datetime.strptime(program_joining_date, "%Y-%m-%d")
-            # d2 = datetime.strptime(now, "%Y-%m-%d")
             diff = now - program_joining_date
-            # d1 = da
             diff = diff.days
             print(diff)
             days = 365
@@ -318,7 +283,6 @@ def editProfileStudent(request):
             return redirect('questionnaire:studentHome')
 
         else:
-            print("hi")
             print(studentProfile_Form.errors)
 
     return render(request, 'registration/profile_edit.html',
@@ -358,15 +322,3 @@ def editProfileProfessor(request):
         return render(request, 'registration/profile_edit.html',
                       {'professorProfile_Form': professorProfile_Form, 'studentProfessor': studentProfessor})
 
-
-# @login_required()
-# def homepageStudent(request):
-#     sessionFullName = request.session['fullNameSession']
-#     sessionUserName = request.session['userNameSession']
-#     sessionid = request.session['idSession']
-#     submissionList = submissionTrack.objects.filter(username_id=sessionid).order_by("-questionnaire_for")
-#     blankspace = ""
-#     profile = studentProfile.objects.get(email=sessionUserName)
-#     return render(request, 'registration/homeStudent.html',
-#                   {'sessionFullName': sessionFullName, 'submissionList': submissionList,
-#                    'profile': profile, 'blankspace': blankspace})

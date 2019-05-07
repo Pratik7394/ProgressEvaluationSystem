@@ -154,6 +154,7 @@
                                     <th>Proposal</th>
                                     <th>Defense</th>
                                     <th>Thesis Committee</th>
+                                    <th>Research Advisor</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -163,6 +164,8 @@
                                         <td>{{ user.Proposal }} ({{ user.Proposal_Status }})</td>
                                         <td>{{ user.Defense }} ({{ user.Defense_Status }})</td>
                                         <td>{{ user.Thesis_Committee }} </td>
+                                        <td>{{ user.Current_Research_Advisor }}</td>
+
                                     </tr>
                                 {% empty %}
                                     <tr>
@@ -251,7 +254,7 @@
                             </table>
 
                             <h1>PAPER</h1>
-                             <table class="d">
+                            <table class="d">
                                 <thead>
                                 <tr>
                                     <th>Title</th>

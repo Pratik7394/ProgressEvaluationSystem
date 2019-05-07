@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from registration.tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
-from registration.models import studentName, userInfo
+from registration.models import studentName
 from django.http import HttpResponseRedirect
 from registration.decorators import user_type_professor
 
@@ -37,31 +37,31 @@ def professorHome(request):
         return render(request, 'registration/homeProfessor.html', context=user_dict)
 
 
-@login_required
-@user_type_professor
-def filterName(request, item_id):
-    if request.method == 'POST':
-        if 'clear' in request.POST:
-            return redirect('professor:professorHome')
-
-        if 'export' in request.POST:
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-    else:
-        print(item_id)
-        details = submissionTrack.objects.filter(username_id=item_id)
-        print(details)
-        fullname = ''
-
-        for detail in details:
-            fullname = detail.fullname
-            break
-        sessionFullName = request.session['fullNameSession']
-        blankspace = ""
-        filter = UserFilter(request.GET, queryset=details)
-        user_dict = {'details': details, 'filter': filter, 'fullname': fullname, 'sessionFullName': sessionFullName,
-                     'blankspace': blankspace}
-        return render(request, 'registration/homeProfessor.html', context=user_dict)
+# @login_required
+# @user_type_professor
+# def filterName(request, item_id):
+#     if request.method == 'POST':
+#         if 'clear' in request.POST:
+#             return redirect('professor:professorHome')
+#
+#         if 'export' in request.POST:
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
+#     else:
+#         print(item_id)
+#         details = submissionTrack.objects.filter(username_id=item_id)
+#         print(details)
+#         fullname = ''
+#
+#         for detail in details:
+#             fullname = detail.fullname
+#             break
+#         sessionFullName = request.session['fullNameSession']
+#         blankspace = ""
+#         filter = UserFilter(request.GET, queryset=details)
+#         user_dict = {'details': details, 'filter': filter, 'fullname': fullname, 'sessionFullName': sessionFullName,
+#                      'blankspace': blankspace}
+#         return render(request, 'registration/homeProfessor.html', context=user_dict)
 
 
 @login_required
@@ -122,9 +122,6 @@ def submissionView(request, item_id):
             HttpResponse("Something is wrong on our side. Inform administrator, Then we will resolve it")
 
     else:
-        # print(item_id)
-        # sid = submissionTrack.objects.get(status="Submitted For Review").id
-        # print("sid --> " + str(sid))
         questionnaire_id = submissionTrack.objects.get(id=item_id).questionnaire_for_id
         questionnaireStatus = submissionTrack.objects.get(id=item_id).status
         questionnaire_submit_username = submissionTrack.objects.get(id=item_id).username
