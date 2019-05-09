@@ -121,7 +121,7 @@ def activate(request, uidb64, token):
         user.save()
         user_name = user.username
         emailID = user.email
-        print(emailID)
+        # print(emailID)
         first_name = user.first_name
         last_name = user.last_name
         first_name = str(first_name)
@@ -253,13 +253,13 @@ def editProfileStudent(request):
             native_country = studentProfile_Form.cleaned_data['native_country']
             full_name = first_name + " " + last_name
             program_joining_date = studentProfile_Form.cleaned_data['program_joining_date']
-            print(program_joining_date)
+            # print(program_joining_date)
             now = datetime.now()
             now = now.date()
-            print(now)
+            # print(now)
             diff = now - program_joining_date
             diff = diff.days
-            print(diff)
+            # print(diff)
             days = 365
             if diff < days:
                 year = 1
@@ -278,7 +278,7 @@ def editProfileStudent(request):
             else:
                 year = 8
 
-            print(year)
+            # print(year)
             studentProfile.objects.filter(email=sessionUserName).update(first_name=first_name, last_name=last_name,
                                                                         SUNY_ID=SUNY_ID,
                                                                         native_country=native_country,
@@ -335,7 +335,7 @@ def editProfileProfessor(request):
         profile = User.objects.get(username=sessionUserName)
         id = request.session['idSession']
         studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
-        print("userinfo --> " + str(studentProfessor))
+        # print("userinfo --> " + str(studentProfessor))
         professorProfile_Form = professorProfileForm(instance=profile)
         return render(request, 'registration/profile_edit.html',
                       {'professorProfile_Form': professorProfile_Form, 'studentProfessor': studentProfessor})
