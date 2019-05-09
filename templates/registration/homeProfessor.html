@@ -11,6 +11,12 @@
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v4.9.7, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta name="description" content="">
+
     <title>Home {{ sessionFullName }}</title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
@@ -84,6 +90,11 @@
         tr:hover td {
             background-color: floralwhite;
         }
+
+        form.line {
+            display: inline;
+        }
+
     </style>
 
     <style>
@@ -340,9 +351,30 @@
                                       enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <blackcolor>
-                                        <button type="submit" class="button" name="clear">
-                                            Search
-                                        </button>
+
+                                        <form class="line">
+                                            <input type=image  src="{% static 'assets/images/search.png' %}"
+                                                   alt="not found"
+                                                   height=50
+                                                   width=50 align="middle">
+                                        </form>
+                                        &nbsp;
+                                        <form class="line">
+                                            <a href="{% url 'professor:clearSearch' %}">
+                                                <img src="{% static 'assets/images/clear.png' %}" alt="not found"
+                                                     height=50
+                                                     width=50>
+                                            </a>
+                                        </form>
+                                        &nbsp;
+                                        <form class="line">
+                                            <a href="{% url 'professor:export' %}">
+                                                <img src="{% static 'assets/images/export.png' %}" onclick="
+                                                 exportTableToCSV('student_filter_result.csv')" alt="not found"
+                                                     height=50 width=50>
+                                            </a>
+                                        </form>
+
                                     </blackcolor>
                                 </form>
                             </div>

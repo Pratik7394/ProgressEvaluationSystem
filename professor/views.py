@@ -36,6 +36,14 @@ def professorHome(request):
         user_dict = {'details': details, 'filter': filter, 'sessionFullName': sessionFullName, 'blankspace': blankspace}
         return render(request, 'registration/homeProfessor.html', context=user_dict)
 
+def clearSearch(request):
+    print("clear")
+    return redirect('professor:professorHome')
+
+def export(request):
+    print('export')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 # @login_required
 # @user_type_professor

@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,11 +21,15 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ivjglk59s&**#h71xtk)1nrh(%rd)-#bu3b&-5^pzm68q37=!o'
+with open(os.path.join(sys.path[0], "info/secret.txt"), "r") as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
+# DEBUG = True
+# ALLOWED_HOSTS = []
+
+DEBUG = False
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'progressevaluationsystem.pythonanywhere.com']
 
 # Application definition
@@ -111,12 +115,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # AUTH_USER_MODEL = users.
-# AUTHENTICATION_BACKENDS = [
-#     'registration.backends.EmailBackend',
-#     # 'django.contrib.auth.backends.ModelBackend',
-# ]
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+TICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -139,11 +139,21 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
+
+with open(os.path.join(sys.path[0], "info/email.txt"), "r") as f:
+    email = f.read().strip()
+    print(email)
+
+with open(os.path.join(sys.path[0], "info/pwd.txt"), "r") as f:
+    pwd = f.read().strip()
+    print(pwd)
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'jeenu151@gmail.com'
-EMAIL_HOST_PASSWORD = 'hxtrcpcemlpaiexj'
+EMAIL_HOST_USER = email
+EMAIL_HOST_PASSWORD = pwd
 
 LOGIN_URL = '/registration/login'

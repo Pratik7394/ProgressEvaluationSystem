@@ -15,8 +15,8 @@ class userInfoForm(forms.ModelForm):
         cleaned_data = super(userInfoForm, self).clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-        print(password)
-        print(confirm_password)
+        # print(password)
+        # print(confirm_password)
         if password != confirm_password:
             raise forms.ValidationError("Password does not match")
 
@@ -94,9 +94,9 @@ class studentProfileForm(forms.ModelForm):
     def clean_program_joining_date(self):
         program_joining = self.cleaned_data['program_joining_date']
         date = str(program_joining)
-        print('date -->' + date)
+        # print('date -->' + date)
         if date == 'None':
-            print("inside")
+            # print("inside")
             raise forms.ValidationError("Programming Joining Date can not be empty")
 
         return program_joining
