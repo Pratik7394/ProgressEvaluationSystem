@@ -24,10 +24,12 @@ from datetime import datetime
 
 @login_required()
 def userLogout(request):
+    print("hi2")
     del request.session['fullNameSession']
     del request.session['userNameSession']
     del request.session['idSession']
     del request.session['studentProfessor']
+    del request.session['login']
     logout(request)
     announcement_list = announcement.objects.all()
     return render(request, 'registration/index.html',
@@ -93,13 +95,18 @@ def register(request):
         userInfo_form = userInfoForm()
         userInfo_form2 = userInfoForm2()
 
-        if 'userNameSession' in request.session:
-            studentProfessor = request.session['studentProfessor']
-            if studentProfessor == "student":
-                return redirect('questionnaire:studentHome')
-
-            elif studentProfessor == "professor":
-                return redirect('professor:professorHome')
+        if 'login' in request.session:
+            del request.session['fullNameSession']
+            del request.session['userNameSession']
+            del request.session['idSession']
+            del request.session['studentProfessor']
+            del request.session['login']
+            logout(request)
+            announcement_list = announcement.objects.all()
+            message = messages.warning(request,
+                                       "You have been logged out")
+            return render(request, 'registration/index.html',
+                          {'announcement_list': announcement_list})
 
 
     return render(request, 'registration/register.html', {'userInfo_form': userInfo_form,
@@ -169,7 +176,6 @@ def userLogin(request):
             password = request.POST.get('password')
             user = authenticate(username=username, password=password)
 
-
             if user is not None:
 
                 if user.is_active:
@@ -183,6 +189,7 @@ def userLogin(request):
                     request.session['lastNameSession'] = last_name
                     request.session['fullNameSession'] = full_name
                     request.session['idSession'] = id
+                    request.session['login'] = 'login'
                     # id = User.objects.get(username=username).id
                     studentProfessor = userInfo.objects.get(user_id=id).studentOrProfessor
                     request.session['studentProfessor'] = studentProfessor
@@ -208,13 +215,18 @@ def userLogin(request):
                              "Something is wrong on our side. Inform administrator, Then we will resolve it")
             return redirect('registration:userLogin')
     else:
-        if 'userNameSession' in request.session:
-            studentProfessor = request.session['studentProfessor']
-            if studentProfessor == "student":
-                return redirect('questionnaire:studentHome')
-
-            elif studentProfessor == "professor":
-                return redirect('professor:professorHome')
+        if 'login' in request.session:
+            del request.session['fullNameSession']
+            del request.session['userNameSession']
+            del request.session['idSession']
+            del request.session['studentProfessor']
+            del request.session['login']
+            logout(request)
+            announcement_list = announcement.objects.all()
+            message = messages.warning(request,
+                                       "You have been logged out")
+            return render(request, 'registration/index.html',
+                          {'announcement_list': announcement_list})
         else:
             return render(request, 'registration/login.html', {})
 
