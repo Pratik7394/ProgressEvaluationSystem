@@ -38,10 +38,10 @@
                 <li><a href="{% url 'questionnaire:form-research' %}">Research</a>
                     <!-- </li> -->
                     <!-- <li> -->
-                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
                 <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
                 <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-                <li><a class="current" href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+                <li><a class="current" href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
                 {% if questionnaireStatus == 'Saved' %}
                     <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
                 {% endif %}
@@ -55,7 +55,7 @@
 {% block content %}
 
     <div class="card-header">
-        <h2 class="mb-0 my-2"><b>Research Paper</b></h2>
+        <h2 class="mb-0 my-2"><b>Research Papers</b></h2>
     </div>
     <br>
     <form id="formset" class="form" role="form" autocomplete="off" method="post"
@@ -63,15 +63,18 @@
         {% csrf_token %}
 
         {{ formset.management_form }}
+        <p>
+            List both <b>In Progress</b> and <b>Published</b> papers.
+        </p>
         <table class="d" border="3" cellpadding="15" cellspacing="0">
             <thead>
             <tr>
-                <th>Title</th>
-                <th>List of Authors</th>
-                <th>Status of Paper</th>
-                <th>Publish Year and Term</th>
-                <th>Venue</th>
-                <th style="width:10%">Select for Deletion</th>
+                <th><b>Title</b></th>
+                <th><b>List of Authors</b></th>
+                <th style="width:12%"><b>Status of Paper</b></th>
+                <th style="width:16%"><b>Publish Year and Term</b></th>
+                <th><b>Conference/Journal</b></th>
+                <th style="width:7%"><b>Delete</b></th>
             </tr>
             </thead>
             <tbody>

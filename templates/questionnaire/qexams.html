@@ -37,10 +37,10 @@
         <ul class="nav" style="width:75%">
             <li><a href="{% url 'questionnaire:form-research' %}">Research </a></li>
 
-            <li><a class="current" href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+            <li><a class="current" href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
             <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
             <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-            <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+            <li><a href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
             {% if questionnaireStatus == 'Saved' %}
                 <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
             {% endif %}
@@ -72,10 +72,10 @@
         <table class="d" border="3" cellpadding="1" cellspacing="0">
             <thead>
             <tr>
-                <th>Qualifying Exam Name</th>
-                <th>Attempt Number</th>
-                <th>Grade</th>
-                <th style="width:10%">Select for Deletion</th>
+                <th><b>Qualifying Exam Name</b></th>
+                <th><b>Attempt Number</b></th>
+                <th><b>Grade</b></th>
+                <th style="width:7%"><b>Delete</b></th>
             </tr>
             </thead>
             <tbody>

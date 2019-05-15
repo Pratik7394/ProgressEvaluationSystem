@@ -66,9 +66,9 @@ class PaperForm(ModelForm):
         exclude = ['username', 'questionnaire_for']
         # fields = ['Title', 'Venue', 'Status_of_Paper', 'Coauthor']
         widgets = {
-            'Title': forms.Textarea(attrs={'rows': 3, 'cols': 16}),
-            'Venue': forms.Textarea(attrs={'rows': 3, 'cols': 16}),
-            'List_of_Authors': forms.Textarea(attrs={'rows': 3, 'cols': 16}),
+            'Title': forms.Textarea(attrs={'rows': 3, 'cols': 30}),
+            'Venue': forms.Textarea(attrs={'rows': 3, 'cols': 30}),
+            'List_of_Authors': forms.Textarea(attrs={'rows': 3, 'cols': 30}),
         }
 
 

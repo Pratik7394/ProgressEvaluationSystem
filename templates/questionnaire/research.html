@@ -37,10 +37,10 @@
             <ul class="nav" style="width:75%">
                 <li><a class="current" href="{% url 'questionnaire:form-research' %}">Research </a></li>
                 <li></li>
-                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
                 <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
                 <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-                <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+                <li><a href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
                 {% if questionnaireStatus == 'Saved' %}
                     <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
                 {% endif %}
@@ -63,10 +63,13 @@
         <div class="card-header">
             <h2 class="mb-0 my-2"><b>Academic details</b></h2>
         </div>
+        <p>
+            This section is <b>mandatory</b> in your questionnaire.
+        </p>
         <table class="d" style="width:40%">
 {#            {% for form in formset.forms %}#}
             <tr>
-                <th>GPA</th>
+                <th><b>GPA</b></th>
                 <td>{{ form.Current_GPA }}
                     {% if form.Current_GPA.errors %}
                         {% for error in form.Current_GPA.errors %}
@@ -76,7 +79,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Academic Advisor</th>
+                <th><b>Academic Advisor</b></th>
                 <td>{{ form.Current_Academic_Advisor }}
                     {% if form.Current_Academic_Advisor.errors %}
                         {% for error in form.Current_Academic_Advisor.errors %}
@@ -90,10 +93,13 @@
         <div class="card-header">
             <h2 class="mb-0 my-2"><b>Research details</b></h2>
         </div>
+        <p>
+            This section is <b>mandatory</b> in your questionnaire.
+        </p>
         <table class="d" style="width:75%">
 {#            {% for form in formset.forms %}#}
             <tr>
-                <th>Thesis Topic</th>
+                <th><b>Thesis Topic</b></th>
                 <td>{{ form.Topic }}
                     {% if form.Topic.errors %}
                         {% for error in form.Topic.errors %}
@@ -103,7 +109,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Research Advisor</th>
+                <th><b>Research Advisor</b></th>
                 <td>{{ form.Current_Research_Advisor }}
                     {% if form.Current_Research_Advisor.errors %}
                         {% for error in form.Current_Research_Advisor.errors %}
@@ -113,7 +119,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Thesis Proposal</th>
+                <th><b>Thesis Proposal</b></th>
                 <td>{{ form.Proposal }}&nbsp{{ form.Proposal_Status }}
                     {% if form.Proposal.errors %}
                         {% for error in form.Proposal.errors %}
@@ -123,7 +129,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Thesis Defense</th>
+                <th><b>Thesis Defense</b></th>
                 <td>{{ form.Defense }}&nbsp{{ form.Defense_Status }}
                     {% if form.Defense.errors %}
                         {% for error in form.Defense.errors %}
@@ -133,7 +139,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Thesis Committee</th>
+                <th><b>Thesis Committee</b></th>
                 <td>{{ form.Thesis_Committee }}
                     {% if form.Thesis_Committee.errors %}
                         {% for error in form.Thesis_Committee.errors %}

@@ -35,10 +35,10 @@
 
     <ul class="nav">
         <li><a href="{% url 'questionnaire:form-research' %}">Research</a></li>
-        <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+        <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
         <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
         <li><a class="current" href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-        <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+        <li><a href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
         {% if questionnaireStatus == 'Saved' %}
             <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
         {% endif %}
@@ -61,11 +61,11 @@
         <table class="d" border="3" cellpadding="1" cellspacing="0">
             <thead>
             <tr>
-                <th>Course Name</th>
-                <th>Course Code (ICSI)</th>
-                <th>Subject Year and Term</th>
-                <th>Grade</th>
-                <th style="width:10%">Select for Deletion</th>
+                <th><b>Course Name</b></th>
+                <th><b>Course Code (ICSI)</b></th>
+                <th><b>Subject Year and Term</b></th>
+                <th><b>Grade</b></th>
+                <th style="width:7%"><b>Delete</b></th>
             </tr>
             </thead>
             <tbody>

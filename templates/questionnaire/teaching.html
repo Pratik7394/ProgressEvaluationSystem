@@ -37,10 +37,10 @@
                 <li><a href="{% url 'questionnaire:form-research' %}">Research</a>
                     <!-- </li> -->
                     <!-- <li> -->
-                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exam</a></li>
+                <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
                 <li><a class="current" href="{% url 'questionnaire:form-ta' %}">TA</a></li>
                 <li><a href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-                <li><a href="{% url 'questionnaire:form-papers' %}">Research Paper</a></li>
+                <li><a href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
                 {% if questionnaireStatus == 'Saved' %}
                     <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
                 {% endif %}
@@ -62,14 +62,14 @@
         <table class="d" border="3" cellpadding="1" cellspacing="1">
             <thead>
             <tr>
-                <th>Subject Name</th>
-                <th style="width:12%">Subject Code (ICSI)</th>
-                <th>Instructor Name</th>
-                <th style="width:16%">Term</th>
-                <th>Responsibilities</th>
-                <th style="width:14%">Lectures or Presentation Given</th>
-                <th>Area of Improvement</th>
-                <th style="width:8%">Select for Deletion</th>
+                <th><b>Subject Name</b></th>
+                <th style="width:12%"><b>Subject Code (ICSI)</b></th>
+                <th><b>Instructor Name</b></th>
+                <th style="width:16%"><b>Term</b></th>
+                <th><b>Responsibilities</b></th>
+                <th style="width:14%"><b>Lectures or Presentation Given</b></th>
+                <th><b>Area of Improvement</b></th>
+                <th style="width:7%"><b>Delete</b></th>
             </tr>
             </thead>
             <tbody>

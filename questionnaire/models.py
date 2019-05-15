@@ -144,8 +144,8 @@ class techingAssistant(models.Model):
     Subject_Code = models.CharField(max_length=50)
     Instructor_Name = models.CharField(max_length=200)
     Responsibilities = models.TextField(max_length=5000)
-    Lecture_or_Presentation_Given = models.TextField(max_length=5000)
-    Area_of_Improvement = models.TextField(max_length=5000)
+    Lecture_or_Presentation_Given = models.TextField(max_length=5000, blank=True)
+    Area_of_Improvement = models.TextField(max_length=5000, blank=True)
 
     class Meta:
         unique_together = ('username', 'questionnaire_for', 'Subject_Name', 'Subject_Year', 'Subject_Term')
@@ -186,7 +186,7 @@ class paper(models.Model):
 
     questionnaire_for = models.ForeignKey(questionnaire, db_column="questionnaire_for", on_delete=models.PROTECT)
     Title = models.CharField(max_length=5000)
-    Venue = models.CharField(max_length=5000)
+    Venue = models.CharField(max_length=5000, blank=True)
     Status_of_Paper = models.CharField(max_length=15, choices=status_choices)
     Publish_Year = models.IntegerField(choices=year_choices, blank=True, null=True)
     Publish_Term = models.CharField(max_length=6, choices=term_choices, blank=True)
@@ -198,12 +198,16 @@ class paper(models.Model):
         unique_together = ('Author', 'questionnaire_for', 'Title',)
 
     def clean(self):
+        errorList = []
         if self.Status_of_Paper == 'Published':
             if self.Publish_Year or self.Publish_Term:
                 if not (self.Publish_Year and self.Publish_Term):
-                    raise ValidationError({'Publish_Year': ["Select BOTH Publish Year and Term for a 'Published' Paper.",]})
+                    errorList.append(ValidationError({'Publish_Year': ["Select BOTH Publish Year and Term for a 'Published' Paper.",]}))
             else:
-                raise ValidationError({'Publish_Year': ["Please select Publish Year and Term.",]})
+                errorList.append(ValidationError({'Publish_Year': ["Please select Publish Year and Term.",]}))
+            if not self.Venue:
+                errorList.append(ValidationError({'Venue': ["Select Conference/Journal for a 'Published' Paper.", ]}))
+        raise ValidationError(errorList)
 
     def __str__(self):
         return str(self.Author) + " " + str(self.questionnaire_for) + " " + self.Title

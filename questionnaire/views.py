@@ -57,7 +57,6 @@ def studentHome(request):
         var = request.POST['var']
         request.session["questionnaireForIdSession"] = var
         return redirect('questionnaire:viewSubmissions')
-
     else:
         sessionFullName = request.session['fullNameSession']
         sessionUserName = request.session['userNameSession']
@@ -171,7 +170,7 @@ def load_data(request, userTableID, questionnaire_id):
 
         # Load Teaching Assistantships
         current_ta = TA.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id)
-        teaching_assists = TA.objects.filter(username_id=userTableID,questionnaire_for_id=previousReport.id)
+        teaching_assists = TA.objects.filter(username_id=userTableID, questionnaire_for_id=previousReport.id)
         if teaching_assists.exists() and not current_ta.exists():
             print('TA Data exists and Loaded for this term')
             data = [TA(
@@ -194,7 +193,7 @@ def load_data(request, userTableID, questionnaire_id):
         studentAuthor_id = Student.objects.get(username_id=userTableID)
         current_papers = Paper.objects.filter(Author_id=studentAuthor_id, questionnaire_for_id=questionnaire_id)
         papers = Paper.objects.filter(Author_id=studentAuthor_id, questionnaire_for_id=previousReport.id)
-        if papers.exists() and  not current_papers.exists():
+        if papers.exists() and not current_papers.exists():
             print('Papers present and noted')
             data = [Paper(
                 Author_id=c.Author_id, questionnaire_for_id=questionnaire_id, Title=c.Title,
@@ -209,6 +208,7 @@ def load_data(request, userTableID, questionnaire_id):
                 # If the transaction failed
                 messages.error(request, "Your Research papers couldn't be preloaded.")
     return
+
 
 @user_type_student
 @login_required()
@@ -254,9 +254,10 @@ def viewSubmissions(request):
                                'research_dict': research_dict})
             elif questionnaireStatus == "Saved":
                 return redirect(reverse('questionnaire:form-research'))
-            else: # status == 'not started'
+            else:  # status == 'not started'
                 load_data(request, userTableID, questionnaire_id)
                 return redirect(reverse('questionnaire:form-research'))
+
 
 '''
     # @requestHandler: Generic method that takes care of rendering data for every object,
@@ -472,8 +473,8 @@ def requestHandler(request, Object, objectName):
         }, initial=data)
 
     context = {
-        'formset': formset,
-        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
+        'formset': formset, 'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus,
+        'sessionFullName' : request.session['fullNameSession']
     }
     return render(request, 'questionnaire/' + objectName.lower() + '.html', context)
 
@@ -559,8 +560,8 @@ def handleResearch(request):
         print('Research GET')
         form = ResearchForm()
     context = {
-        'form': form,
-        'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus
+        'form': form, 'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus,
+        'sessionFullName' : request.session['fullNameSession']
     }
     return render(request, 'questionnaire/research.html', context)
 
@@ -594,7 +595,12 @@ def handleReview(request):
             submissionTrack_id = submissionTrack_id[:-6]
             userTableID = User.objects.get(username=request.session['userNameSession']).id
             questionnaire_id = Submission.objects.get(id=submissionTrack_id).questionnaire_for_id
-            current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+            try:
+                current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
+            except Research.DoesNotExist:
+                messages.error("Couldn't find Research details for you. Please add data in Research Section")
+                return redirect('questionnaire:research')
+
             try:
                 Submission.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).update(
                     current_GPA=current_data.Current_GPA, status="Submitted For Review",
@@ -602,12 +608,10 @@ def handleReview(request):
                     Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
                 )
             except Submission.DoesNotExist:
-                messages.error('Error while submitting record, Inform Admin')
+                messages.error('Error while submitting record, Please inform Admin')
             return redirect('questionnaire:studentHome')
-
         else:  # Back button
             return redirect('questionnaire:form-research')
-
     else:
         print("in review page")
         questionnaireStatus = Submission.objects.get(id=request.session["questionnaireForIdSession"]).status

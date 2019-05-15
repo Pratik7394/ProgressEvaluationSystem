@@ -94,13 +94,21 @@
                         Home
                     </a>
                 </span>
-                {% if user.is_authenticated %}
+{#                <div class="navbar" style="float: right;">#}
+                    {% if sessionFullName %}
                     <span class="navbar-caption-wrap">
-                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
-                        Logout
-                    </a>
-                </span>
-                {% endif %}
+                        <a class="navbar-caption text-white display-4" href="{% url 'registration:editProfileStudent' %}">
+                            {{ sessionFullName }}
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <span class="navbar-caption-wrap">
+                        <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                            Logout
+                        </a>
+                    </span>
+                    {% endif %}
                 {% block nav_header %}{% endblock nav_header %}
             </div>
         </div>
