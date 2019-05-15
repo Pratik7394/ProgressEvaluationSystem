@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from registration.models import studentName, professorName
+from registration.models import studentName, professorWhiteList
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 import datetime
@@ -227,7 +227,7 @@ class research(models.Model):
 
     #   Research
     Topic = models.CharField(max_length=5000)
-    Current_Research_Advisor = models.ForeignKey(professorName, related_name='research_advisor',
+    Current_Research_Advisor = models.ForeignKey(professorWhiteList, related_name='research_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
     Proposal = models.DateField()
     Proposal_Status = models.CharField(max_length=10, choices=status_choices, default=exp)
@@ -236,7 +236,7 @@ class research(models.Model):
     Thesis_Committee = models.TextField(max_length=5000,blank=True)
 
     #   Academics
-    Current_Academic_Advisor = models.ForeignKey(professorName, related_name='academic_advisor',
+    Current_Academic_Advisor = models.ForeignKey(professorWhiteList, related_name='academic_advisor',
                                                  on_delete=models.PROTECT, blank=True, null=True)
 
     Current_GPA = models.FloatField(validators=[MaxValueValidator(4),MinValueValidator(0)], null=True)

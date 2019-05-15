@@ -21,9 +21,10 @@ class professorName(models.Model):
 
 class professorWhiteList(models.Model):
     email = models.EmailField(max_length=200, unique=True)
+    name = models.CharField(max_length= 500, unique=True)
 
     def __str__(self):
-        return self.email
+        return self.name
 
 class announcement(models.Model):
     announcement = models.CharField(max_length=1000)

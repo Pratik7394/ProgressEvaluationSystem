@@ -598,8 +598,8 @@ def handleReview(request):
             try:
                 current_data = Research.objects.get(username_id=userTableID, questionnaire_for_id=questionnaire_id)
             except Research.DoesNotExist:
-                messages.error("Couldn't find Research details for you. Please add data in Research Section")
-                return redirect('questionnaire:research')
+                messages.error(request, "Couldn't find Research details for you. Fill up Research Page and try again to submit.")
+                return redirect('questionnaire:form-research')
 
             try:
                 Submission.objects.filter(username_id=userTableID, questionnaire_for_id=questionnaire_id).update(
@@ -608,7 +608,7 @@ def handleReview(request):
                     Current_Academic_Advisor=str(current_data.Current_Academic_Advisor),
                 )
             except Submission.DoesNotExist:
-                messages.error('Error while submitting record, Please inform Admin')
+                messages.error(request, 'Error while submitting record, Please inform Admin')
             return redirect('questionnaire:studentHome')
         else:  # Back button
             return redirect('questionnaire:form-research')
