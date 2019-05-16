@@ -206,8 +206,9 @@ class paper(models.Model):
             else:
                 errorList.append(ValidationError({'Publish_Year': ["Please select Publish Year and Term.",]}))
             if not self.Venue:
-                errorList.append(ValidationError({'Venue': ["Select Conference/Journal for a 'Published' Paper.", ]}))
-        raise ValidationError(errorList)
+                errorList.append(ValidationError({'Venue': ["Add Conference/Journal for a 'Published' Paper.", ]}))
+            if errorList:
+                raise ValidationError(errorList)
 
     def __str__(self):
         return str(self.Author) + " " + str(self.questionnaire_for) + " " + self.Title
