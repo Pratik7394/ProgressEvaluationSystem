@@ -651,3 +651,6 @@ def handleReview(request):
                            'techingAssistant_dict': techingAssistant_dict, 'paper_dict': paper_dict,
                            'research_dict': research_dict, 'profile2': profile2, 'sessionFullName': sessionFullName,
                            'submissionList': submissionList, 'profile': profile, })
+        else:
+            messages.error(request, "You currently don't have permission to access the requested page.")
+            return redirect('questionnaire:studentHome')
