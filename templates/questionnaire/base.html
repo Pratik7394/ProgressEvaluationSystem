@@ -95,20 +95,26 @@
                     </a>
                 </span>
 {#                <div class="navbar" style="float: right;">#}
-                    {% if sessionFullName %}
-                    <span class="navbar-caption-wrap">
-                        <a class="navbar-caption text-white display-4" href="{% url 'registration:editProfileStudent' %}">
-                            {{ sessionFullName }}
-                        </a>
-                    </span>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                    <span class="navbar-caption-wrap">
-                        <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
-                            Logout
-                        </a>
-                    </span>
-                    {% endif %}
+                {% if sessionFullName %}
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:editProfileStudent' %}">
+                        {{ sessionFullName }}
+                    </a>
+                </span>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <span class="navbar-caption-wrap">
+                    <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogout' %}">
+                        Logout
+                    </a>
+                </span>
+                {% endif %}
+                <span class="navbar-caption-wrap">
+                    <div class="navbar-caption text-white display-7">
+                        Version: Alpha<br>help/issues: <a href="mailto:csphd.ualbany@gmail.com">csphd.ualbany@gmail.com</a>
+                    </div>
+                </span>
+
                 {% block nav_header %}{% endblock nav_header %}
             </div>
         </div>
@@ -144,6 +150,7 @@
         </div>
     </div>
 </section>
+Version: Alpha<br>help/issues: <a href="mailto:csphd.ualbany@gmail.com">csphd.ualbany@gmail.com</a>
 {% block footer %}{% endblock footer %}
 <!-- Include formset plugin - including jQuery dependency -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
