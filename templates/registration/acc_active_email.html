@@ -1,5 +1,8 @@
 {% autoescape off %}
+    *Alpha-version, please email problems to csphd.ualbany@gmail.com*
+
     Hi {{ user.first_name }} {{ user.last_name }},
+
     Please click on the link to confirm your registration,
     http://{{ domain }}{% url 'registration:activate' uidb64=uid token=token %}
 {% endautoescape %}

@@ -10,7 +10,7 @@ from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
-from registration.models import professorWhiteList, userInfo, studentProfile, announcement, studentName, professorName
+from registration.models import professorWhiteList, userInfo, studentProfile, announcement, studentName
 from questionnaire.models import submissionTrack, questionnaire
 from django.contrib import messages
 import datetime
@@ -73,7 +73,7 @@ def register(request):
 
             # Email Verification
             current_site = get_current_site(request)
-            mail_subject = 'ACTIVATE YOUR PhD Evaluation ACCOUNT'
+            mail_subject = 'ACTIVATE YOUR PhD EVALUATION ACCOUNT'
             message = render_to_string('registration/acc_active_email.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -85,7 +85,7 @@ def register(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            messages.warning(request,
+            messages.info(request,
                              "Please confirm your email address to complete the registration")
             return redirect('registration:userLogin')
         else:
@@ -154,11 +154,11 @@ def activate(request, uidb64, token):
                 submissionTrack.objects.create(username=user, questionnaire_for=questionnaireFor,
                                                status="Not Started", Email=emailID, fullname=full_name)
 
-        else:
-            user = User.objects.get(id=uid)
-            professorName.objects.create(username=user, name=full_name)
+        # else:
+            # user = User.objects.get(id=uid)
+            # professorName.objects.create(username=user, name=full_name)
 
-        message = messages.warning(request,
+        message = messages.success(request,
                                    "Email verification done. You can login into your account now")
         return redirect("registration:userLogin")
         # return render(request, 'registration/login.html', {'message': message})
@@ -331,7 +331,7 @@ def editProfileProfessor(request):
             full_name = first_name + " " + last_name
             uid = User.objects.get(username=sessionUserName).id
             User.objects.filter(username=sessionUserName).update(first_name=first_name, last_name=last_name)
-            professorName.objects.filter(username_id=uid).update(name = full_name)
+            # professorWhiteList.objects.filter(email=sessionUserName).update(name = full_name)
             # submissionTrack.objects.filter(Current_Research_Advisor=name).update(Current_Research_Advisor=full_name)
             # submissionTrack.objects.filter(Current_Academic_Advisor=name).update(Current_Academic_Advisor=full_name)
             first_name = User.objects.get(username=sessionUserName).first_name

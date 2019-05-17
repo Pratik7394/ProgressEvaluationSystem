@@ -101,10 +101,29 @@
                                                        required>
 
                                                 {% if messages %}
-                                                    <p class="messages">
-                                                        {% for message in messages %}
-                                                            <p style="color:red">{{ message }}</p>
-                                                        {% endfor %}
+                                                    {% for message in messages %}
+                                                        {% if message.tags == 'warning' %}
+                                                            <p class="messages" style="color: red">
+                                                                {{ message }}
+                                                            </p>
+                                                        {% endif %}
+                                                        {% if message.tags == 'error' %}
+                                                            <p class="messages" style="color: red">
+                                                                {{ message }}
+                                                            </p>
+                                                        {% endif %}
+                                                        {% if message.tags == 'info' %}
+                                                            <p class="messages" style="color: blue">
+                                                                {{ message }}
+                                                            </p>
+                                                        {% endif %}
+
+                                                        {% if message.tags == 'success' %}
+                                                            <p class="messages" style="color: green">
+                                                                {{ message }}
+                                                            </p>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 {% endif %}
                                             </b>
                                             <div class="form-group">
