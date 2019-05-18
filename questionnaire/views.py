@@ -65,9 +65,6 @@ def studentHome(request):
         blankspace = ""
         profile = studentProfile.objects.get(email=sessionUserName)
         try:
-            Submission.objects.filter(
-                Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
-                username_id=sessionid)
             profile2 = \
                 Submission.objects.filter(
                     Q(status='Review Submitted') | Q(status='Submitted For Review') | Q(status='Review In Progress'),
@@ -258,7 +255,7 @@ def viewSubmissions(request):
                 yjd = studentProfile.objects.get(email=questionnaire_submit_username).program_joining_date
                 if yjd == None:
                     messages.warning(request,
-                                     "Programming joining date needed to be filled before starting a questionnaire")
+                                     "Program joining date is mandatory to start a questionnaire")
                     return redirect('registration:editProfileStudent')
                 else:
                     load_data(request, userTableID, questionnaire_id)
@@ -480,7 +477,7 @@ def requestHandler(request, Object, objectName):
 
     context = {
         'formset': formset, 'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus,
-        'sessionFullName' : request.session['fullNameSession']
+        'sessionFullName' : request.session['fullNameSession'], 'currentPage': objectName.lower()
     }
     return render(request, 'questionnaire/' + objectName.lower() + '.html', context)
 
@@ -567,7 +564,7 @@ def handleResearch(request):
         form = ResearchForm()
     context = {
         'form': form, 'QuestionnaireFor': questionnairefor, 'questionnaireStatus': questionnaireStatus,
-        'sessionFullName' : request.session['fullNameSession']
+        'sessionFullName' : request.session['fullNameSession'], 'currentPage': 'research'
     }
     return render(request, 'questionnaire/research.html', context)
 
