@@ -12,7 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <meta name="description" content="">
 
-    <title>Questionnaire</title>
+    <title>
+        Questionnaire {% if QuestionnaireFor %}{{ QuestionnaireFor }}{% endif %}{% if sessionFullName %}: {{ sessionFullName }}{% endif %}
+    </title>
     <link rel="stylesheet" href="{% static 'assets/web/assets/mobirise-icons/mobirise-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/tether/tether.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
@@ -62,6 +64,37 @@
     </style>
 
     <style>
+        .nav {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            text-align: center;
+        }
+
+        .nav li {
+
+            display: inline-block;
+        }
+
+        .nav a {
+            color: #fff;
+            display: inline-block;
+            padding: 0.5em 0.75em;
+            background-color: #666;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            background-color: #000;
+        }
+
+        .nav .current {
+            background-color: red;
+        }
+    </style>
+
+    <style>
         html {
             overflow-y: scroll;
         }
@@ -70,8 +103,6 @@
 </head>
 <body>
 <section class="menu cid-rmqZR6lSw2" once="menu" id="menu1-6">
-
-
     <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -94,7 +125,6 @@
                         Home
                     </a>
                 </span>
-{#                <div class="navbar" style="float: right;">#}
                 {% if sessionFullName %}
                 <span class="navbar-caption-wrap">
                     <a class="navbar-caption text-white display-4" href="{% url 'registration:editProfileStudent' %}">
@@ -114,13 +144,10 @@
                         Version: Alpha<br>help/issues: <a href="mailto:csphd.ualbany@gmail.com">csphd.ualbany@gmail.com</a>
                     </div>
                 </span>
-
                 {% block nav_header %}{% endblock nav_header %}
             </div>
         </div>
     </nav>
-
-
 </section>
 <section class="cid-qTkA127IK8 mbr-fullscreen mbr-parallax-background" id="header2-1">
     <div class="container">
@@ -129,12 +156,26 @@
             <h1 class="mb-0 my-2"><b>Questionnaire for {{ QuestionnaireFor }}</b></h1>
         {% endif %}
         <br>
-        {% block progressbar %}{% endblock progressbar %}
+        {% block progressbar %}
+        <div class="ex1">
+            <nav>
+                <ul class="nav" style="width:75%">
+                    <li><a {% if currentPage == 'research' %} class="current" {% endif %} href="{% url 'questionnaire:form-research' %}">Research </a></li>
+                    <li><a {% if currentPage == 'qexams' %} class="current" {% endif %} href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
+                    <li><a {% if currentPage == 'teaching' %} class="current" {% endif %} href="{% url 'questionnaire:form-ta' %}">TA</a></li>
+                    <li><a {% if currentPage == 'courses' %} class="current" {% endif %} href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
+                    <li><a {% if currentPage == 'papers' %} class="current" {% endif %} href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
+                    {% if questionnaireStatus == 'Saved' %}
+                        <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endblock progressbar %}
         <div class="row">
             <div class="row">
                 <div class="card border-primary">
                     <div class="card-body">
-
                         {% if messages %}
                             {% for message in messages %}
                                 <div role="alert"

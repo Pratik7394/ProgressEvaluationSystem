@@ -1,59 +1,9 @@
 {% extends "./base.html" %}
-
-{% block progressbar %}
-
-    <style>
-        .nav {
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            text-align: center;
-        }
-
-        .nav li {
-
-            display: inline-block;
-        }
-
-        .nav a {
-            color: #fff;
-            display: inline-block;
-            padding: 0.5em 0.75em;
-            background-color: #666;
-            border-radius: 4px;
-            text-decoration: none;
-        }
-
-        .nav a:hover {
-            background-color: #000;
-        }
-
-        .nav .current {
-            background-color: red;
-        }
-    </style>
-
-    <ul class="nav">
-        <li><a href="{% url 'questionnaire:form-research' %}">Research</a></li>
-        <li><a href="{% url 'questionnaire:form-qexams' %}">Qualifying Exams</a></li>
-        <li><a href="{% url 'questionnaire:form-ta' %}">TA</a></li>
-        <li><a class="current" href="{% url 'questionnaire:form-courses' %}">Courses</a></li>
-        <li><a href="{% url 'questionnaire:form-papers' %}">Research Papers</a></li>
-        {% if questionnaireStatus == 'Saved' %}
-            <li><a href="{% url 'questionnaire:review' %}">Review</a></li>
-        {% endif %}
-    </ul>
-{% endblock progressbar %}
-
-{% load crispy_forms_tags %}
-
-<!-- {% block nav_header%}
-{% endblock nav_header%} -->
-
 {% block content %}
     <div class="card-header">
         <h2 class="mb-0 my-2"><b>Courses Taken</b></h2>
     </div>
+    <br>
     <form id="formset" class="form" role="form" autocomplete="off" method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
