@@ -61,77 +61,43 @@
                                 </div>
                                 <div align="left">
                                     <div class="card-body">
-
-                                        {% if studentProfessor == 'student' %}
-                                            <form class="form" role="form" autocomplete="off" method="post"
-                                                  enctype="multipart/form-data">
-                                                <b>
-                                                    {% csrf_token %}
-                                                    {{ studentProfile_Form.as_p }}
-                                                </b>
+                                        <form class="form" role="form" autocomplete="off" method="post"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <b>
                                                 {% if messages %}
                                                     <p style="color: red" class="messages">
                                                     {% for message in messages %}
                                                         <b>  {{ message }} </b>
                                                     {% endfor %}
                                                 {% endif %}
-
-                                                <div class="form-group">
-                                                    <button type="submit" class="button">
-                                                        Submit
-                                                    </button>
-                                                    <br>
-                                                    <br>
-                                                    <div class="bg">
-                                                        <a href="{% url 'password-change' %}"
-                                                           style="color: darkslategrey">
-                                                            <b>Change Password</b>
-                                                        </a>
-                                                    </div>
-
-                                                </div>
-                                            </form>
-                                        {% endif %}
-
-                                        {% if studentProfessor == 'professor' %}
-                                            <form class="form" role="form" autocomplete="off" method="post"
-                                                  enctype="multipart/form-data">
-                                                <b>
-                                                    {% csrf_token %}
+                                                {% if studentProfessor == 'professor' %}
                                                     {{ professorProfile_Form.as_p }}
-                                                </b>
-                                                <div class="form-group">
-                                                    <button type="submit" class="button">
-                                                        Submit
-                                                    </button>
-                                                    <br>
-                                                    <br>
-                                                    <div class="bg">
-                                                        <a href="{% url 'password-change' %}"
-                                                           style="color: darkslategrey">
-                                                            <b>Change Password</b>
-                                                        </a>
-                                                    </div>
-
-                                                </div>
-                                            </form>
-                                        {% endif %}
-
-
+                                                {% else %}
+                                                    {{ studentProfile_Form.as_p }}
+                                                {% endif %}
+                                            </b>
+                                            <div class="form-group">
+                                                <button type="submit" class="button">
+                                                    Submit
+                                                </button>
+                                                &nbsp
+                                                <button type="button" class="button">
+                                                    <a href="{% url 'password-change' %}">
+                                                        Change Password
+                                                    </a>
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--/row-->
-
                 </div>
-                <!--/col-->
             </div>
-            <!--/row-->
         </div>
     </div>
-
 </section>
 
 
