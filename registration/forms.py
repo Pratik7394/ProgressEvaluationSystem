@@ -15,8 +15,6 @@ class userInfoForm(forms.ModelForm):
         cleaned_data = super(userInfoForm, self).clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-        # print(password)
-        # print(confirm_password)
         if password != confirm_password:
             raise forms.ValidationError("Password does not match")
 
@@ -69,6 +67,7 @@ class userInfoForm(forms.ModelForm):
             raise forms.ValidationError("Password must be of minimum 9 characters length")
         else:
             return password
+
 
 
 class userInfoForm2(forms.ModelForm):

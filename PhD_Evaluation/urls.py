@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from registration import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -25,4 +26,6 @@ urlpatterns = [
     path('questionnaire/', include('questionnaire.urls')),
     path('professor/', include('professor.urls')),
     path('registration/logout', views.userLogout, name='logout'),
+    path('password-change/', auth_views.PasswordChangeView.as_view(template_name='registration/password_change.html'),
+         name='password-change'),
 ]

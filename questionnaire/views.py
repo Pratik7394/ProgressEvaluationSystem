@@ -255,8 +255,14 @@ def viewSubmissions(request):
             elif questionnaireStatus == "Saved":
                 return redirect(reverse('questionnaire:form-research'))
             else:  # status == 'not started'
-                load_data(request, userTableID, questionnaire_id)
-                return redirect(reverse('questionnaire:form-research'))
+                yjd = studentProfile.objects.get(email=questionnaire_submit_username).program_joining_date
+                if yjd == None:
+                    messages.warning(request,
+                                     "Programming joining date needed to be filled before starting a questionnaire")
+                    return redirect('registration:editProfileStudent')
+                else:
+                    load_data(request, userTableID, questionnaire_id)
+                    return redirect(reverse('questionnaire:form-research'))
 
 
 '''

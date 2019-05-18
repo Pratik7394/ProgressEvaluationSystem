@@ -16,6 +16,6 @@ urlpatterns = [
     path('step6/', views.handleReview, name='review'),
 ]
 
-handler404 = views.handler404
-
-handler500 = views.handler500
+# handler404 = views.handler404
+#
+# handler500 = views.handler500

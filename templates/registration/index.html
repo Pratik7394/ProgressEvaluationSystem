@@ -6,10 +6,16 @@
 <html lang="en">
 
 
-<html>
+{#<html>#}
 <head>
     <!-- Dont remove this: Divyarth Singh -->
     <!-- Site made with Mobirise Website Builder v4.9.7, https://mobirise.com -->
+
+    <style>
+        .bg {
+            background-color: floralwhite;
+        }
+    </style>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,13 +61,13 @@
                         Register
                     </a>
                 </span>
-{#                <div class="topnav-right">#}
+                {#                <div class="topnav-right">#}
                 <span class="navbar-caption-wrap">
                     <a class="navbar-caption text-white display-4" href="{% url 'registration:userLogin' %}">
                         Login
                     </a>
                 </span>
-{#                </div>#}
+                {#                </div>#}
             </div>
         </div>
     </nav>
@@ -94,11 +100,13 @@
                     <ul>
                         <b>
                             <blackcolor>
-                                <h3>
-                                    {% for announcement in announcement_list %}
-                                        <li class="c2">{{ announcement }}</li>
-                                    {% endfor %}
-                                </h3>
+                                <div class="bg">
+                                    <h3>
+                                        {% for announcement in announcement_list %}
+                                            <li class="c2">{{ announcement }}</li>
+                                        {% endfor %}
+                                    </h3>
+                                </div>
                             </blackcolor>
                         </b>
                     </ul>
