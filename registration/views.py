@@ -24,7 +24,7 @@ from datetime import datetime
 
 @login_required()
 def userLogout(request):
-    print("hi2")
+    # print("hi2")
     del request.session['fullNameSession']
     del request.session['userNameSession']
     del request.session['idSession']
@@ -39,6 +39,14 @@ def index(request):
     announcement_list = announcement.objects.all()
     return render(request, 'registration/index.html',
                   {'announcement_list': announcement_list})
+
+def navigate(request):
+    studentProfessor = request.session['studentProfessor']
+    if studentProfessor == "student":
+        return redirect('questionnaire:studentHome')
+
+    elif studentProfessor == "professor":
+        return redirect('professor:professorHome')
 
 def register(request):
     registered = False

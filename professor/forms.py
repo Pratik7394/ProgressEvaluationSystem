@@ -8,5 +8,5 @@ class feedbackform(forms.ModelForm):
         model = submissionTrack
         fields = ('Feedback',)
         widgets = {
-            'Feedback': forms.Textarea(attrs={'cols': 165, 'rows': 8}),
+            'Feedback': forms.Textarea(attrs={'cols': 100, 'rows': 8}),
         }

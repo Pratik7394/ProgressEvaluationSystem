@@ -11,12 +11,12 @@ class studentName(models.Model):
     def __str__(self):
         return self.name
 
-class professorName(models.Model):
-    username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
-    name = models.CharField(max_length= 500, blank=True)
-
-    def __str__(self):
-        return self.name
+# class professorName(models.Model):
+#     username = models.ForeignKey(User, db_column="username", on_delete=models.PROTECT)
+#     name = models.CharField(max_length= 500, blank=True)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class professorWhiteList(models.Model):
@@ -44,7 +44,7 @@ class studentProfile(models.Model):
     first_name = models.CharField(max_length=500)
     last_name = models.CharField(max_length=500)
     email = models.EmailField(unique=True)
-    SUNY_ID = models.IntegerField(blank=True, null=True)
+    SUNY_ID = models.CharField(max_length=20, blank=True)
     native_country = models.CharField(max_length=100, blank=True)
     program_joining_date = models.DateField(blank=True, null=True)
 
